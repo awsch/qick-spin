@@ -2,14 +2,16 @@
 //  FERMI RESEARCH LAB
 ///////////////////////////////////////////////////////////////////////////////
 //  Author         : Martin Di Federico
-//  Date           : 4-2023
+//  Date           : 10-2023
 //  Version        : 2
 ///////////////////////////////////////////////////////////////////////////////
-//Description:  QICK PROCESSOR
+//  QICK PROCESSOR :  tProc_v2
+/* Description: 
+Test Bench for Qick Processor Testing
+*/
 //////////////////////////////////////////////////////////////////////////////
 
-
-`include "_qick_defines.svh"
+`include "_tproc_defines.svh"
 
 
 import axi_vip_pkg::*;
@@ -32,14 +34,16 @@ import axi_mst_0_pkg::*;
 `define DIVIDER          1
 `define ARITH            1
 `define TIME_READ        1
+`define FIFO_DEPTH       3
 `define PMEM_AW          8 
 `define DMEM_AW          4 
 `define WMEM_AW          4 
 `define REG_AW           4 
 `define IN_PORT_QTY      1
-`define OUT_TRIG_QTY     1
-`define OUT_DPORT_QTY    1 
-`define OUT_WPORT_QTY    1 
+`define OUT_TRIG_QTY     4
+`define OUT_DPORT_QTY    2
+`define OUT_DPORT_DW     2
+`define OUT_WPORT_QTY    2 
 
 
 module tb_axis_qick_processor ();
@@ -84,17 +88,20 @@ wire                   s_axi_rready     ;
 //////////////////////////////////////////////////////////////////////////
 //  CLK Generation
 reg   t_clk, s_ps_dma_aclk, rst_ni;
-reg  c_clk ;
+wire   c_clk ;
 
 initial begin
   t_clk = 1'b0;
   forever # (`T_TCLK) t_clk = ~t_clk;
 end
 
+/*
 initial begin
   c_clk = 1'b0;
   forever # (`T_CCLK) c_clk = ~c_clk;
 end
+*/
+assign c_clk = t_clk;
 initial begin
   s_ps_dma_aclk = 1'b0;
   #0.5
@@ -153,11 +160,7 @@ wire [167:0]       m6_axis_tdata        ;
 wire               m6_axis_tvalid       ;
 wire [167:0]       m7_axis_tdata        ;
 wire               m7_axis_tvalid       ;
-wire [31:0]         port_0_dt_o         ;
-wire [31:0]         port_1_dt_o         ;
-wire [31:0]         port_2_dt_o         ;
-wire [31:0]         port_3_dt_o         ;
-
+wire [`OUT_DPORT_DW-1:0]         port_0_dt_o, port_1_dt_o, port_2_dt_o, port_3_dt_o         ;
 
 wire                tnet_en_o   ;
 wire  [4 :0]        tnet_op_o   ;
@@ -247,7 +250,7 @@ reg time_updt_i;
 
 wire [31:0] ps_debug_do;
    
-axis_qick_proccessor # (
+axis_qick_processor # (
    .DUAL_CORE      (  `DUAL_CORE   ) ,
    .IO_CTRL        (  `IO_CTRL   ) ,
    .DEBUG          (  `DEBUG     ) ,
@@ -257,6 +260,7 @@ axis_qick_proccessor # (
    .DIVIDER        (  `DIVIDER ) ,
    .ARITH          (  `ARITH ) ,
    .TIME_READ      (  `TIME_READ ) ,
+   .FIFO_DEPTH     (  `FIFO_DEPTH ) ,
    .PMEM_AW        (  `PMEM_AW ) ,
    .DMEM_AW        (  `DMEM_AW ) ,
    .WMEM_AW        (  `WMEM_AW ) ,
@@ -264,6 +268,7 @@ axis_qick_proccessor # (
    .IN_PORT_QTY    (  `IN_PORT_QTY ) ,
    .OUT_TRIG_QTY   (  `OUT_TRIG_QTY ) ,
    .OUT_DPORT_QTY  (  `OUT_DPORT_QTY ) ,
+   .OUT_DPORT_DW   (  `OUT_DPORT_DW ) ,   
    .OUT_WPORT_QTY  (  `OUT_WPORT_QTY ) 
 ) AXIS_QPROC (
    .t_clk_i             ( t_clk              ) ,
@@ -403,8 +408,8 @@ initial begin
    //AXIS_QPROC.QPROC.DATA_FIFO[1].data_fifo_inst.fifo_mem.RAM = '{default:'0} ;
    
    
-   $readmemb("/home/mdifeder/repos/fpga_ip/axis_qick_processor/src/TB/prog.bin", AXIS_QPROC.QPROC.CORE_0.CORE_MEM.P_MEM.RAM);
-   $readmemb("/home/mdifeder/repos/fpga_ip/axis_qick_processor/src/TB/wave.bin", AXIS_QPROC.QPROC.CORE_0.CORE_MEM.W_MEM.RAM);
+   $readmemb("/home/mdifeder/IPS/qick_processor/src/TB/prog.bin", AXIS_QPROC.QPROC.CORE_0.CORE_MEM.P_MEM.RAM);
+   $readmemb("/home/mdifeder/IPS/qick_processor/src/TB/wave.bin", AXIS_QPROC.QPROC.CORE_0.CORE_MEM.W_MEM.RAM);
    
   	// Create agents.
 	axi_mst_0_agent 	= new("axi_mst_0 VIP Agent",tb_axis_qick_processor.axi_mst_0_i.inst.IF);
@@ -416,30 +421,27 @@ initial begin
 
 // INITIAL VALUES
 
-tnet_dt_i = '{default:'0} ;
-
+   tnet_dt_i = '{default:'0} ;
    rst_ni          = 1'b0;
-   axi_dt = 0 ;
+   axi_dt          = 0 ;
    axis_dma_start  = 1'b0;
-
    s0_axis_tvalid  = 1'b0 ;
-   port_0_dt_i = 0;
+   port_0_dt_i     = 0;
    s1_axis_tvalid  = 1'b0 ;
-   port_1_dt_i = 0;
+   port_1_dt_i     = 0;
    periph_rdy_i    = 0 ;
    periph_dt_i     = {0,0} ;
    tnet_rdy_i      = 0 ;
    tnet_dt_i [2]   = {0,0} ;
 
-
    proc_start_i   = 1'b0;
-   proc_stop_i   = 1'b0;
-   core_start_i  = 1'b0;
-   core_stop_i  = 1'b0;
-   time_rst_i   = 1'b0;
-   time_init_i  = 1'b0;
-   time_updt_i  = 1'b0;
-   offset_dt_i   = 0 ;
+   proc_stop_i    = 1'b0;
+   core_start_i   = 1'b0;
+   core_stop_i    = 1'b0;
+   time_rst_i     = 1'b0;
+   time_init_i    = 1'b0;
+   time_updt_i    = 1'b0;
+   offset_dt_i    = 0 ;
  
    m_dma_axis_tready_i = 1'b1; 
    max_value   = 0;
@@ -447,7 +449,6 @@ tnet_dt_i = '{default:'0} ;
    @ (posedge s_ps_dma_aclk); #0.1;
 	rst_ni = 1'b1;
    #10;
-   @ (posedge s_ps_dma_aclk); #0.1;
 
 //TEST_AXI ();
 //TEST_SINGLE_READ_AXI();
@@ -458,6 +459,7 @@ tnet_dt_i = '{default:'0} ;
 
 /*
 // CONFIGURE LFSR
+   @ (posedge s_ps_dma_aclk); #0.1;
    WRITE_AXI( REG_TPROC_W_DT1 , 4); //
    WRITE_AXI( REG_TPROC_W_DT2 , 10); //
    WRITE_AXI( REG_CORE_CFG, 1); //LFSR FREE RUN
@@ -503,6 +505,7 @@ tnet_dt_i = '{default:'0} ;
    port_1_dt_i     = 0;
    #25;
 */
+   WRITE_AXI( REG_TPROC_CFG, 1024); //ENABLE EXTERNAL CONTROL
 
    #100;
    @ (posedge c_clk); #0.1;

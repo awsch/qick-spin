@@ -1,4 +1,17 @@
-`include "_qick_defines.svh"
+///////////////////////////////////////////////////////////////////////////////
+//  FERMI RESEARCH LAB
+///////////////////////////////////////////////////////////////////////////////
+//  Author         : Martin Di Federico
+//  Date           : 10-2023
+//  Version        : 2
+///////////////////////////////////////////////////////////////////////////////
+//  QICK PROCESSOR :  tProc_v2
+/* Description: 
+
+*/
+//////////////////////////////////////////////////////////////////////////////
+
+`include "_tproc_defines.svh"
    
 module qproc_core # (
    parameter LFSR        = 1,
@@ -87,7 +100,7 @@ qcore_cpu # (
    .sreg_div_i          ( sreg_div_i             ) , // Div Input
    .sreg_status_i       ( sreg_status_i               ) ,
    .sreg_core_r_dt_i    ( sreg_core_r_dt_i       ) ,
-   .sreg_port_dt_i      ( {in_port_dt_r[63:32], in_port_dt_r[31:0] } ) ,
+   .sreg_port_dt_i      ( {in_port_dt_r[31:0], in_port_dt_r[63:32] } ) ,
    .sreg_time_dt_i      ( sreg_time_dt_i         ) ,
    .sreg_core_w_dt_o    ( sreg_core_w_dt_o         ) ,
    .usr_dt_a_o          ( usr_dt_a_o             ) ,

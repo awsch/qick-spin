@@ -1,4 +1,17 @@
-`include "_qick_defines.svh"
+///////////////////////////////////////////////////////////////////////////////
+//  FERMI RESEARCH LAB
+///////////////////////////////////////////////////////////////////////////////
+//  Author         : Martin Di Federico
+//  Date           : 10-2023
+//  Version        : 2
+///////////////////////////////////////////////////////////////////////////////
+//  QICK PROCESSOR :  tProc_v2
+/* Description: 
+
+*/
+//////////////////////////////////////////////////////////////////////////////
+
+`include "_tproc_defines.svh"
 
 module qcore_cpu # (
    parameter LFSR           =  1 ,
@@ -26,10 +39,10 @@ module qcore_cpu # (
    input  wire [31:0]      sreg_port_dt_i  [2]  ,
    input  wire [31:0]      sreg_time_dt_i       , 
    output wire [31:0]      sreg_core_w_dt_o[2]  ,
-   output  wire [31:0]           usr_dt_a_o     , // Data A from Current Instruction (rsD)
-   output  wire [31:0]           usr_dt_b_o     , // Data B from Current Instruction (rsC or Imm)
-   output  wire [31:0]           usr_dt_c_o     , // Data C from Current Instruction (rsC or Imm)
-   output  wire [31:0]           usr_dt_d_o     , // Data D from Current Instruction (rsC or Imm)
+   output  wire [31:0]           usr_dt_a_o     , // Data A from Current Instruction (rsD0)
+   output  wire [31:0]           usr_dt_b_o     , // Data B from Current Instruction (rsD1)
+   output  wire [31:0]           usr_dt_c_o     , // Data C from Current Instruction (rsA0)
+   output  wire [31:0]           usr_dt_d_o     , // Data D from Current Instruction (rsA1m)
    output  wire [9:0]            usr_ctrl_o     , // CONTROL from Current Instruction 
 // PROGRAM MEMORY    
    output  wire [PMEM_AW-1:0]    pmem_addr_o    ,
@@ -55,13 +68,13 @@ module qcore_cpu # (
 // Signal Declaration
 
 // Address Signals
-reg  [DMEM_AW-1:0]      r_id_imm_addr, r_rd_imm_addr ;
-reg  [WMEM_AW-1:0]      r_rd_rsA0_addr, r_rd_rsA1_addr ;
+reg  [10:0]      r_id_imm_addr, r_rd_imm_addr ;
+//reg  [WMEM_AW-1:0]      r_rd_rsA0_addr, r_rd_rsA1_addr ;
+reg  [WMEM_AW-1:0]      r_rd_rsA1_addr ;
 wire [PMEM_AW-1:0]      reg_addr;
 //Data Signals
 reg [31 :0]    r_id_imm_dt, r_rd_imm_dt, r_x1_imm_dt;
-reg [31 :0]    r_x1_alu_dt, r_x2_alu_dt      ;
-reg [31 :0]    r_x2_dmem_w_dt      ;
+reg [31 :0]    r_x1_alu_dt      ;
 // Data Signals
 wire [31:0]    x1_alu_dt   ;
 wire           x1_alu_fZ, x1_alu_fC, x1_alu_fS   ;
@@ -74,8 +87,8 @@ wire           id_pc_change;
 reg            r_id_pc_change ;
 reg  [5:0]     r_id_rs_A_addr     [2] ; // Address in the RegBank
 reg  [6:0]     r_id_rs_D_addr     [2] ; // Address in the RegBank
-wire [15:0]    reg_A_fwd_dt      [2] ; 
 wire [31:0]    reg_D_fwd_dt      [2] ; 
+wire [31:0]    reg_A_fwd_dt      [2] ; 
 wire [31:0]    reg_time ;
 
 // PROCESSOR STATUS 
@@ -85,6 +98,7 @@ wire halt, flush, stall, bubble_id, bubble_rd;
 assign halt    = ~en_i ;
 assign flush   = id_pc_change | r_id_pc_change ;
 assign stall   = bubble_id | bubble_rd;
+assign fetch_en = ~stall & ~halt;
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -168,8 +182,6 @@ reg [9:0] id_usr_ctrl;
 reg id_cond_ok, id_exec_ok, id_branch_cond_ok;
 reg alu_fZ_r, alu_fS_r;
 
-reg id_r_wave_used;
-
 always_comb begin : DECODER
    id_type_cfg       = ( id_HEADER == CFG    ) ;
    id_type_br        = ( id_HEADER == BRANCH  ) ;
@@ -217,15 +229,14 @@ reg [5 :0] id_rs_A_addr [2];
 reg [6 :0] id_rs_D_addr [2];
 reg [6 :0] id_rd_addr      ;
 wire [PMEM_AW-1:0] pc_stack;
-reg id_rd_wreg;
 
 ///////////////////////////////////////////////////////////////////////////////
 // DATA
 always_comb
    unique case (id_DF)
       2'b00 : id_imm_dt = id_imm_addr  ; // Data Immediate is 16 Bits Address Space
-      2'b01 : id_imm_dt = { {16{r_if_op_data[22]}} , r_if_op_data [22:7]}  ; // Data Immediate is 16 Bits
-      2'b10 : id_imm_dt = { { 8{r_if_op_data[30]}} , r_if_op_data [30:7]}  ; // Data Immediate is 24 Bits
+      2'b01 : id_imm_dt = { {16{r_if_op_data[22]}} , r_if_op_data [22:7]}  ; // Data Immediate is 16 Bits SIGNED
+      2'b10 : id_imm_dt = { { 8{r_if_op_data[30]}} , r_if_op_data [30:7]}  ; // Data Immediate is 24 Bits SIGNED
       2'b11 : id_imm_dt = r_if_op_data [38:7]                  ; // Data Immediate is 32 Bits
    endcase
 
@@ -238,12 +249,12 @@ always_comb begin
    id_rs_D_addr[0] = r_if_op_data [ 37 : 31 ] ;
    id_rs_D_addr[1] = r_if_op_data [ 29 : 23 ] ;
    id_rd_addr      = r_if_op_data [  6 :  0 ] ;
-   id_rd_wreg      = r_if_op_data[6:5] == 2'b01 ; //RD is wreg
 end
-assign id_reg.we      = id_dreg_we      ;
-assign id_reg.r_wave_we = id_r_wave_we  ;
-assign id_reg.addr    = id_rd_addr      ;
-assign id_reg.src     = id_cfg_reg_src  ;
+assign id_reg.we        = id_dreg_we      ;
+assign id_reg.r_wave_we = id_r_wave_we    ;
+assign id_reg.addr      = id_rd_addr      ;
+assign id_reg.src       = id_cfg_reg_src  ;
+assign id_reg.port_re   = id_dport_re     ;
 
 assign id_ctrl.cfg_addr_imm  = id_AI            ;
 assign id_ctrl.cfg_dt_imm    = id_cfg_dt_imm    ;
@@ -258,7 +269,6 @@ assign id_ctrl.flag_we       = id_flag_we       ;
 assign id_ctrl.dmem_we       = id_dmem_we       ;
 assign id_ctrl.wmem_we       = id_wmem_we       ;
 assign id_ctrl.port_we       = id_wport_we | id_dport_we ;
-assign id_ctrl.port_re       = id_dport_re      ;
 
 
 // CONDITION  
@@ -314,7 +324,7 @@ always @(posedge clk_i) begin
    if (restart_i) begin
       PC_curr     <= 0;
       PC_prev     <= 0;
-   end else if (~stall & ~halt ) begin
+   end else if (fetch_en) begin
          PC_curr <= PC_nxt;
          PC_prev <= PC_curr;
       end
@@ -327,16 +337,15 @@ end
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
 wire [31:0] x1_rsD0_dt, x1_rsD1_dt ;
-wire [15:0] x1_rsA1_dt, x1_rsA0_dt ;
-wire [15:0] rs_A_dt [2] ;
+wire [31:0] x1_rsA1_dt, x1_rsA0_dt ;
+wire [31:0] rs_A_dt [2] ;
 wire [31:0] rs_D_dt [2] ;
 
 
-   
-assign x1_rsD0_dt = reg_D_fwd_dt[0] ;
-assign x1_rsD1_dt = reg_D_fwd_dt[1] ;
 assign x1_rsA0_dt = x1_ctrl.cfg_addr_imm ? r_rd_imm_addr :  reg_A_fwd_dt[0] ;
 assign x1_rsA1_dt = reg_A_fwd_dt[1] ;
+assign x1_rsD0_dt = reg_D_fwd_dt[0] ;
+assign x1_rsD1_dt = reg_D_fwd_dt[1] ;
 
 // ARITHMETIC UNIT
 /////////////////////////////////////////////////
@@ -501,15 +510,16 @@ wire pc_stack_full;
 /////////////////////////////////////////////////
 LIFO  # (
    .WIDTH  ( PMEM_AW   )  , 
-   .DEPTH  ( 4          )  
+   .DEPTH  ( 8          )  
 ) pc_stack_inst  ( 
    .clk_i   ( clk_i    ) ,
    .rst_ni  ( rst_ni   ) ,
    .data_i  ( PC_prev  ) ,
-   .push    ( id_call  ) ,
-   .pop     ( id_ret   ) ,
+   .push    ( id_call & fetch_en  ) ,
+   .pop     ( id_ret & fetch_en  ) ,
    .data_o  ( pc_stack ) ,
    .full_o  ( pc_stack_full ) );
+
 
 
 
@@ -517,8 +527,6 @@ LIFO  # (
 // PIPELINE  
 ///////////////////////////////////////////////////////////////////////////////
 
-
-reg [6:0] r_id_rd_addr, r_rd_rd_addr, r_x1_rd_addr, r_x2_rd_addr;
 
 // DATA & ADDRESS PIPELINE 
 always_ff @ (posedge clk_i) begin
@@ -535,21 +543,15 @@ always_ff @ (posedge clk_i) begin
       //Address Signals
       r_id_imm_addr        <= 0  ;
       r_rd_imm_addr        <= 0  ;
-      r_rd_rsA0_addr       <= 0  ;
+//      r_rd_rsA0_addr       <= 0  ;
       r_rd_rsA1_addr       <= 0  ;
       r_id_rs_A_addr       <= '{default:'0};
       r_id_rs_D_addr       <= '{default:'0};
-      r_id_rd_addr         <= 0  ;
-      r_rd_rd_addr         <= 0  ;
-      r_x1_rd_addr         <= 0  ;
-      r_x2_rd_addr         <= 0  ;
       //Data Signals
       r_id_imm_dt          <= 0  ;
       r_rd_imm_dt          <= 0  ;
       r_x1_imm_dt          <= 0  ;
       r_x1_alu_dt          <= 0  ;
-      r_x2_alu_dt          <= 0  ;
-      r_x2_dmem_w_dt       <= 0  ;
       r_x1_port_dt       <= 0  ;
       alu_fZ_r             <= 0  ;
       alu_fS_r             <= 0  ;
@@ -564,20 +566,14 @@ always_ff @ (posedge clk_i) begin
       wr_reg               <= '{default:'0};
       r_id_imm_addr        <= 0  ;
       r_rd_imm_addr        <= 0  ;
-      r_rd_rsA0_addr       <= 0  ;
+//      r_rd_rsA0_addr       <= 0  ;
       r_rd_rsA1_addr       <= 0  ;
       r_id_rs_A_addr       <= '{default:'0};
       r_id_rs_D_addr       <= '{default:'0};
-      r_id_rd_addr         <= 0  ;
-      r_rd_rd_addr         <= 0  ;
-      r_x1_rd_addr         <= 0  ;
-      r_x2_rd_addr         <= 0  ;
       r_id_imm_dt          <= 0  ;
       r_rd_imm_dt          <= 0  ;
       r_x1_imm_dt          <= 0  ;
       r_x1_alu_dt          <= 0  ;
-      r_x2_alu_dt          <= 0  ;
-      r_x2_dmem_w_dt       <= 0  ;
       r_x1_port_dt       <= 0  ;
       alu_fZ_r             <= 0  ;
       alu_fS_r             <= 0  ;
@@ -603,7 +599,6 @@ always_ff @ (posedge clk_i) begin
             //Data Signals
             r_id_rs_A_addr          <= id_rs_A_addr;
             r_id_rs_D_addr          <= id_rs_D_addr ;
-            r_id_rd_addr            <= id_rd_addr     ;
             r_id_imm_addr           <= id_imm_addr    ;
             r_id_imm_dt             <= id_imm_dt      ;
          end
@@ -617,9 +612,8 @@ always_ff @ (posedge clk_i) begin
             x1_reg               <= rd_reg            ;
          end
          //Address Signals
-         r_rd_rsA0_addr          <= r_id_rs_A_addr[0]   ;
+//         r_rd_rsA0_addr          <= r_id_rs_A_addr[0]   ;
          r_rd_rsA1_addr          <= r_id_rs_A_addr[1]   ;
-         r_rd_rd_addr            <= r_id_rd_addr      ;
          r_rd_imm_addr           <= r_id_imm_addr     ;
          //Data Signals
          r_rd_imm_dt             <= r_id_imm_dt       ;
@@ -628,7 +622,7 @@ always_ff @ (posedge clk_i) begin
          //Data Signals
          r_x1_imm_dt                <= r_rd_imm_dt       ;
          r_x1_alu_dt                <= x1_alu_dt         ;
-         r_x1_port_dt             <= x1_rsA0_dt; //x1_mem_w_dt       ;
+         r_x1_port_dt               <= x1_rsA0_dt        ;
          r_x1_port_w_addr           <= x1_port_w_addr    ;
          if (x1_ctrl.flag_we) begin 
             alu_fZ_r                <= x1_alu_fZ         ;
@@ -650,39 +644,38 @@ end //ALWAYS
 /////////////////////////////////////////////////////////////////////////////////////////
 
 // PROGRAM MEMORY
-assign pmem_en_o        = ~stall & ~halt | r_mem_rst;
+assign pmem_en_o        = fetch_en | r_mem_rst;
 assign pmem_addr_o      = PC_curr         ; // Disable next instruction with pc_jump
-// assign pmem_addr_o   = PC_nxt         ;
 
 //DATA MEMORY
-assign dmem_we_o        = x1_ctrl.dmem_we & ~halt   ;
+assign dmem_we_o        = halt ? 0 : x1_ctrl.dmem_we;
 assign dmem_addr_o      = x1_mem_addr        ;
 assign dmem_w_dt_o      = x1_mem_w_dt        ;
 
 //WAVE MEMORY
-assign wmem_we_o        = x1_ctrl.wmem_we  & ~halt ;
+assign wmem_we_o        = halt ? 0 : x1_ctrl.wmem_we;
 assign wmem_addr_o      = x1_wave_addr      ;
 assign wmem_w_dt_o      = reg_wave_dt      ;
 
-// TIME CTRL // Move to X2 in case of SLOW PATH and ADD ALU OUT
-
-assign usr_ctrl_o      = x1_ctrl.usr_ctrl ;
+// PERIPH OUT
+// assign <output> = <1-bit_select> ? <input1> : <input0>;
+assign usr_ctrl_o      = halt ? 0 : x1_ctrl.usr_ctrl ;
 assign usr_dt_a_o      = x1_rsD0_dt ; 
 assign usr_dt_b_o      = x1_ctrl.cfg_dt_imm ? r_rd_imm_dt : x1_rsD1_dt ;
 assign usr_dt_c_o      = x1_rsA0_dt ; 
 assign usr_dt_d_o      = x1_rsA1_dt;
 
 // PORT OUTPUT
-assign port_we_o        = x2_ctrl.port_we & ~halt   ;
-assign port_re_o        = x2_ctrl.port_re & ~halt   ;
+assign port_we_o        = halt ? 0 : x2_ctrl.port_we ;
+assign port_re_o        = halt ? 0 : x2_reg.port_re ;
+
 assign port_o.p_time    = x2_ctrl.cfg_port_time ? r_x1_imm_dt : reg_time;
 assign port_o.p_type    = x2_ctrl.cfg_port_type ;
 assign port_o.p_addr    = r_x1_port_w_addr     ;
 assign port_o.p_data    = x2_port_w_dt       ;
 
-
 // DEBUG
-assign core_do [31:24] = {restart_i, stall, flush, id_flag_we, alu_fZ_r, alu_fS_r, x2_ctrl.port_we, x2_ctrl.port_re};
+assign core_do [31:24] = {restart_i, stall, flush, id_flag_we, alu_fZ_r, alu_fS_r, x2_ctrl.port_we, x2_reg.port_re};
 assign core_do [23:16] = {id_type_ctrl, id_type_cfg, id_type_br, id_type_wr, id_type_wm, id_type_wp, 1'b0, pc_stack_full } ;
 assign core_do [15:8]  = r_x1_alu_dt[7:0]  ;
 assign core_do [7:0]   = port_o.p_time[7:0] ;

@@ -55,9 +55,30 @@ class AbsSignalGen(SocIp):
         #print("%s: switch %d, tProc ch %d, DAC tile %s block %s"%(self.fullpath, self.switch_ch, self.tproc_ch, *self.dac))
 
     def set_nyquist(self, nqz):
+        """Set the Nyquist zone mode for the DAC linked to this generator.
+        For tProc-controlled generators, this method is called automatically during program config.
+        You should normally only call this method directly for a constant-IQ output.
+
+        Parameters
+        ----------
+        nqz : int
+            Nyquist zone (must be 1 or 2).
+            Setting the NQZ to 2 increases output power in the 2nd/3rd Nyquist zones.
+        """
         self.rf.set_nyquist(self.dac, nqz)
 
     def set_mixer_freq(self, f, ro_ch=None):
+        """Set the mixer frequency for the DAC linked to this generator.
+        For tProc-controlled generators, this method is called automatically during program config.
+        You should normally only call this method directly for a constant-IQ output.
+
+        Parameters
+        ----------
+        mixer_freq : float
+            Mixer frequency (in MHz)
+        ro_ch : int
+            readout channel for frequency matching (use None if you don't want mixer freq to be rounded to a valid readout frequency)
+        """
         if not self.HAS_MIXER:
             raise NotImplementedError("This channel does not have a mixer.")
         if ro_ch is None:
@@ -93,15 +114,11 @@ class AbsArbSignalGen(AbsSignalGen):
 
         # what switch port drives this generator?
         ((block, port),) = soc.metadata.trace_bus(self.fullpath, self.WAVEFORM_PORT)
+        self.switch = getattr(soc, block)
         # port names are of the form 'M01_AXIS'
         self.switch_ch = int(port.split('_')[0][1:])
-
-    def configure_dma(self, axi_dma, axis_switch):
-        # dma
-        self.dma = axi_dma
-
-        # Switch
-        self.switch = axis_switch
+        ((block, port),) = soc.metadata.trace_bus(block, 'S00_AXIS')
+        self.dma = getattr(soc, block)
 
     # Load waveforms.
     def load(self, xin, addr=0):
@@ -204,7 +221,7 @@ class AbsPulsedSignalGen(AbsSignalGen):
             else:
                 raise RuntimeError("failed to trace tProc port for %s - ran into unrecognized IP block %s" % (self.fullpath, block))
         # ask the tproc to translate this port name to a channel number
-        self.cfg['tproc_ch'] = getattr(soc, block).port2ch(port)
+        self.cfg['tproc_ch'],_ = getattr(soc, block).port2ch(port)
 
 class AxisSignalGen(AbsArbSignalGen, AbsPulsedSignalGen):
     """
@@ -490,6 +507,8 @@ class AxisSgMux4V2(AbsPulsedSignalGen):
         self.update()
 
 class AxisConstantIQ(AbsSignalGen):
+    """Plays a constant IQ value, which gets mixed with the DAC's built-in oscillator.
+    """
     # AXIS Constant IQ registers:
     # REAL_REG : 16-bit.
     # IMAG_REG : 16-bit.
@@ -514,6 +533,16 @@ class AxisConstantIQ(AbsSignalGen):
         self.we_reg = 0
 
     def set_iq(self, i=1, q=1):
+        """
+        Set gain.
+
+        Parameters
+        ----------
+        i : float
+            signed gain, I component (in range -1 to 1)
+        q : float
+            signed gain, Q component (in range -1 to 1)
+        """
         # Set registers.
         self.real_reg = np.int16(i*self.MAXV)
         self.imag_reg = np.int16(q*self.MAXV)

@@ -107,20 +107,23 @@ class DataStreamer():
                 if stride is None:
                     stride = int(0.1 * self.soc.get_avg_max_length(0)/reads_per_count)
                 # bigger stride is more efficient, but the transfer size must never exceed AVG_MAX_LENGTH, so the stride should be set with some safety margin
+
+                # make sure count variable is reset to 0 before starting processor
+                self.soc.tproc.single_write(addr=counter_addr, data=0)
                 stats = []
 
                 t_start = time.time()
 
                 # if the tproc is configured for internal start, this will start the program
                 # for external start, the program will not start until a start pulse is received
-                self.soc.tproc.run()
+                self.soc.tproc.start()
 
                 # Keep streaming data until you get all of it
                 while last_reps < total_reps:
                     if self.stop_flag.is_set():
                         print("streamer loop: got stop flag")
                         break
-                    reps, _ = self.soc.tproc.read_tproc_out()
+                    reps = self.soc.tproc.single_read(addr=counter_addr)
                     # wait until either you've gotten a full stride of measurements or you've finished (so you don't go crazy trying to download every measurement)
                     if reps >= min(last_reps+stride, total_reps):
                         addr = last_count % self.soc.get_avg_max_length(0)
@@ -139,6 +142,7 @@ class DataStreamer():
 
                         # buffer for each channel
                         d_buf = np.zeros((len(ch_list), length, 2), dtype=np.int32)
+
                         # for each adc channel get the single shot data and add it to the buffer
                         for iCh, ch in enumerate(ch_list):
                             data = self.soc.get_accumulated(ch=ch, address=addr, length=length)

@@ -5,11 +5,11 @@ import logging
 from typing import Union, List
 import numpy as np
 import json
-from collections import namedtuple, OrderedDict
+from collections import namedtuple, OrderedDict, defaultdict
 from abc import ABC, abstractmethod
 from tqdm.auto import tqdm
 
-from qick import obtain
+from qick import obtain, get_version
 from .helpers import gauss, triang, DRAG, NpEncoder, ch2list
 from .parser import parse_prog
 
@@ -34,11 +34,21 @@ class QickConfig():
     """
 
     def __init__(self, cfg=None):
-        if isinstance(cfg, str):
-            with open(cfg) as f:
-                self._cfg = json.load(f)
-        elif cfg is not None:
-            self._cfg = cfg
+        if cfg is not None:
+            # we are getting an external config dictionary (e.g. from a Pyro server)
+            if isinstance(cfg, str):
+                with open(cfg) as f:
+                    self._cfg = json.load(f)
+            else:
+                self._cfg = cfg
+            # compare the remote and local versions, warn on mismatch
+            # if the remote library is so old that it doesn't have sw_version, get() will return None
+            extversion = self._cfg.get('sw_version')
+            ourversion = get_version()
+            if extversion != ourversion:
+                logger.warning("QICK library version mismatch: %s remote (the board), %s local (the PC)\n\
+                        This may cause errors, usually KeyError in QickConfig initialization.\n\
+                        If this happens, you must bring your versions in sync."%(extversion, ourversion))
 
     def __str__(self):
         return self.description()
@@ -61,10 +71,14 @@ class QickConfig():
             description
 
         """
+        tproc = self['tprocs'][0]
+
         lines = []
         lines.append("\n\tBoard: " + self['board'])
+        lines.append("\n\tSoftware version: " + self['sw_version'])
+        lines.append("\tFirmware timestamp: " + self['fw_timestamp'])
         lines.append("\n\tGlobal clocks (MHz): tProcessor %.3f, RF reference %.3f" % (
-            self['fs_proc'], self['refclk_freq']))
+            tproc['f_time'], self['refclk_freq']))
 
         lines.append("\n\t%d signal generator channels:" % (len(self['gens'])))
         for iGen, gen in enumerate(self['gens']):
@@ -87,8 +101,10 @@ class QickConfig():
                 lines.append("\t%d:\t%s - controlled by PYNQ" % (iReadout, readout['ro_type']))
             lines.append("\t\tADC tile %s, blk %s, %d-bit DDS, fabric=%.3f MHz, fs=%.3f MHz" %
                          (*readout['adc'], readout['b_dds'], readout['f_fabric'], readout['f_dds']))
-            lines.append("\t\tmaxlen %d (avg) %d (decimated), trigger bit %d, tProc input %d" % (
-                readout['avg_maxlen'], readout['buf_maxlen'], readout['trigger_bit'], readout['tproc_ch']))
+            lines.append("\t\tmaxlen %d (avg) %d (decimated)" % (
+                readout['avg_maxlen'], readout['buf_maxlen']))
+            lines.append("\t\ttriggered by %s %d, pin %d, feedback to tProc input %d" % (
+                readout['trigger_type'], readout['trigger_port'], readout['trigger_bit'], readout['tproc_ch']))
 
         lines.append("\n\t%d DACs:" % (len(self['dacs'])))
         for dac in self['dacs']:
@@ -115,14 +131,29 @@ class QickConfig():
             lines.append("\t\tADC tile %d, blk %d is %s" %
                          (tile, block, label))
 
-        tproc = self['tprocs'][0]
-        lines.append("\n\t%d digital output pins (tProc output %d):" % (len(tproc['output_pins']), tproc['trig_output']))
-        for pin, name in tproc['output_pins']:
-            lines.append("\t%d:\t%s" % (pin, name))
+        lines.append("\n\t%d digital output pins:" % (len(tproc['output_pins'])))
+        for iPin, (porttype, port, pin, name) in enumerate(tproc['output_pins']):
+            lines.append("\t%d:\t%s (%s %d, pin %d)" % (iPin, name, porttype, port, pin))
 
         lines.append("\n\ttProc %s: program memory %d words, data memory %d words" %
                 (tproc['type'], tproc['pmem_size'], tproc['dmem_size']))
         lines.append("\t\texternal start pin: %s" % (tproc['start_pin']))
+
+        bufnames = [ro['avgbuf_fullpath'] for ro in self['readouts']]
+        if "ddr4_buf" in self._cfg:
+            buf = self['ddr4_buf']
+            buflist = [bufnames.index(x) for x in buf['readouts']]
+            lines.append("\n\tDDR4 memory buffer: %d samples, %d samples/transfer" % (buf['maxlen'], buf['burst_len']))
+            lines.append("\t\twired to readouts %s, triggered by %s %d, pin %d" % (
+                buflist, buf['trigger_type'], buf['trigger_port'], buf['trigger_bit']))
+
+        if "mr_buf" in self._cfg:
+            buf = self['mr_buf']
+            buflist = [bufnames.index(x) for x in buf['readouts']]
+            lines.append("\n\tMR buffer: %d samples, wired to readouts %s, triggered by %s %d, pin %d" % (
+                buf['maxlen'], buflist, buf['trigger_type'], buf['trigger_port'], buf['trigger_bit']))
+            #lines.append("\t\twired to readouts %s, triggered by %s %d, pin %d" % (
+            #    buflist, buf['trigger_type'], buf['trigger_port'], buf['trigger_bit']))
 
         return "\nQICK configuration:\n"+"\n".join(lines)
 
@@ -436,7 +467,7 @@ class QickConfig():
         elif ro_ch is not None:
             fclk = self['readouts'][ro_ch]['f_fabric']
         else:
-            fclk = self['fs_proc']
+            fclk = self['tprocs'][0]['f_time']
         return cycles/fclk
 
     def us2cycles(self, us, gen_ch=None, ro_ch=None):
@@ -466,7 +497,7 @@ class QickConfig():
         elif ro_ch is not None:
             fclk = self['readouts'][ro_ch]['f_fabric']
         else:
-            fclk = self['fs_proc']
+            fclk = self['tprocs'][0]['f_time']
         return np.int64(np.round(obtain(us)*fclk))
 
 class AbsRegisterManager(ABC):
@@ -957,7 +988,7 @@ class InterpolatedGenManager(AbsGenManager):
                 self.next_pulse['regs'].append([self.prog._sreg_tproc(self.tproc_ch,x) for x in ['freq', 'gain', 'mode', '0', '0']])
                 self.next_pulse['regs'].append([self.prog._sreg_tproc(self.tproc_ch,x) for x in ['freq', 'addr2', 'mode2', '0', '0']])
                 # workaround for FIR bug: we play a zero-gain DDS pulse (length equal to the flat segment) after the ramp-down, which brings the FIR to zero
-                self.next_pulse['regs'].append((0, 0, 'mode', 0, 0))
+                self.next_pulse['regs'].append([self.prog._sreg_tproc(self.tproc_ch,x) for x in ['0', '0', 'mode', '0', '0']])
                 # set the pulse duration (including the extra duration for the FIR workaround)
                 self.next_pulse['length'] = (wfm_length//2)*2 + 2*params['length']
 
@@ -1003,11 +1034,20 @@ class MultiplexedGenManager(AbsGenManager):
             self.next_pulse['length'] = params['length']
 
 class AbsQickProgram:
+    """Generic QICK program, including support for generator and readout configuration but excluding tProc-specific code.
+    """
+    # Calls to these methods will be passed through to the soccfg object.
+    soccfg_methods = ['freq2reg', 'freq2reg_adc',
+                      'reg2freq', 'reg2freq_adc',
+                      'cycles2us', 'us2cycles',
+                      'deg2reg', 'reg2deg']
+
     def __init__(self, soccfg):
         """
         Constructor method
         """
         self.soccfg = soccfg
+        self.tproccfg = self.soccfg['tprocs'][0]
 
         # Pulse envelopes.
         self.pulses = [{} for ch in soccfg['gens']]
@@ -1019,6 +1059,21 @@ class AbsQickProgram:
         # Timestamps, for keeping track of pulse and readout end times.
         self._gen_ts = [0]*len(soccfg['gens'])
         self._ro_ts = [0]*len(soccfg['readouts'])
+
+    def __getattr__(self, a):
+        """
+        Include QickConfig methods as methods of the QickProgram.
+        This allows e.g. this.freq2reg(f) instead of this.soccfg.freq2reg(f).
+
+        :param a: Instruction name
+        :type a: str
+        :return: Instruction arguments
+        :rtype: *args object
+        """
+        if a in self.__class__.soccfg_methods:
+            return getattr(self.soccfg, a)
+        else:
+            return object.__getattribute__(self, a)
 
     def config_all(self, soc, load_pulses=True):
         """
@@ -1281,8 +1336,8 @@ class AbsQickProgram:
                         data=pulse['data'],
                         addr=pulse['addr'])
 
-    def reset_timestamps(self):
-        self._gen_ts = [0]*len(self._gen_ts)
+    def reset_timestamps(self, gen_t0=None):
+        self._gen_ts = [0]*len(self._gen_ts) if gen_t0 is None else gen_t0.copy()
         self._ro_ts = [0]*len(self._ro_ts)
 
     def get_timestamp(self, gen_ch=None, ro_ch=None):
@@ -1305,10 +1360,16 @@ class AbsQickProgram:
         else:
             raise RuntimeError("must specify gen_ch or ro_ch!")
 
-    def get_max_timestamp(self, gens=True, ros=True):
+    def get_max_timestamp(self, gens=True, ros=True, gen_t0=None):
         timestamps = []
-        if gens: timestamps += self._gen_ts
-        if ros: timestamps += self._ro_ts
+        if gens:
+            if gen_t0 is None:
+                timestamps += list(self._gen_ts)
+            else:
+                gen_ts_copy = np.copy(self._gen_ts)
+                gen_t0_copy = np.copy(gen_t0)
+                timestamps += list(np.maximum(gen_ts_copy - gen_t0_copy, 0))
+        if ros: timestamps += list(self._ro_ts)
         return max(timestamps)
 
 
@@ -1358,11 +1419,6 @@ class QickProgram(AbsQickProgram):
     # Pairs of channels share a register page.
     # The flat_top pulse uses some extra registers.
     pulse_registers = ["freq", "phase", "addr", "gain", "mode", "t", "addr2", "gain2", "mode2", "mode3"]
-
-    soccfg_methods = ['freq2reg', 'freq2reg_adc',
-                      'reg2freq', 'reg2freq_adc',
-                      'cycles2us', 'us2cycles',
-                      'deg2reg', 'reg2deg']
 
     # Attributes to dump when saving the program to JSON.
     dump_keys = ['prog_list', 'pulses', 'ro_chs', 'gen_chs', 'counter_addr', 'reps', 'expts', 'rounds', 'shot_angle', 'shot_threshold']
@@ -1959,7 +2015,7 @@ class QickProgram(AbsQickProgram):
                     print("warning: pulse time %d appears to conflict with previous pulse ending at %f?"%(t, ts))
                 # convert from generator clock to tProc clock
                 pulse_length = next_pulse['length']
-                pulse_length *= self.soccfg['fs_proc']/self.soccfg['gens'][ch]['f_fabric']
+                pulse_length *= self.tproccfg['f_time']/self.soccfg['gens'][ch]['f_fabric']
                 self.set_timestamp(t + pulse_length, gen_ch=ch)
                 self.safe_regwi(rp, r_t, t, f't = {t}')
 
@@ -1993,20 +2049,31 @@ class QickProgram(AbsQickProgram):
             if imm % 4 != 0:
                 self.mathi(rp, reg, reg, "+", imm % 4)
 
-    def sync_all(self, t=0):
+
+    def sync_all(self, t=0, gen_t0=None):
         """Aligns and syncs all channels with additional time t.
         Accounts for both generator pulses and readout windows.
-        This does not pause the tProc.
+        This does not pause the tProc. gen_t0 is an optional list of
+        additional delays for each individual generator channel, e.g. when 
+        the channels are on different tiles so they don't natively sync.
 
         Parameters
         ----------
         t : int, optional
             The time offset in tProc cycles
+        gen_t0 : list, optional
+            List of additional delays for each individual generator channel, in tProc cycles
         """
-        max_t = self.get_max_timestamp()
-        if max_t+t > 0:
-            self.synci(int(max_t+t))
-            self.reset_timestamps()
+        # subtract gen_t0 from the timestamps
+        max_t = self.get_max_timestamp(gen_t0=gen_t0)
+        if max_t + t > 0:
+            self.synci(int(max_t + t))
+            # reset all timestamps to 0 or gen_t0 (if defined)
+            self.reset_timestamps(gen_t0=gen_t0)
+        elif gen_t0:
+            # we just want to set the timestamps to gen_t0
+            self.reset_timestamps(gen_t0=gen_t0)
+
 
     def wait_all(self, t=0):
         """Pause the tProc until all ADC readout windows are complete, plus additional time t.
@@ -2020,7 +2087,7 @@ class QickProgram(AbsQickProgram):
         self.waiti(0, int(self.get_max_timestamp(gens=False, ros=True) + t))
 
     # should change behavior to only change bits that are specified
-    def trigger(self, adcs=None, pins=None, adc_trig_offset=270, t=0, width=10, rp=0, r_out=31):
+    def trigger(self, adcs=None, pins=None, ddr4=False, mr=False, adc_trig_offset=270, t=0, width=10, rp=0, r_out=31):
         """Pulse the readout(s) and marker pin(s) with a specified pulse width at a specified time t+adc_trig_offset.
         If no readouts are specified, the adc_trig_offset is not applied.
 
@@ -2031,6 +2098,10 @@ class QickProgram(AbsQickProgram):
         pins : list of int
             List of marker pins to pulse.
             Use the pin numbers in the QickConfig printout.
+        ddr4 : bool
+            If True, trigger the DDR4 buffer.
+        mr : bool
+            If True, trigger the MR buffer.
         adc_trig_offset : int, optional
             Offset time at which the ADC is triggered (in tProc cycles)
         t : int, optional
@@ -2046,34 +2117,42 @@ class QickProgram(AbsQickProgram):
             adcs = []
         if pins is None:
             pins = []
-        if not adcs and not pins:
-            raise RuntimeError("must pulse at least one ADC or pin")
+        #if not any([adcs, pins, ddr4]):
+        #    raise RuntimeError("must pulse at least one readout or pin")
 
-        out = 0
-        for adc in adcs:
-            out |= (1 << self.soccfg['readouts'][adc]['trigger_bit'])
+        outdict = defaultdict(int)
+        for ro in adcs:
+            rocfg = self.soccfg['readouts'][ro]
+            outdict[rocfg['trigger_port']] |= (1 << rocfg['trigger_bit'])
         for pin in pins:
-            out |= (1 << pin)
+            pincfg = self.soccfg['tprocs'][0]['output_pins'][pin]
+            outdict[pincfg[1]] |= (1 << pincfg[2])
+        if ddr4:
+            rocfg = self.soccfg['ddr4_buf']
+            outdict[rocfg['trigger_port']] |= (1 << rocfg['trigger_bit'])
+        if mr:
+            rocfg = self.soccfg['mr_buf']
+            outdict[rocfg['trigger_port']] |= (1 << rocfg['trigger_bit'])
 
         t_start = t
-        if adcs:
+        if any([adcs, ddr4, mr]):
             t_start += adc_trig_offset
             # update timestamps with the end of the readout window
-            for adc in adcs:
-                ts = self.get_timestamp(ro_ch=adc)
+            for ro in adcs:
+                ts = self.get_timestamp(ro_ch=ro)
                 if t_start < ts:
                     print("Readout time %d appears to conflict with previous readout ending at %f?"%(t, ts))
                 # convert from readout clock to tProc clock
-                ro_length = self.ro_chs[adc]['length']
-                ro_length *= self.soccfg['fs_proc']/self.soccfg['readouts'][adc]['f_fabric']
-                self.set_timestamp(t_start + ro_length, ro_ch=adc)
+                ro_length = self.ro_chs[ro]['length']
+                ro_length *= self.tproccfg['f_time']/self.soccfg['readouts'][ro]['f_fabric']
+                self.set_timestamp(t_start + ro_length, ro_ch=ro)
         t_end = t_start + width
 
-        trig_output = self.soccfg['tprocs'][0]['trig_output']
+        for outport, out in outdict.items():
+            self.regwi(rp, r_out, out, f'out = 0b{out:>016b}')
+            self.seti(outport, rp, r_out, t_start, f'ch =0 out = ${r_out} @t = {t}')
+            self.seti(outport, rp, 0, t_end, f'ch =0 out = 0 @t = {t}')
 
-        self.regwi(rp, r_out, out, f'out = 0b{out:>016b}')
-        self.seti(trig_output, rp, r_out, t_start, f'ch =0 out = ${r_out} @t = {t}')
-        self.seti(trig_output, rp, 0, t_end, f'ch =0 out = 0 @t = {t}')
 
     def measure(self, adcs, pulse_ch, pins=None, adc_trig_offset=270, t='auto', wait=False, syncdelay=None):
         """Wrapper method that combines an ADC trigger, a pulse, and (optionally) the appropriate wait and a sync_all.
@@ -2460,12 +2539,12 @@ class QickProgram(AbsQickProgram):
 
 
 class QickRegister:
+    """A qick register object that keeps the page, address, generator/readout channel and register type information,
+       provides functions that make it easier to set register value given input values in physical units.
+    """
     def __init__(self, prog: QickProgram, page: int, addr: int, reg_type: str = None,
                  gen_ch: int = None, ro_ch: int = None, init_val=None, name: str = None):
         """
-        a qick register object that keeps the page, address, generator/readout channel and register type information,
-        provides functions that make it easier to set register value given input values in physical units.
-
         :param prog: qick program in which the register is used.
         :param page: page of the register
         :param addr: address of the register in the register page (referred as "register number" in some other places)

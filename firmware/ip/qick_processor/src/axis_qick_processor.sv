@@ -2,34 +2,37 @@
 //  FERMI RESEARCH LAB
 ///////////////////////////////////////////////////////////////////////////////
 //  Author         : Martin Di Federico
-//  Date           : 4-2023
+//  Date           : 10-2023
 //  Version        : 2
 ///////////////////////////////////////////////////////////////////////////////
-//Description:  QICK PROCESSOR
+//  QICK PROCESSOR :  tProc_v2
+/* Description: 
+
+*/
 //////////////////////////////////////////////////////////////////////////////
 
+`include "_tproc_defines.svh"
 
-`include "_qick_defines.svh"
- 
-module axis_qick_proccessor # (
+module axis_qick_processor # (
    parameter DUAL_CORE      =  0  ,
-   parameter IO_CTRL        =  1  ,
-   parameter DEBUG          =  1  ,
-   parameter TNET           =  1  ,
-   parameter CUSTOM_PERIPH  =  1  ,
+   parameter IO_CTRL        =  0  ,
+   parameter DEBUG          =  0  ,
+   parameter TNET           =  0  ,
+   parameter CUSTOM_PERIPH  =  0  ,
    parameter LFSR           =  1  ,
    parameter DIVIDER        =  1  ,
    parameter ARITH          =  1  ,
    parameter TIME_READ      =  1  ,
+   parameter FIFO_DEPTH     =  9 ,
    parameter PMEM_AW        =  10 ,
    parameter DMEM_AW        =  10 ,
-   parameter WMEM_AW        =  8  ,
-   parameter REG_AW         =  4  ,
-   parameter IN_PORT_QTY    =  2  ,
-   parameter OUT_TRIG_QTY   =  2  ,
+   parameter WMEM_AW        =  10  ,
+   parameter REG_AW         =  5  ,
+   parameter IN_PORT_QTY    =  4  ,
+   parameter OUT_TRIG_QTY   =  4  ,
    parameter OUT_DPORT_QTY  =  1  ,
-   parameter OUT_DPORT_DW   =  8 ,
-   parameter OUT_WPORT_QTY  =  4 
+   parameter OUT_DPORT_DW   =  4 ,
+   parameter OUT_WPORT_QTY  =  8 
 )(
 // Core, Time and AXI CLK & RST.
    input  wire                t_clk_i         ,
@@ -221,7 +224,7 @@ wire   port_trig_so     [8] ;
 wire [OUT_DPORT_DW-1:0]  port_tdata_so     [4] ;
 wire                     port_tvalid_so    [4] ;
 
-wire [31:0]          ext_op_r, ext_dt_r, ext_dt_i   ;
+// wire [31:0]          ext_op_r, ext_dt_r, ext_dt_i   ;
 
 wire [167:0]         m_axis_tdata_s [16] ;
 wire                 m_axis_tvalid_s[16] ; 
@@ -301,6 +304,7 @@ qick_processor # (
    .DIVIDER        ( DIVIDER        ),
    .ARITH          ( ARITH          ),
    .TIME_READ      ( TIME_READ      ),
+   .FIFO_DEPTH     ( FIFO_DEPTH     ),
    .PMEM_AW        ( PMEM_AW        ),
    .DMEM_AW        ( DMEM_AW        ),
    .WMEM_AW        ( WMEM_AW        ),
@@ -479,6 +483,7 @@ assign m13_axis_tvalid    = m_axis_tvalid_s[13]  ;
 assign m14_axis_tdata     = m_axis_tdata_s [14]  ;
 assign m14_axis_tvalid    = m_axis_tvalid_s[14]  ;
 assign m15_axis_tdata     = m_axis_tdata_s [15]  ;
+assign m15_axis_tvalid    = m_axis_tvalid_s[15]  ;
 
 ///// DEBUG 
 generate

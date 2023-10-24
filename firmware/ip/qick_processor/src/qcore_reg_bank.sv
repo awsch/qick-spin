@@ -1,4 +1,17 @@
-`include "_qick_defines.svh"
+///////////////////////////////////////////////////////////////////////////////
+//  FERMI RESEARCH LAB
+///////////////////////////////////////////////////////////////////////////////
+//  Author         : Martin Di Federico
+//  Date           : 10-2023
+//  Version        : 2
+///////////////////////////////////////////////////////////////////////////////
+//  QICK PROCESSOR :  tProc_v2
+/* Description: 
+
+*/
+//////////////////////////////////////////////////////////////////////////////
+
+`include "_tproc_defines.svh"
 
 module qcore_reg_bank # (
    parameter LFSR           =  1 ,
@@ -26,7 +39,7 @@ module qcore_reg_bank # (
    input   wire [ 6 : 0 ]        rs_D_addr_i[2] ,
    output  reg  [31:0]           w_dt_o         ,
    output  wire [31:0]           rs_D_dt_o [2]  ,
-   output  wire [15:0]           rs_A_dt_o [2]  ,
+   output  wire [31:0]           rs_A_dt_o [2]  ,
    output  wire [31:0]           sreg_dt_o [2]  ,       
    output  wire [PMEM_AW-1:0]    out_addr_o     ,
    output  wire [31:0]           out_time_o     ,       
@@ -181,32 +194,27 @@ assign sreg_dt[14] = sreg_32_dt [2]     ; // OUT TIME
 assign sreg_dt[15] = sreg_32_dt [3]     ; // PC_NXT_ADDR_REG
 
 
-wire [15:0] data_16 [2];
-wire  [15:0] data_16_r [2];
+wire  [31:0] data_A   [2];
 
 genvar ind_A;
 generate
    for (ind_A=0; ind_A <2 ; ind_A=ind_A+1) begin
-      assign data_16[ind_A]    = dreg_32_dt[ rs_A_addr_i[ind_A][REG_AW-1:0] ][15:0];
-      assign data_16_r[ind_A]  = data_16[ind_A];
+      assign data_A[ind_A]   = dreg_32_dt[ rs_A_addr_i[ind_A][REG_AW-1:0] ];
    end
-
 endgenerate
 
-reg [31:0] data_32 [2] ;
-reg [31:0] data_32_r [2];
+reg [31:0] data_D [2] ;
 
 genvar ind_D;
 generate
    for (ind_D=0; ind_D <2 ; ind_D=ind_D+1) begin
       always_comb begin
          case (rs_D_addr_i[ind_D][6:5])
-            2'b00 : data_32[ind_D] = dreg_32_dt[ rs_D_addr_i[ind_D][REG_AW-1:0] ];
-            2'b01 : data_32[ind_D] = wreg_32_dt[ rs_D_addr_i[ind_D][2:0] ]; // 6 Registers
-            2'b10 : data_32[ind_D] = sreg_dt   [ rs_D_addr_i[ind_D][3:0] ]; // 16 Registers
-            2'b11 : data_32[ind_D] = 0 ;
+            2'b00 : data_D[ind_D] = dreg_32_dt[ rs_D_addr_i[ind_D][REG_AW-1:0] ];
+            2'b01 : data_D[ind_D] = wreg_32_dt[ rs_D_addr_i[ind_D][2:0] ]; // 6 Registers
+            2'b10 : data_D[ind_D] = sreg_dt   [ rs_D_addr_i[ind_D][3:0] ]; // 16 Registers
+            2'b11 : data_D[ind_D] = 0 ;
          endcase
-         data_32_r[ind_D] = data_32[ind_D];
       end
    end //for
 endgenerate
@@ -221,8 +229,8 @@ always_ff @ (posedge clk_i, negedge rst_ni)
 
 ///////////////////////////////////////////////////////////////////////////////
 // OUTPUT ASSIGNMENT
-assign rs_A_dt_o     =  data_16_r ;
-assign rs_D_dt_o     =  data_32_r ;
+assign rs_A_dt_o     =  data_A ;
+assign rs_D_dt_o     =  data_D ;
 
 assign lfsr_o        =  lfsr_reg ;
 assign reg_cfg_o     = sreg_cfg_dt ;

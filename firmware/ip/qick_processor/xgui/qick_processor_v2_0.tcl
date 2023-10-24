@@ -110,6 +110,15 @@ proc validate_PARAM_VALUE.DUAL_CORE { PARAM_VALUE.DUAL_CORE } {
 	return true
 }
 
+proc update_PARAM_VALUE.FIFO_DEPTH { PARAM_VALUE.FIFO_DEPTH } {
+	# Procedure called to update FIFO_DEPTH when any of the dependent parameters in the arguments change
+}
+
+proc validate_PARAM_VALUE.FIFO_DEPTH { PARAM_VALUE.FIFO_DEPTH } {
+	# Procedure called to validate FIFO_DEPTH
+	return true
+}
+
 proc update_PARAM_VALUE.IN_PORT_QTY { PARAM_VALUE.IN_PORT_QTY } {
 	# Procedure called to update IN_PORT_QTY when any of the dependent parameters in the arguments change
 }
@@ -307,5 +316,10 @@ proc update_MODELPARAM_VALUE.OUT_DPORT_DW { MODELPARAM_VALUE.OUT_DPORT_DW PARAM_
 proc update_MODELPARAM_VALUE.OUT_TRIG_QTY { MODELPARAM_VALUE.OUT_TRIG_QTY PARAM_VALUE.OUT_TRIG_QTY } {
 	# Procedure called to set VHDL generic/Verilog parameter value(s) based on TCL parameter value
 	set_property value [get_property value ${PARAM_VALUE.OUT_TRIG_QTY}] ${MODELPARAM_VALUE.OUT_TRIG_QTY}
+}
+
+proc update_MODELPARAM_VALUE.FIFO_DEPTH { MODELPARAM_VALUE.FIFO_DEPTH PARAM_VALUE.FIFO_DEPTH } {
+	# Procedure called to set VHDL generic/Verilog parameter value(s) based on TCL parameter value
+	set_property value [get_property value ${PARAM_VALUE.FIFO_DEPTH}] ${MODELPARAM_VALUE.FIFO_DEPTH}
 }
 
