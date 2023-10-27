@@ -3,15 +3,14 @@
 from pathlib import Path
 import subprocess
 import time
-from qick.pyro import start_server
+import argparse
 
-HERE = Path(__file__).parent
+from qick.pyro import start_server
 
 ############
 # parameters
 ############
 
-bitfile = '../qick_lib/qick/qick_4x2.bit'
 proxy_name ='rfsoc'
 ns_port = 8000
 # set to 0.0.0.0 to allow access from outside systems
@@ -19,19 +18,42 @@ ns_host = 'localhost'
 
 ############
 
-# start the nameserver process
-ns_proc = subprocess.Popen(
-    [f'PYRO_SERIALIZERS_ACCEPTED=pickle PYRO_PICKLE_PROTOCOL_VERSION=4 pyro4-ns -n {ns_host} -p {ns_port}'],
-    shell=True
+# parse command-line arguments
+arg_parser = argparse.ArgumentParser(
+    description='Start a pyro server for the QickSoc.'
 )
-
-# wait for the nameserver to start up
-time.sleep(5)
-
-# start the qick proxy server
-start_server(
-    bitfile=str(HERE / bitfile),
-    proxy_name=proxy_name,
-    ns_host='localhost',
-    ns_port=ns_port
+arg_parser.add_argument(
+    '-n',
+    '--nameserver',
+    action='store_true',
+    help='start the pyro nameserver',
 )
+arg_parser.add_argument(
+    '-p',
+    '--proxy',
+    action='store_true',
+    help='start the pyro proxy server',
+)
+cmd_args = arg_parser.parse_args()
+
+if cmd_args.nameserver:
+    # start the nameserver process
+    ns_proc = subprocess.Popen(
+        [f'PYRO_SERIALIZERS_ACCEPTED=pickle PYRO_PICKLE_PROTOCOL_VERSION=4 pyro4-ns -n {ns_host} -p {ns_port}'],
+        shell=True
+    )
+    if cmd_args.proxy:
+        # wait for nameserver to start
+        time.sleep(5)
+    else:
+        # loop forever
+        while True:
+            time.sleep(1)
+
+if cmd_args.proxy:
+    # start the qick proxy server
+    start_server(
+        proxy_name=proxy_name,
+        ns_host='localhost',
+        ns_port=ns_port
+    )

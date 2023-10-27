@@ -17,8 +17,8 @@ set_property IOSTANDARD  LVCMOS18  [get_ports "PMOD0_7_LS"] ;# Bank  88 VCCO - V
 
 set_property PACKAGE_PIN L17       [get_ports "PMOD1_0_LS"] ;# Bank  88 VCCO - VCC1V8   - IO_L4N_AD12N_88
 set_property IOSTANDARD  LVCMOS18  [get_ports "PMOD1_0_LS"] ;# Bank  88 VCCO - VCC1V8   - IO_L4N_AD12N_88
-#set_property PACKAGE_PIN M17       [get_ports "PMOD1_1_LS"] ;# Bank  88 VCCO - VCC1V8   - IO_L4P_AD12P_88
-#set_property IOSTANDARD  LVCMOS18  [get_ports "PMOD1_1_LS"] ;# Bank  88 VCCO - VCC1V8   - IO_L4P_AD12P_88
+set_property PACKAGE_PIN M17       [get_ports "PMOD1_1_LS"] ;# Bank  88 VCCO - VCC1V8   - IO_L4P_AD12P_88
+set_property IOSTANDARD  LVCMOS18  [get_ports "PMOD1_1_LS"] ;# Bank  88 VCCO - VCC1V8   - IO_L4P_AD12P_88
 #set_property PACKAGE_PIN M14       [get_ports "PMOD1_2_LS"] ;# Bank  88 VCCO - VCC1V8   - IO_L3N_AD13N_88
 #set_property IOSTANDARD  LVCMOS18  [get_ports "PMOD1_2_LS"] ;# Bank  88 VCCO - VCC1V8   - IO_L3N_AD13N_88
 #set_property PACKAGE_PIN N14       [get_ports "PMOD1_3_LS"] ;# Bank  88 VCCO - VCC1V8   - IO_L3P_AD13P_88

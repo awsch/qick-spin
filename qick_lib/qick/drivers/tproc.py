@@ -466,10 +466,10 @@ class Axis_QICK_Proc(SocIp):
     def time_update(self):
         self.logger.info('TIME_UPDATE')
         self.tproc_ctrl      = 2
-    def proc_start(self):
+    def start(self):
         self.logger.info('PROCESSOR_START')
         self.tproc_ctrl      = 4
-    def proc_stop(self):
+    def stop(self):
         self.logger.info('PROCESSOR_STOP')
         self.tproc_ctrl      = 8
     def core_start(self):
@@ -478,10 +478,10 @@ class Axis_QICK_Proc(SocIp):
     def core_stop(self):
         self.logger.info('CORE_STOP')
         self.tproc_ctrl      = 32
-    def proc_reset(self):
+    def reset(self):
         self.logger.info('PROCESSOR_RESET')
         self.tproc_ctrl      = 64
-    def proc_run(self):
+    def run(self):
         self.logger.info('PROCESSOR_RUN')
         self.tproc_ctrl      = 128
     def proc_pause(self):

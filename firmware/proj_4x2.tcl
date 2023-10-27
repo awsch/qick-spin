@@ -43,7 +43,7 @@ update_ip_catalog -rebuild
 # Set 'sources_1' fileset object
 set obj [get_filesets sources_1]
 set files [list \
-	[ file normalize "$origin_dir/hdl/vect2bits_16.v"]	\
+	[ file normalize "$origin_dir/hdl/vect2bits_9.v"]	\
 ]
 add_files -norecurse -fileset $obj $files
 

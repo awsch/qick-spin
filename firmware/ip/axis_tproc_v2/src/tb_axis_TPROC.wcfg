@@ -1,0 +1,548 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wave_config>
+   <wave_state>
+   </wave_state>
+   <db_ref_list>
+      <db_ref path="tb_axis_tproc_B_behav.wdb" id="1">
+         <top_modules>
+            <top_module name="\$unit_alu_sv " />
+            <top_module name="axi_mst_0_pkg" />
+            <top_module name="axi_vip_pkg" />
+            <top_module name="glbl" />
+            <top_module name="std" />
+            <top_module name="tb_axis_tproc_B" />
+            <top_module name="xil_common_vip_pkg" />
+         </top_modules>
+      </db_ref>
+   </db_ref_list>
+   <zoom_setting>
+      <ZoomStartTime time="15551223fs"></ZoomStartTime>
+      <ZoomEndTime time="16663224fs"></ZoomEndTime>
+      <Cursor1Time time="15841223fs"></Cursor1Time>
+   </zoom_setting>
+   <column_width_setting>
+      <NameColumnWidth column_width="211"></NameColumnWidth>
+      <ValueColumnWidth column_width="66"></ValueColumnWidth>
+   </column_width_setting>
+   <WVObjectSize size="58" />
+   <wvobject type="logic" fp_name="/tb_axis_tproc_B/axis_tproc_B/t_clk_i">
+      <obj_property name="ElementShortName">t_clk_i</obj_property>
+      <obj_property name="ObjectShortName">t_clk_i</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/tb_axis_tproc_B/axis_tproc_B/c_clk_i">
+      <obj_property name="ElementShortName">c_clk_i</obj_property>
+      <obj_property name="ObjectShortName">c_clk_i</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/tb_axis_tproc_B/axis_tproc_B/s_ps_dma_aclk">
+      <obj_property name="ElementShortName">s_ps_dma_aclk</obj_property>
+      <obj_property name="ObjectShortName">s_ps_dma_aclk</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/tb_axis_tproc_B/axis_tproc_B/axi_slv_inst/TPROC_CTRL">
+      <obj_property name="ElementShortName">TPROC_CTRL[31:0]</obj_property>
+      <obj_property name="ObjectShortName">TPROC_CTRL[31:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/tb_axis_tproc_B/axis_tproc_B/T_PROC/proc_rst">
+      <obj_property name="ElementShortName">proc_rst</obj_property>
+      <obj_property name="ObjectShortName">proc_rst</obj_property>
+      <obj_property name="CustomSignalColor">#FF00FF</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/tb_axis_tproc_B/axis_tproc_B/T_PROC/\WAVE_FIFO[0].wave_fifo_inst /flush_i">
+      <obj_property name="ElementShortName">flush_i</obj_property>
+      <obj_property name="ObjectShortName">flush_i</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/tb_axis_tproc_B/axis_tproc_B/T_PROC/fifo_wave_empty">
+      <obj_property name="ElementShortName">fifo_wave_empty[7:0]</obj_property>
+      <obj_property name="ObjectShortName">fifo_wave_empty[7:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/tb_axis_tproc_B/axis_tproc_B/T_PROC/ext_cond_r">
+      <obj_property name="ElementShortName">ext_cond_r</obj_property>
+      <obj_property name="ObjectShortName">ext_cond_r</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/tb_axis_tproc_B/port_0_dt_i">
+      <obj_property name="ElementShortName">port_0_dt_i[63:0]</obj_property>
+      <obj_property name="ObjectShortName">port_0_dt_i[63:0]</obj_property>
+      <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/tb_axis_tproc_B/port_1_dt_i">
+      <obj_property name="ElementShortName">port_1_dt_i[63:0]</obj_property>
+      <obj_property name="ObjectShortName">port_1_dt_i[63:0]</obj_property>
+      <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/tb_axis_tproc_B/axis_tproc_B/t_time_abs_do">
+      <obj_property name="ElementShortName">t_time_abs_do[31:0]</obj_property>
+      <obj_property name="ObjectShortName">t_time_abs_do[31:0]</obj_property>
+      <obj_property name="CustomSignalColor">#FFA500</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/tb_axis_tproc_B/axis_tproc_B/T_PROC/time_usr_o">
+      <obj_property name="ElementShortName">time_usr_o[31:0]</obj_property>
+      <obj_property name="ObjectShortName">time_usr_o[31:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/tb_axis_tproc_B/axis_tproc_B/T_PROC/c_time_ref_dt">
+      <obj_property name="ElementShortName">c_time_ref_dt[47:0]</obj_property>
+      <obj_property name="ObjectShortName">c_time_ref_dt[47:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/tb_axis_tproc_B/axis_tproc_B/T_PROC/t_time_abs_do">
+      <obj_property name="ElementShortName">t_time_abs_do[31:0]</obj_property>
+      <obj_property name="ObjectShortName">t_time_abs_do[31:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/tb_axis_tproc_B/axis_tproc_B/T_PROC/c_time_ref_do">
+      <obj_property name="ElementShortName">c_time_ref_do[31:0]</obj_property>
+      <obj_property name="ObjectShortName">c_time_ref_do[31:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/tb_axis_tproc_B/axis_tproc_B/T_PROC/c_time_usr">
+      <obj_property name="ElementShortName">c_time_usr[31:0]</obj_property>
+      <obj_property name="ObjectShortName">c_time_usr[31:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/tb_axis_tproc_B/axis_tproc_B/T_PROC/D_RESULT">
+      <obj_property name="ElementShortName">D_RESULT[0:0][47:0]</obj_property>
+      <obj_property name="ObjectShortName">D_RESULT[0:0][47:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/tb_axis_tproc_B/axis_tproc_B/T_PROC/port_we">
+      <obj_property name="ElementShortName">port_we</obj_property>
+      <obj_property name="ObjectShortName">port_we</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/tb_axis_tproc_B/axis_tproc_B/T_PROC/t_core_B_inst/port_o">
+      <obj_property name="ElementShortName">port_o</obj_property>
+      <obj_property name="ObjectShortName">port_o</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/tb_axis_tproc_B/axis_tproc_B/T_PROC/data_pop">
+      <obj_property name="ElementShortName">data_pop[0:0]</obj_property>
+      <obj_property name="ObjectShortName">data_pop[0:0]</obj_property>
+      <obj_property name="isExpanded"></obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/tb_axis_tproc_B/axis_tproc_B/T_PROC/data_t_eq">
+      <obj_property name="ElementShortName">data_t_eq[0:0]</obj_property>
+      <obj_property name="ObjectShortName">data_t_eq[0:0]</obj_property>
+      <obj_property name="CustomSignalColor">#800080</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/tb_axis_tproc_B/axis_tproc_B/T_PROC/fifo_data_dt">
+      <obj_property name="ElementShortName">fifo_data_dt[0:0][31:0]</obj_property>
+      <obj_property name="ObjectShortName">fifo_data_dt[0:0][31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/tb_axis_tproc_B/axis_tproc_B/T_PROC/data_pop_prev">
+      <obj_property name="ElementShortName">data_pop_prev[0:0]</obj_property>
+      <obj_property name="ObjectShortName">data_pop_prev[0:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/tb_axis_tproc_B/axis_tproc_B/T_PROC/time_abs">
+      <obj_property name="ElementShortName">time_abs[47:0]</obj_property>
+      <obj_property name="ObjectShortName">time_abs[47:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/tb_axis_tproc_B/axis_tproc_B/T_PROC/fifo_data_time">
+      <obj_property name="ElementShortName">fifo_data_time[0:0][47:0]</obj_property>
+      <obj_property name="ObjectShortName">fifo_data_time[0:0][47:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/tb_axis_tproc_B/axis_tproc_B/T_PROC/D_RESULT">
+      <obj_property name="ElementShortName">D_RESULT[0:0][47:0]</obj_property>
+      <obj_property name="ObjectShortName">D_RESULT[0:0][47:0]</obj_property>
+      <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject type="group" fp_name="group1489">
+      <obj_property name="label">DPORT</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+      <wvobject type="array" fp_name="/tb_axis_tproc_B/axis_tproc_B/port_3_dt_o">
+         <obj_property name="ElementShortName">port_3_dt_o[31:0]</obj_property>
+         <obj_property name="ObjectShortName">port_3_dt_o[31:0]</obj_property>
+         <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/tb_axis_tproc_B/axis_tproc_B/port_2_dt_o">
+         <obj_property name="ElementShortName">port_2_dt_o[31:0]</obj_property>
+         <obj_property name="ObjectShortName">port_2_dt_o[31:0]</obj_property>
+         <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/tb_axis_tproc_B/axis_tproc_B/port_1_dt_o">
+         <obj_property name="ElementShortName">port_1_dt_o[31:0]</obj_property>
+         <obj_property name="ObjectShortName">port_1_dt_o[31:0]</obj_property>
+         <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/tb_axis_tproc_B/axis_tproc_B/port_0_dt_o">
+         <obj_property name="ElementShortName">port_0_dt_o[31:0]</obj_property>
+         <obj_property name="ObjectShortName">port_0_dt_o[31:0]</obj_property>
+         <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+      </wvobject>
+   </wvobject>
+   <wvobject type="group" fp_name="group1484">
+      <obj_property name="label">WPORT</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+      <obj_property name="isExpanded"></obj_property>
+      <wvobject type="array" fp_name="/tb_axis_tproc_B/axis_tproc_B/m0_axis_tdata">
+         <obj_property name="ElementShortName">m0_axis_tdata[167:0]</obj_property>
+         <obj_property name="ObjectShortName">m0_axis_tdata[167:0]</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/tb_axis_tproc_B/axis_tproc_B/m0_axis_tvalid">
+         <obj_property name="ElementShortName">m0_axis_tvalid</obj_property>
+         <obj_property name="ObjectShortName">m0_axis_tvalid</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/tb_axis_tproc_B/axis_tproc_B/m1_axis_tdata">
+         <obj_property name="ElementShortName">m1_axis_tdata[167:0]</obj_property>
+         <obj_property name="ObjectShortName">m1_axis_tdata[167:0]</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/tb_axis_tproc_B/axis_tproc_B/m1_axis_tvalid">
+         <obj_property name="ElementShortName">m1_axis_tvalid</obj_property>
+         <obj_property name="ObjectShortName">m1_axis_tvalid</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/tb_axis_tproc_B/axis_tproc_B/m2_axis_tdata">
+         <obj_property name="ElementShortName">m2_axis_tdata[167:0]</obj_property>
+         <obj_property name="ObjectShortName">m2_axis_tdata[167:0]</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/tb_axis_tproc_B/axis_tproc_B/m2_axis_tvalid">
+         <obj_property name="ElementShortName">m2_axis_tvalid</obj_property>
+         <obj_property name="ObjectShortName">m2_axis_tvalid</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/tb_axis_tproc_B/axis_tproc_B/m3_axis_tdata">
+         <obj_property name="ElementShortName">m3_axis_tdata[167:0]</obj_property>
+         <obj_property name="ObjectShortName">m3_axis_tdata[167:0]</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/tb_axis_tproc_B/axis_tproc_B/m3_axis_tvalid">
+         <obj_property name="ElementShortName">m3_axis_tvalid</obj_property>
+         <obj_property name="ObjectShortName">m3_axis_tvalid</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/tb_axis_tproc_B/axis_tproc_B/m4_axis_tdata">
+         <obj_property name="ElementShortName">m4_axis_tdata[167:0]</obj_property>
+         <obj_property name="ObjectShortName">m4_axis_tdata[167:0]</obj_property>
+         <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/tb_axis_tproc_B/axis_tproc_B/m4_axis_tvalid">
+         <obj_property name="ElementShortName">m4_axis_tvalid</obj_property>
+         <obj_property name="ObjectShortName">m4_axis_tvalid</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/tb_axis_tproc_B/axis_tproc_B/m5_axis_tdata">
+         <obj_property name="ElementShortName">m5_axis_tdata[167:0]</obj_property>
+         <obj_property name="ObjectShortName">m5_axis_tdata[167:0]</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/tb_axis_tproc_B/axis_tproc_B/m5_axis_tvalid">
+         <obj_property name="ElementShortName">m5_axis_tvalid</obj_property>
+         <obj_property name="ObjectShortName">m5_axis_tvalid</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/tb_axis_tproc_B/axis_tproc_B/m6_axis_tdata">
+         <obj_property name="ElementShortName">m6_axis_tdata[167:0]</obj_property>
+         <obj_property name="ObjectShortName">m6_axis_tdata[167:0]</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/tb_axis_tproc_B/axis_tproc_B/m6_axis_tvalid">
+         <obj_property name="ElementShortName">m6_axis_tvalid</obj_property>
+         <obj_property name="ObjectShortName">m6_axis_tvalid</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/tb_axis_tproc_B/axis_tproc_B/m7_axis_tdata">
+         <obj_property name="ElementShortName">m7_axis_tdata[167:0]</obj_property>
+         <obj_property name="ObjectShortName">m7_axis_tdata[167:0]</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/tb_axis_tproc_B/axis_tproc_B/m7_axis_tvalid">
+         <obj_property name="ElementShortName">m7_axis_tvalid</obj_property>
+         <obj_property name="ObjectShortName">m7_axis_tvalid</obj_property>
+      </wvobject>
+   </wvobject>
+   <wvobject type="group" fp_name="group1491">
+      <obj_property name="label">IN_PORT</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+      <wvobject type="logic" fp_name="/tb_axis_tproc_B/axis_tproc_B/s0_axis_tvalid">
+         <obj_property name="ElementShortName">s0_axis_tvalid</obj_property>
+         <obj_property name="ObjectShortName">s0_axis_tvalid</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/tb_axis_tproc_B/axis_tproc_B/s1_axis_tvalid">
+         <obj_property name="ElementShortName">s1_axis_tvalid</obj_property>
+         <obj_property name="ObjectShortName">s1_axis_tvalid</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/tb_axis_tproc_B/axis_tproc_B/s2_axis_tvalid">
+         <obj_property name="ElementShortName">s2_axis_tvalid</obj_property>
+         <obj_property name="ObjectShortName">s2_axis_tvalid</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/tb_axis_tproc_B/axis_tproc_B/s3_axis_tvalid">
+         <obj_property name="ElementShortName">s3_axis_tvalid</obj_property>
+         <obj_property name="ObjectShortName">s3_axis_tvalid</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/tb_axis_tproc_B/axis_tproc_B/s4_axis_tvalid">
+         <obj_property name="ElementShortName">s4_axis_tvalid</obj_property>
+         <obj_property name="ObjectShortName">s4_axis_tvalid</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/tb_axis_tproc_B/axis_tproc_B/s5_axis_tvalid">
+         <obj_property name="ElementShortName">s5_axis_tvalid</obj_property>
+         <obj_property name="ObjectShortName">s5_axis_tvalid</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/tb_axis_tproc_B/axis_tproc_B/s6_axis_tvalid">
+         <obj_property name="ElementShortName">s6_axis_tvalid</obj_property>
+         <obj_property name="ObjectShortName">s6_axis_tvalid</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/tb_axis_tproc_B/axis_tproc_B/s7_axis_tvalid">
+         <obj_property name="ElementShortName">s7_axis_tvalid</obj_property>
+         <obj_property name="ObjectShortName">s7_axis_tvalid</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/tb_axis_tproc_B/axis_tproc_B/port_dt_new">
+         <obj_property name="ElementShortName">port_dt_new</obj_property>
+         <obj_property name="ObjectShortName">port_dt_new</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/tb_axis_tproc_B/axis_tproc_B/T_PROC/port_re">
+         <obj_property name="ElementShortName">port_re</obj_property>
+         <obj_property name="ObjectShortName">port_re</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/tb_axis_tproc_B/axis_tproc_B/T_PROC/port_dt_new_i">
+         <obj_property name="ElementShortName">port_dt_new_i</obj_property>
+         <obj_property name="ObjectShortName">port_dt_new_i</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/tb_axis_tproc_B/axis_tproc_B/T_PROC/in_port_dt_new">
+         <obj_property name="ElementShortName">in_port_dt_new</obj_property>
+         <obj_property name="ObjectShortName">in_port_dt_new</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/tb_axis_tproc_B/axis_tproc_B/T_PROC/in_port_dt_r">
+         <obj_property name="ElementShortName">in_port_dt_r[63:0]</obj_property>
+         <obj_property name="ObjectShortName">in_port_dt_r[63:0]</obj_property>
+      </wvobject>
+   </wvobject>
+   <wvobject type="array" fp_name="/tb_axis_tproc_B/axis_tproc_B/T_PROC/t_core_B_inst/reg_bank/dreg_32_dt">
+      <obj_property name="ElementShortName">dreg_32_dt[0:15][31:0]</obj_property>
+      <obj_property name="ObjectShortName">dreg_32_dt[0:15][31:0]</obj_property>
+   </wvobject>
+   <wvobject type="group" fp_name="group282">
+      <obj_property name="label">LFSR</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/tb_axis_tproc_B/axis_tproc_B/T_PROC/t_core_B_inst/reg_bank/sreg_dt">
+      <obj_property name="ElementShortName">sreg_dt[0:15][31:0]</obj_property>
+      <obj_property name="ObjectShortName">sreg_dt[0:15][31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/tb_axis_tproc_B/axis_tproc_B/T_PROC/t_core_B_inst/reg_bank/sreg_32_dt">
+      <obj_property name="ElementShortName">sreg_32_dt[0:3][31:0]</obj_property>
+      <obj_property name="ObjectShortName">sreg_32_dt[0:3][31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/tb_axis_tproc_B/axis_tproc_B/T_PROC/t_core_B_inst/x2_ctrl">
+      <obj_property name="ElementShortName">x2_ctrl</obj_property>
+      <obj_property name="ObjectShortName">x2_ctrl</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/tb_axis_tproc_B/axis_tproc_B/T_PROC/t_core_B_inst/id_type_wpw">
+      <obj_property name="ElementShortName">id_type_wpw</obj_property>
+      <obj_property name="ObjectShortName">id_type_wpw</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/tb_axis_tproc_B/axis_tproc_B/T_PROC/t_core_B_inst/id_SO">
+      <obj_property name="ElementShortName">id_SO</obj_property>
+      <obj_property name="ObjectShortName">id_SO</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/tb_axis_tproc_B/axis_tproc_B/T_PROC/t_core_B_inst/id_TO">
+      <obj_property name="ElementShortName">id_TO</obj_property>
+      <obj_property name="ObjectShortName">id_TO</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/tb_axis_tproc_B/axis_tproc_B/T_PROC/t_core_B_inst/x2_wave_w_dt">
+      <obj_property name="ElementShortName">x2_wave_w_dt[167:0]</obj_property>
+      <obj_property name="ObjectShortName">x2_wave_w_dt[167:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/tb_axis_tproc_B/axis_tproc_B/T_PROC/t_core_B_inst/port_we_o">
+      <obj_property name="ElementShortName">port_we_o</obj_property>
+      <obj_property name="ObjectShortName">port_we_o</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/tb_axis_tproc_B/axis_tproc_B/T_PROC/t_core_B_inst/port_o">
+      <obj_property name="ElementShortName">port_o</obj_property>
+      <obj_property name="ObjectShortName">port_o</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/tb_axis_tproc_B/axis_tproc_B/T_PROC/fifo_time_in_r">
+      <obj_property name="ElementShortName">fifo_time_in_r[47:0]</obj_property>
+      <obj_property name="ObjectShortName">fifo_time_in_r[47:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/tb_axis_tproc_B/axis_tproc_B/T_PROC/fifo_wave_push">
+      <obj_property name="ElementShortName">fifo_wave_push[7:0]</obj_property>
+      <obj_property name="ObjectShortName">fifo_wave_push[7:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/tb_axis_tproc_B/axis_tproc_B/T_PROC/fifo_data_push">
+      <obj_property name="ElementShortName">fifo_data_push[0:0]</obj_property>
+      <obj_property name="ObjectShortName">fifo_data_push[0:0]</obj_property>
+   </wvobject>
+   <wvobject type="group" fp_name="group491">
+      <obj_property name="label">AXI_REG</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+      <wvobject type="array" fp_name="/tb_axis_tproc_B/axis_tproc_B/axi_slv_inst/TPROC_CTRL">
+         <obj_property name="ElementShortName">TPROC_CTRL[31:0]</obj_property>
+         <obj_property name="ObjectShortName">TPROC_CTRL[31:0]</obj_property>
+         <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/tb_axis_tproc_B/axis_tproc_B/axi_slv_inst/RAND">
+         <obj_property name="ElementShortName">RAND[31:0]</obj_property>
+         <obj_property name="ObjectShortName">RAND[31:0]</obj_property>
+         <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/tb_axis_tproc_B/axis_tproc_B/axi_slv_inst/TPROC_CFG">
+         <obj_property name="ElementShortName">TPROC_CFG[31:0]</obj_property>
+         <obj_property name="ObjectShortName">TPROC_CFG[31:0]</obj_property>
+         <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/tb_axis_tproc_B/axis_tproc_B/axi_slv_inst/MEM_ADDR">
+         <obj_property name="ElementShortName">MEM_ADDR[15:0]</obj_property>
+         <obj_property name="ObjectShortName">MEM_ADDR[15:0]</obj_property>
+         <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/tb_axis_tproc_B/axis_tproc_B/axi_slv_inst/MEM_LEN">
+         <obj_property name="ElementShortName">MEM_LEN[15:0]</obj_property>
+         <obj_property name="ObjectShortName">MEM_LEN[15:0]</obj_property>
+         <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/tb_axis_tproc_B/axis_tproc_B/axi_slv_inst/MEM_DT_I">
+         <obj_property name="ElementShortName">MEM_DT_I[31:0]</obj_property>
+         <obj_property name="ObjectShortName">MEM_DT_I[31:0]</obj_property>
+         <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/tb_axis_tproc_B/axis_tproc_B/axi_slv_inst/TPROC_EXT_DT1_I">
+         <obj_property name="ElementShortName">TPROC_EXT_DT1_I[31:0]</obj_property>
+         <obj_property name="ObjectShortName">TPROC_EXT_DT1_I[31:0]</obj_property>
+         <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/tb_axis_tproc_B/axis_tproc_B/axi_slv_inst/TPROC_EXT_DT2_I">
+         <obj_property name="ElementShortName">TPROC_EXT_DT2_I[31:0]</obj_property>
+         <obj_property name="ObjectShortName">TPROC_EXT_DT2_I[31:0]</obj_property>
+         <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/tb_axis_tproc_B/axis_tproc_B/axi_slv_inst/PORT_LSB">
+         <obj_property name="ElementShortName">PORT_LSB[31:0]</obj_property>
+         <obj_property name="ObjectShortName">PORT_LSB[31:0]</obj_property>
+         <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/tb_axis_tproc_B/axis_tproc_B/axi_slv_inst/PORT_HSB">
+         <obj_property name="ElementShortName">PORT_HSB[31:0]</obj_property>
+         <obj_property name="ObjectShortName">PORT_HSB[31:0]</obj_property>
+         <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/tb_axis_tproc_B/axis_tproc_B/axi_slv_inst/TIME_USR">
+         <obj_property name="ElementShortName">TIME_USR[31:0]</obj_property>
+         <obj_property name="ObjectShortName">TIME_USR[31:0]</obj_property>
+         <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/tb_axis_tproc_B/axis_tproc_B/axi_slv_inst/TPROC_EXT_DT1_O">
+         <obj_property name="ElementShortName">TPROC_EXT_DT1_O[31:0]</obj_property>
+         <obj_property name="ObjectShortName">TPROC_EXT_DT1_O[31:0]</obj_property>
+         <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/tb_axis_tproc_B/axis_tproc_B/axi_slv_inst/TPROC_EXT_DT2_O">
+         <obj_property name="ElementShortName">TPROC_EXT_DT2_O[31:0]</obj_property>
+         <obj_property name="ObjectShortName">TPROC_EXT_DT2_O[31:0]</obj_property>
+         <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/tb_axis_tproc_B/axis_tproc_B/axi_slv_inst/MEM_DT_O">
+         <obj_property name="ElementShortName">MEM_DT_O[31:0]</obj_property>
+         <obj_property name="ObjectShortName">MEM_DT_O[31:0]</obj_property>
+         <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/tb_axis_tproc_B/axis_tproc_B/axi_slv_inst/TPROC_STATUS">
+         <obj_property name="ElementShortName">TPROC_STATUS[31:0]</obj_property>
+         <obj_property name="ObjectShortName">TPROC_STATUS[31:0]</obj_property>
+         <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/tb_axis_tproc_B/axis_tproc_B/axi_slv_inst/TPROC_DEBUG">
+         <obj_property name="ElementShortName">TPROC_DEBUG[31:0]</obj_property>
+         <obj_property name="ObjectShortName">TPROC_DEBUG[31:0]</obj_property>
+         <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+      </wvobject>
+   </wvobject>
+   <wvobject type="array" fp_name="/tb_axis_tproc_B/axis_tproc_B/T_PROC/fifo_wave_dt">
+      <obj_property name="ElementShortName">fifo_wave_dt[7:0][167:0]</obj_property>
+      <obj_property name="ObjectShortName">fifo_wave_dt[7:0][167:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/tb_axis_tproc_B/axis_tproc_B/T_PROC/fifo_data_in_r">
+      <obj_property name="ElementShortName">fifo_data_in_r[167:0]</obj_property>
+      <obj_property name="ObjectShortName">fifo_data_in_r[167:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/tb_axis_tproc_B/axis_tproc_B/T_PROC/c_core_en">
+      <obj_property name="ElementShortName">c_core_en</obj_property>
+      <obj_property name="ObjectShortName">c_core_en</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/tb_axis_tproc_B/axis_tproc_B/T_PROC/dfifo_full">
+      <obj_property name="ElementShortName">dfifo_full</obj_property>
+      <obj_property name="ObjectShortName">dfifo_full</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/tb_axis_tproc_B/axis_tproc_B/T_PROC/wfifo_full">
+      <obj_property name="ElementShortName">wfifo_full</obj_property>
+      <obj_property name="ObjectShortName">wfifo_full</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/tb_axis_tproc_B/axis_tproc_B/T_PROC/fifo_data_empty">
+      <obj_property name="ElementShortName">fifo_data_empty[0:0]</obj_property>
+      <obj_property name="ObjectShortName">fifo_data_empty[0:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/tb_axis_tproc_B/axis_tproc_B/T_PROC/fifo_ok">
+      <obj_property name="ElementShortName">fifo_ok</obj_property>
+      <obj_property name="ObjectShortName">fifo_ok</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/tb_axis_tproc_B/axis_tproc_B/T_PROC/t_core_B_inst/en_i">
+      <obj_property name="ElementShortName">en_i</obj_property>
+      <obj_property name="ObjectShortName">en_i</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/tb_axis_tproc_B/axis_tproc_B/T_PROC/\DATA_FIFO[0].data_fifo_inst /rd_ptr">
+      <obj_property name="ElementShortName">rd_ptr[7:0]</obj_property>
+      <obj_property name="ObjectShortName">rd_ptr[7:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/tb_axis_tproc_B/axis_tproc_B/T_PROC/\DATA_FIFO[0].data_fifo_inst /wr_ptr">
+      <obj_property name="ElementShortName">wr_ptr[7:0]</obj_property>
+      <obj_property name="ObjectShortName">wr_ptr[7:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/tb_axis_tproc_B/axis_tproc_B/T_PROC/\DATA_FIFO[0].data_fifo_inst /full_o">
+      <obj_property name="ElementShortName">full_o</obj_property>
+      <obj_property name="ObjectShortName">full_o</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/tb_axis_tproc_B/axis_tproc_B/T_PROC/\DATA_FIFO[0].data_fifo_inst /full">
+      <obj_property name="ElementShortName">full</obj_property>
+      <obj_property name="ObjectShortName">full</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/tb_axis_tproc_B/axis_tproc_B/T_PROC/fifo_wave_time">
+      <obj_property name="ElementShortName">fifo_wave_time[7:0][47:0]</obj_property>
+      <obj_property name="ObjectShortName">fifo_wave_time[7:0][47:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+      <wvobject type="array" fp_name="/tb_axis_tproc_B/axis_tproc_B/T_PROC/fifo_wave_time[7]">
+         <obj_property name="ElementShortName">[7][47:0]</obj_property>
+         <obj_property name="ObjectShortName">[7][47:0]</obj_property>
+         <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/tb_axis_tproc_B/axis_tproc_B/T_PROC/fifo_wave_time[6]">
+         <obj_property name="ElementShortName">[6][47:0]</obj_property>
+         <obj_property name="ObjectShortName">[6][47:0]</obj_property>
+         <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/tb_axis_tproc_B/axis_tproc_B/T_PROC/fifo_wave_time[5]">
+         <obj_property name="ElementShortName">[5][47:0]</obj_property>
+         <obj_property name="ObjectShortName">[5][47:0]</obj_property>
+         <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/tb_axis_tproc_B/axis_tproc_B/T_PROC/fifo_wave_time[4]">
+         <obj_property name="ElementShortName">[4][47:0]</obj_property>
+         <obj_property name="ObjectShortName">[4][47:0]</obj_property>
+         <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/tb_axis_tproc_B/axis_tproc_B/T_PROC/fifo_wave_time[3]">
+         <obj_property name="ElementShortName">[3][47:0]</obj_property>
+         <obj_property name="ObjectShortName">[3][47:0]</obj_property>
+         <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/tb_axis_tproc_B/axis_tproc_B/T_PROC/fifo_wave_time[2]">
+         <obj_property name="ElementShortName">[2][47:0]</obj_property>
+         <obj_property name="ObjectShortName">[2][47:0]</obj_property>
+         <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/tb_axis_tproc_B/axis_tproc_B/T_PROC/fifo_wave_time[1]">
+         <obj_property name="ElementShortName">[1][47:0]</obj_property>
+         <obj_property name="ObjectShortName">[1][47:0]</obj_property>
+         <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/tb_axis_tproc_B/axis_tproc_B/T_PROC/fifo_wave_time[0]">
+         <obj_property name="ElementShortName">[0][47:0]</obj_property>
+         <obj_property name="ObjectShortName">[0][47:0]</obj_property>
+         <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+      </wvobject>
+   </wvobject>
+   <wvobject type="array" fp_name="/tb_axis_tproc_B/axis_tproc_B/T_PROC/fifo_data_time">
+      <obj_property name="ElementShortName">fifo_data_time[0:0][47:0]</obj_property>
+      <obj_property name="ObjectShortName">fifo_data_time[0:0][47:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+      <obj_property name="isExpanded"></obj_property>
+      <wvobject type="array" fp_name="/tb_axis_tproc_B/axis_tproc_B/T_PROC/fifo_data_time[0]">
+         <obj_property name="ElementShortName">[0][47:0]</obj_property>
+         <obj_property name="ObjectShortName">[0][47:0]</obj_property>
+         <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+      </wvobject>
+   </wvobject>
+</wave_config>

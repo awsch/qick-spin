@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wave_config>
+   <wave_state>
+   </wave_state>
+   <db_ref_list>
+      <db_ref path="tb_test_behav.wdb" id="1">
+         <top_modules>
+            <top_module name="axi_vip_pkg" />
+            <top_module name="glbl" />
+            <top_module name="std" />
+            <top_module name="tb_test" />
+            <top_module name="xil_common_vip_pkg" />
+         </top_modules>
+      </db_ref>
+   </db_ref_list>
+   <zoom_setting>
+      <ZoomStartTime time="977fs"></ZoomStartTime>
+      <ZoomEndTime time="105278fs"></ZoomEndTime>
+      <Cursor1Time time="44820fs"></Cursor1Time>
+   </zoom_setting>
+   <column_width_setting>
+      <NameColumnWidth column_width="207"></NameColumnWidth>
+      <ValueColumnWidth column_width="66"></ValueColumnWidth>
+   </column_width_setting>
+   <WVObjectSize size="28" />
+   <wvobject type="logic" fp_name="/tb_test/fifo_inst/wr_clk_i">
+      <obj_property name="ElementShortName">wr_clk_i</obj_property>
+      <obj_property name="ObjectShortName">wr_clk_i</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/tb_test/fifo_inst/wr_rst_ni">
+      <obj_property name="ElementShortName">wr_rst_ni</obj_property>
+      <obj_property name="ObjectShortName">wr_rst_ni</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/tb_test/fifo_inst/wr_en_i">
+      <obj_property name="ElementShortName">wr_en_i</obj_property>
+      <obj_property name="ObjectShortName">wr_en_i</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/tb_test/fifo_inst/push_i">
+      <obj_property name="ElementShortName">push_i</obj_property>
+      <obj_property name="ObjectShortName">push_i</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/tb_test/fifo_inst/data_i">
+      <obj_property name="ElementShortName">data_i[31:0]</obj_property>
+      <obj_property name="ObjectShortName">data_i[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/tb_test/fifo_inst/rd_clk_i">
+      <obj_property name="ElementShortName">rd_clk_i</obj_property>
+      <obj_property name="ObjectShortName">rd_clk_i</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/tb_test/fifo_inst/rd_rst_ni">
+      <obj_property name="ElementShortName">rd_rst_ni</obj_property>
+      <obj_property name="ObjectShortName">rd_rst_ni</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/tb_test/fifo_inst/rd_en_i">
+      <obj_property name="ElementShortName">rd_en_i</obj_property>
+      <obj_property name="ObjectShortName">rd_en_i</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/tb_test/fifo_inst/data_o">
+      <obj_property name="ElementShortName">data_o[31:0]</obj_property>
+      <obj_property name="ObjectShortName">data_o[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/tb_test/fifo_inst/flush_i">
+      <obj_property name="ElementShortName">flush_i</obj_property>
+      <obj_property name="ObjectShortName">flush_i</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/tb_test/fifo_inst/clr_fifo_req">
+      <obj_property name="ElementShortName">clr_fifo_req</obj_property>
+      <obj_property name="ObjectShortName">clr_fifo_req</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/tb_test/fifo_inst/clr_wr">
+      <obj_property name="ElementShortName">clr_wr</obj_property>
+      <obj_property name="ObjectShortName">clr_wr</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/tb_test/fifo_inst/clr_rd">
+      <obj_property name="ElementShortName">clr_rd</obj_property>
+      <obj_property name="ObjectShortName">clr_rd</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/tb_test/fifo_inst/clr_fifo_ack">
+      <obj_property name="ElementShortName">clr_fifo_ack</obj_property>
+      <obj_property name="ObjectShortName">clr_fifo_ack</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/tb_test/fifo_inst/busy">
+      <obj_property name="ElementShortName">busy</obj_property>
+      <obj_property name="ObjectShortName">busy</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/tb_test/fifo_inst/rd_ptr">
+      <obj_property name="ElementShortName">rd_ptr[1:0]</obj_property>
+      <obj_property name="ObjectShortName">rd_ptr[1:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/tb_test/fifo_inst/wr_ptr">
+      <obj_property name="ElementShortName">wr_ptr[1:0]</obj_property>
+      <obj_property name="ObjectShortName">wr_ptr[1:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/tb_test/fifo_inst/mem_dt">
+      <obj_property name="ElementShortName">mem_dt[31:0]</obj_property>
+      <obj_property name="ObjectShortName">mem_dt[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/tb_test/fifo_inst/async_empty">
+      <obj_property name="ElementShortName">async_empty</obj_property>
+      <obj_property name="ObjectShortName">async_empty</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/tb_test/fifo_inst/async_empty_o">
+      <obj_property name="ElementShortName">async_empty_o</obj_property>
+      <obj_property name="ObjectShortName">async_empty_o</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/tb_test/fifo_inst/async_full">
+      <obj_property name="ElementShortName">async_full</obj_property>
+      <obj_property name="ObjectShortName">async_full</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/tb_test/fifo_inst/async_full_o">
+      <obj_property name="ElementShortName">async_full_o</obj_property>
+      <obj_property name="ObjectShortName">async_full_o</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/tb_test/fifo_inst/pop_i">
+      <obj_property name="ElementShortName">pop_i</obj_property>
+      <obj_property name="ObjectShortName">pop_i</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/tb_test/fifo_inst/do_pop">
+      <obj_property name="ElementShortName">do_pop</obj_property>
+      <obj_property name="ObjectShortName">do_pop</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/tb_test/fifo_inst/do_push">
+      <obj_property name="ElementShortName">do_push</obj_property>
+      <obj_property name="ObjectShortName">do_push</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/tb_test/data_i">
+      <obj_property name="ElementShortName">data_i[31:0]</obj_property>
+      <obj_property name="ObjectShortName">data_i[31:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/tb_test/data_o">
+      <obj_property name="ElementShortName">data_o[31:0]</obj_property>
+      <obj_property name="ObjectShortName">data_o[31:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/tb_test/data_read">
+      <obj_property name="ElementShortName">data_read[31:0]</obj_property>
+      <obj_property name="ObjectShortName">data_read[31:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+</wave_config>

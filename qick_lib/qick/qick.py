@@ -956,7 +956,7 @@ class QickSoc(Overlay, QickConfig):
         new_data = []
         while (totaltime < 0) or (streamer.count < streamer.total_count and time.time() < time_end):
             try:
-                raise RuntimeError("exception in readout loop") from streamer.error_queue.get(block=False)
+                raise streamer.error_queue.get(block=False)
             except queue.Empty:
                 pass
             try:

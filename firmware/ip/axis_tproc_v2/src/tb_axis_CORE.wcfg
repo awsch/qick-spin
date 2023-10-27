@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wave_config>
+   <wave_state>
+   </wave_state>
+   <db_ref_list>
+      <db_ref path="tb_axis_tproc_B_behav.wdb" id="1">
+         <top_modules>
+            <top_module name="\$unit_alu_sv " />
+            <top_module name="axi_mst_0_pkg" />
+            <top_module name="axi_vip_pkg" />
+            <top_module name="glbl" />
+            <top_module name="std" />
+            <top_module name="tb_axis_tproc_B" />
+            <top_module name="xil_common_vip_pkg" />
+         </top_modules>
+      </db_ref>
+   </db_ref_list>
+   <zoom_setting>
+      <ZoomStartTime time="16833333fs"></ZoomStartTime>
+      <ZoomEndTime time="117833334fs"></ZoomEndTime>
+      <Cursor1Time time="101000000fs"></Cursor1Time>
+   </zoom_setting>
+   <column_width_setting>
+      <NameColumnWidth column_width="202"></NameColumnWidth>
+      <ValueColumnWidth column_width="79"></ValueColumnWidth>
+   </column_width_setting>
+   <WVObjectSize size="37" />
+   <wvobject type="logic" fp_name="/tb_axis_tproc_B/t_clk">
+      <obj_property name="ElementShortName">t_clk</obj_property>
+      <obj_property name="ObjectShortName">t_clk</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/tb_axis_tproc_B/c_clk">
+      <obj_property name="ElementShortName">c_clk</obj_property>
+      <obj_property name="ObjectShortName">c_clk</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/tb_axis_tproc_B/s_ps_dma_aclk">
+      <obj_property name="ElementShortName">s_ps_dma_aclk</obj_property>
+      <obj_property name="ObjectShortName">s_ps_dma_aclk</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/tb_axis_tproc_B/rst_ni">
+      <obj_property name="ElementShortName">rst_ni</obj_property>
+      <obj_property name="ObjectShortName">rst_ni</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/tb_axis_tproc_B/axis_tproc_B/T_PROC/t_core_B_inst/id_type_cfg">
+      <obj_property name="ElementShortName">id_type_cfg</obj_property>
+      <obj_property name="ObjectShortName">id_type_cfg</obj_property>
+      <obj_property name="CustomSignalColor">#FF00FF</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/tb_axis_tproc_B/axis_tproc_B/T_PROC/t_core_B_inst/id_type_wrd">
+      <obj_property name="ElementShortName">id_type_wrd</obj_property>
+      <obj_property name="ObjectShortName">id_type_wrd</obj_property>
+      <obj_property name="CustomSignalColor">#FF00FF</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/tb_axis_tproc_B/axis_tproc_B/T_PROC/t_core_B_inst/id_type_wmd">
+      <obj_property name="ElementShortName">id_type_wmd</obj_property>
+      <obj_property name="ObjectShortName">id_type_wmd</obj_property>
+      <obj_property name="CustomSignalColor">#FF00FF</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/tb_axis_tproc_B/axis_tproc_B/T_PROC/t_core_B_inst/id_type_wmw">
+      <obj_property name="ElementShortName">id_type_wmw</obj_property>
+      <obj_property name="ObjectShortName">id_type_wmw</obj_property>
+      <obj_property name="CustomSignalColor">#FF00FF</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/tb_axis_tproc_B/axis_tproc_B/T_PROC/t_core_B_inst/id_type_wpd">
+      <obj_property name="ElementShortName">id_type_wpd</obj_property>
+      <obj_property name="ObjectShortName">id_type_wpd</obj_property>
+      <obj_property name="CustomSignalColor">#FF00FF</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/tb_axis_tproc_B/axis_tproc_B/T_PROC/t_core_B_inst/id_type_wpw">
+      <obj_property name="ElementShortName">id_type_wpw</obj_property>
+      <obj_property name="ObjectShortName">id_type_wpw</obj_property>
+      <obj_property name="CustomSignalColor">#FF00FF</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/tb_axis_tproc_B/axis_tproc_B/T_PROC/t_core_B_inst/id_type_br">
+      <obj_property name="ElementShortName">id_type_br</obj_property>
+      <obj_property name="ObjectShortName">id_type_br</obj_property>
+      <obj_property name="CustomSignalColor">#FF00FF</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/tb_axis_tproc_B/axis_tproc_B/T_PROC/t_core_B_inst/id_type_ctrl">
+      <obj_property name="ElementShortName">id_type_ctrl</obj_property>
+      <obj_property name="ObjectShortName">id_type_ctrl</obj_property>
+      <obj_property name="CustomSignalColor">#FF00FF</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/tb_axis_tproc_B/axis_tproc_B/T_PROC/t_core_B_inst/id_type_wr">
+      <obj_property name="ElementShortName">id_type_wr</obj_property>
+      <obj_property name="ObjectShortName">id_type_wr</obj_property>
+      <obj_property name="CustomSignalColor">#FF00FF</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/tb_axis_tproc_B/axis_tproc_B/T_PROC/t_core_B_inst/id_type_wrw">
+      <obj_property name="ElementShortName">id_type_wrw</obj_property>
+      <obj_property name="ObjectShortName">id_type_wrw</obj_property>
+      <obj_property name="CustomSignalColor">#FF00FF</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/tb_axis_tproc_B/axis_tproc_B/T_PROC/t_core_B_inst/id_type_wra">
+      <obj_property name="ElementShortName">id_type_wra</obj_property>
+      <obj_property name="ObjectShortName">id_type_wra</obj_property>
+      <obj_property name="CustomSignalColor">#FF00FF</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/tb_axis_tproc_B/axis_tproc_B/T_PROC/t_core_B_inst/id_type_wp">
+      <obj_property name="ElementShortName">id_type_wp</obj_property>
+      <obj_property name="ObjectShortName">id_type_wp</obj_property>
+      <obj_property name="CustomSignalColor">#FF00FF</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/tb_axis_tproc_B/axis_tproc_B/T_PROC/t_core_B_inst/id_type_wm">
+      <obj_property name="ElementShortName">id_type_wm</obj_property>
+      <obj_property name="ObjectShortName">id_type_wm</obj_property>
+      <obj_property name="CustomSignalColor">#FF00FF</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/tb_axis_tproc_B/axis_tproc_B/T_PROC/time_usr_o">
+      <obj_property name="ElementShortName">time_usr_o[31:0]</obj_property>
+      <obj_property name="ObjectShortName">time_usr_o[31:0]</obj_property>
+      <obj_property name="CustomSignalColor">#FFA500</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/tb_axis_tproc_B/axis_tproc_B/T_PROC/t_core_B_inst/cfg_dual_regs_we">
+      <obj_property name="ElementShortName">cfg_dual_regs_we</obj_property>
+      <obj_property name="ObjectShortName">cfg_dual_regs_we</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/tb_axis_tproc_B/axis_tproc_B/T_PROC/t_core_B_inst/pmem_addr_o">
+      <obj_property name="ElementShortName">pmem_addr_o[6:0]</obj_property>
+      <obj_property name="ObjectShortName">pmem_addr_o[6:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/tb_axis_tproc_B/axis_tproc_B/T_PROC/t_core_B_inst/alu/A_i">
+      <obj_property name="ElementShortName">A_i[31:0]</obj_property>
+      <obj_property name="ObjectShortName">A_i[31:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/tb_axis_tproc_B/axis_tproc_B/T_PROC/t_core_B_inst/alu/B_i">
+      <obj_property name="ElementShortName">B_i[31:0]</obj_property>
+      <obj_property name="ObjectShortName">B_i[31:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/tb_axis_tproc_B/axis_tproc_B/T_PROC/in_port_dt_new">
+      <obj_property name="ElementShortName">in_port_dt_new</obj_property>
+      <obj_property name="ObjectShortName">in_port_dt_new</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/tb_axis_tproc_B/axis_tproc_B/T_PROC/div_rdy">
+      <obj_property name="ElementShortName">div_rdy</obj_property>
+      <obj_property name="ObjectShortName">div_rdy</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/tb_axis_tproc_B/axis_tproc_B/T_PROC/div_rdy_r">
+      <obj_property name="ElementShortName">div_rdy_r</obj_property>
+      <obj_property name="ObjectShortName">div_rdy_r</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/tb_axis_tproc_B/axis_tproc_B/T_PROC/cond_ext_set">
+      <obj_property name="ElementShortName">cond_ext_set</obj_property>
+      <obj_property name="ObjectShortName">cond_ext_set</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/tb_axis_tproc_B/axis_tproc_B/T_PROC/cond_ext_clear">
+      <obj_property name="ElementShortName">cond_ext_clear</obj_property>
+      <obj_property name="ObjectShortName">cond_ext_clear</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/tb_axis_tproc_B/axis_tproc_B/T_PROC/ext_cond_r">
+      <obj_property name="ElementShortName">ext_cond_r</obj_property>
+      <obj_property name="ObjectShortName">ext_cond_r</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/tb_axis_tproc_B/axis_tproc_B/T_PROC/t_core_B_inst/alu_fZ_r">
+      <obj_property name="ElementShortName">alu_fZ_r</obj_property>
+      <obj_property name="ObjectShortName">alu_fZ_r</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/tb_axis_tproc_B/axis_tproc_B/T_PROC/t_core_B_inst/alu_fS_r">
+      <obj_property name="ElementShortName">alu_fS_r</obj_property>
+      <obj_property name="ObjectShortName">alu_fS_r</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/tb_axis_tproc_B/axis_tproc_B/T_PROC/t_core_B_inst/reg_bank/dreg_32_dt">
+      <obj_property name="ElementShortName">dreg_32_dt[0:15][31:0]</obj_property>
+      <obj_property name="ObjectShortName">dreg_32_dt[0:15][31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/tb_axis_tproc_B/axis_tproc_B/T_PROC/t_core_B_inst/x1_rsA1_dt">
+      <obj_property name="ElementShortName">x1_rsA1_dt[15:0]</obj_property>
+      <obj_property name="ObjectShortName">x1_rsA1_dt[15:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/tb_axis_tproc_B/axis_tproc_B/T_PROC/t_core_B_inst/x1_rsA0_dt">
+      <obj_property name="ElementShortName">x1_rsA0_dt[15:0]</obj_property>
+      <obj_property name="ObjectShortName">x1_rsA0_dt[15:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/tb_axis_tproc_B/axis_tproc_B/T_PROC/t_core_B_inst/x1_reg">
+      <obj_property name="ElementShortName">x1_reg</obj_property>
+      <obj_property name="ObjectShortName">x1_reg</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/tb_axis_tproc_B/axis_tproc_B/T_PROC/t_core_B_inst/x1_ctrl">
+      <obj_property name="ElementShortName">x1_ctrl</obj_property>
+      <obj_property name="ObjectShortName">x1_ctrl</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/tb_axis_tproc_B/axis_tproc_B/T_PROC/t_core_B_inst/reg_bank/sreg_dt">
+      <obj_property name="ElementShortName">sreg_dt[0:15][31:0]</obj_property>
+      <obj_property name="ObjectShortName">sreg_dt[0:15][31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/tb_axis_tproc_B/axis_tproc_B/T_PROC/t_core_B_inst/reg_bank/wreg_32_dt">
+      <obj_property name="ElementShortName">wreg_32_dt[0:5][31:0]</obj_property>
+      <obj_property name="ObjectShortName">wreg_32_dt[0:5][31:0]</obj_property>
+   </wvobject>
+</wave_config>

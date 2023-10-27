@@ -1,6 +1,10 @@
-# copy to /etc/systemd/system
-# reload services "sudo systemctl daemon-reload"
-# enable "sudo systemctl enable qick_pyro.service"
+# this service automatically creates a qick pyro nameserver and proxy server on boot
+# log into su account: "sudo -s", then "source /etc/profile"
+# modify the "ExecStart" below with the correct path for the pyro_service.py file
+# copy this file to "ln -s /home/xilinx/qick-spin/pyro4/qick_pyro.service /etc/systemd/system"
+# reload systemd services: "systemctl daemon-reload"
+# enable systemd service: "systemctl enable qick_pyro.service"
+# restart board (or start immediately: "systemctl start qick_pyro.service")
 
 [Unit]
 Description=RFSoC QICK pyro server
@@ -10,7 +14,7 @@ After=network.target
 Type=idle
 Restart=always
 User=root
-ExecStart=/bin/bash -c 'source /etc/profile && python /home/xilinx/jupyter_notebooks/qick/pyro4/pyro_service.py'
+ExecStart=/bin/bash -c 'source /etc/profile && python /home/xilinx/qick-spin/pyro4/pyro_service.py -n -p'
 
 [Install]
 WantedBy=multi-user.target
