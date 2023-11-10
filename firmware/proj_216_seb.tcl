@@ -7,7 +7,7 @@ if { [info exists ::origin_dir_loc] } {
 }
 
 # Set the project name
-set _xil_proj_name_ "top_216"
+set _xil_proj_name_ "top_216_seb"
 
 # Set the directory path for the original project from where this script was exported
 set orig_proj_dir "[file normalize "$origin_dir/"]"
@@ -38,13 +38,6 @@ set_property "ip_repo_paths" "[file normalize "$origin_dir/ip"]" $obj
 # Rebuild user ip_repo's index before adding any source files
 update_ip_catalog -rebuild
 
-# Set 'sources_1' fileset object
-set obj [get_filesets sources_1]
-set files [list \
-	[ file normalize "$origin_dir/hdl/vect2bits_16.v"]	\
-]
-add_files -norecurse -fileset $obj $files
-
 # Set 'constrs_1' fileset object
 set obj [get_filesets constrs_1]
 
@@ -70,7 +63,29 @@ make_wrapper -files [get_files d_1.bd] -top
 
 # Add files to sources_1 fileset
 set files [list \
-  [file normalize "${origin_dir}/top_216/top_216.srcs/sources_1/bd/d_1/hdl/d_1_wrapper.v" ]\
+  [file normalize "${origin_dir}/${_xil_proj_name_}/${_xil_proj_name_}.srcs/sources_1/bd/d_1/hdl/d_1_wrapper.v" ]\
 ]
 add_files -fileset $obj $files
+
+## Modifie Current Synthesis
+set_property strategy Flow_RuntimeOptimized [get_runs synth_1]
+
+## Create Synthesis
+create_run Performance -flow {Vivado Synthesis 2022} -strategy Flow_PerfOptimized_high
+
+## Create Implementation NET DELAY
+create_run Net_Delay -parent_run Performance -flow {Vivado Implementation 2022} -strategy Performance_NetDelay_high
+set INC_DIR_Net_Delay [get_property directory [current_project]]/${_xil_proj_name_}.srcs/utils_1/imports/Net_Delay
+set_property AUTO_INCREMENTAL_CHECKPOINT 1 [get_runs Net_Delay]
+set_property AUTO_INCREMENTAL_CHECKPOINT.DIRECTORY $INC_DIR_Net_Delay [get_runs Net_Delay]
+
+## Create Implementation Extra Timing Opt
+create_run Timing -parent_run Performance -flow {Vivado Implementation 2022} -strategy Performance_ExtraTimingOpt
+set INC_DIR_Timing [get_property directory [current_project]]/${_xil_proj_name_}.srcs/utils_1/imports/Timing
+set_property AUTO_INCREMENTAL_CHECKPOINT.DIRECTORY $INC_DIR_Timing [get_runs Net_Delay]
+set_property AUTO_INCREMENTAL_CHECKPOINT 1 [get_runs Timing]
+set_property incremental_checkpoint.directive TimingClosure [get_runs Timing]
+
+current_run [get_runs Performance]
+#launch_runs Performance Net_Delay Timing -jobs 5
 

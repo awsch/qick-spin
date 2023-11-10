@@ -63,4 +63,7 @@ set_property PULLDOWN TRUE         [get_ports "PMOD1_1_LS"] ;# # Add pulldown, t
 #set_property PACKAGE_PIN D13       [get_ports "LED_GPIO_3"] ;# Bank  87 VCCO - VCC1V8   - IO_L2P_AD14P_87
 #set_property IOSTANDARD  LVCMOS18  [get_ports "LED_GPIO_3"] ;# Bank  87 VCCO - VCC1V8   - IO_L2P_AD14P_87
 
+set_property BITSTREAM.CONFIG.UNUSEDPIN PULLUP [current_design]
+set_property BITSTREAM.CONFIG.OVERTEMPSHUTDOWN ENABLE [current_design]
+set_property BITSTREAM.GENERAL.COMPRESS TRUE [current_design]
 
