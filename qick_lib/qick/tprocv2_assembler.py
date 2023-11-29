@@ -1680,7 +1680,7 @@ class Instruction():
                         comp_REG_FMT = "r(\d+)"
                         param_op  = re.findall(comp_REG_FMT, current['DATA'])
                         if (param_op):
-                           RsF     = '00000_1' + integer2bin(param_op[0][0], 5)     
+                           RsF     = '00000_1' + integer2bin(param_op[0], 5)     
                         else:
                             error = Logger.error('Instruction.PORT_WR', 'Register Selection Error, should be dreg in line ' + str(current['LINE']) )
                     else:
