@@ -281,7 +281,7 @@ class AxisTProc64x32_x8(SocIp):
         return buff
 
 
-class Axis_QICK_Proc(SocIp):
+class QICK_tProc(SocIp):
     """
     Axis_QICK_Proc class
     
@@ -520,7 +520,7 @@ class Axis_QICK_Proc(SocIp):
             lines.append("%-14s: %s" % (param, ["NO", "YES"][self.cfg[param]]))
         lines.append("\nPeripherals:")
         for param in ['has_lfsr', 'has_divider', 'has_arith', 'has_time_read', 'has_tnet', 'has_custom_periph']:
-            lines.append("%-14s: %s" % (param, ["NO", "YES"][self.cfg[param]]))
+            lines.append("%-17s: %s" % (param, ["NO", "YES"][self.cfg[param]]))
         return "\n".join(lines)
     def info(self):
         print(self)
@@ -767,7 +767,7 @@ class Axis_QICK_Proc(SocIp):
         print( 'PERIPH     : 1=' + str(periph_1) +' 2='+  str(periph_2))
 
         
-class Axis_QICK_Net(SocIp):
+class Qick_Net(SocIp):
     """
     Axis_QICK_Proc class
 
@@ -794,19 +794,16 @@ class Axis_QICK_Net(SocIp):
     :type axi_dma: int
     """
     bindto = ['Fermi:user:qick_network:1.0']
-
     REGISTERS = {
-        'tnet_ctrl'     :0 ,
-        'tnet_cfg'      :1 ,
-        'tnet_addr'     :2 ,
-        'tnet_len'      :3 ,
+        'q_ctrl'        :0 ,
+        'q_cfg'         :1 ,
         'raxi_dt1'      :4 ,
         'raxi_dt2'      :5 ,
         'raxi_dt3'      :6 ,
         'nn_id'         :7 ,
         'rtd'           :8,
-        'tnet_w_dt1'    :9,
-        'tnet_w_dt2'    :10,
+        'w_dt1'         :9,
+        'w_dt2'         :10,
         'rx_status'     :11,
         'tx_status'     :12,
         'status'        :13,
@@ -912,9 +909,7 @@ class Axis_QICK_Net(SocIp):
         print( ' SET_COND     : ' + status_bin[0] )
 
     def get_debug(self):
-
         print('---------------------------------------------')
-
         print('--- AXI TNET Register DEBUG_0')
         self.tnet_cfg = 0
         debug_num = self.debug
@@ -1058,3 +1053,68 @@ class Axis_QICK_Net(SocIp):
         print( ' T4   : ' + str(cmd4_st) + ' - ' + cmd_list[cmd4_st])
         print( ' T5   : ' + str(cmd5_st) + ' - ' + cmd_list[cmd5_st])
         
+class Qick_Com(SocIp):
+    """
+    Axis_QICK_Comm class
+
+    ####################
+    QICK COM xREG
+    ####################
+    QCOM_CTRL        Write / Read 32-Bits
+    QCOM_CFG         Write / Read 32-Bits
+    RAXI_DT1         Write / Read 32-Bits
+    QCOM_FLAG        Read Only    32-Bits
+    QCOM_DT1         Read Only    32-Bits
+    QCOM_DT2         Read Only    32-Bits
+    QCOM_STATUS      Read Only    32-Bits
+    QCOM_TX_DT       Read Only    32-Bits
+    QCOM_RX_DT       Read Only    32-Bits
+    QCOM_DEBUG       Read Only    32-Bits
+    """
+    bindto = ['Fermi:user:qick_com:1.0']
+    REGISTERS = {
+        'q_ctrl'     :0 ,
+        'q_cfg'      :1 ,
+        'raxi_dt'  :2 ,
+        'flag'     :7 ,
+        'dt1'      :8 ,
+        'dt2'      :9,
+        'status'   :10,
+        'tx_dt'    :13,
+        'rx_dt'    :14,
+        'debug'    :15
+    }    
+
+    def __init__(self, description):
+        """
+        Constructor method
+        """
+        super().__init__(description)
+        # Initial Values 
+        self.qcom_ctrl = 0
+        self.qcom_cfg  = 0
+        self.raxi_dt1  = 0
+
+    # Configure this driver with links to its memory and DMA.
+    def configure(self, mem, axi_dma):
+        # Program memory.
+        self.mem = mem
+        # dma
+        self.dma = axi_dma
+
+    def get_axi(self):
+        print('--- AXI Registers')
+        for xreg in self.REGISTERS.keys():
+            print(f'{xreg:>15}', getattr(self, xreg))
+    def get_debug(self):
+        debug_num = self.debug
+        debug_bin = '{:032b}'.format(debug_num)
+        print('---------------------------------------------')
+        print('--- AXI TNET Register RX_STATUS')
+        print( ' qcom_rx_st   : ' + debug_bin[30:32] )
+        print( ' rx_header    : ' + debug_bin[27:30] )
+        print( ' reg_sel      : ' + debug_bin[25:27] )
+        print( ' reg_wr_size  : ' + debug_bin[23:25] )
+        print( ' qcom_tx_st   : ' + debug_bin[20:23] )
+        print( ' tx_header    : ' + debug_bin[17:20]  )
+

@@ -291,7 +291,17 @@ class QickSoc(Overlay, QickConfig):
             else:
                 raise RuntimeError('No tProcessor found')
 
-            #self.tnet = self.qick_net_0
+            #self.qnet = self.qick_network_0
+            try:
+               self.qnet = self.qick_network_0
+            except:
+               pass
+
+            #self.qcom = self.qick_com_0
+            try:
+               self.qcom = self.qick_com_0
+            except:
+               pass
 
             self.map_signal_paths()
 
