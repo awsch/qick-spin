@@ -8,6 +8,7 @@ import xrfdc
 import numpy as np
 import time
 import queue
+from collections import OrderedDict
 from . import bitfile_path, obtain, get_version
 from .ip import SocIp, QickMetadata
 from .parser import parse_to_bin
@@ -102,13 +103,13 @@ class RFDC(xrfdc.RFdc):
         """
         super().__init__(description)
         # Nyquist zone for each channel
-        self.nqz_dict = {}
+        self.nqz_dict = {'dac': {}, 'adc': {}}
         # Rounded NCO frequency for each channel
         self.mixer_dict = {}
 
     def configure(self, soc):
-        self.daccfg = soc.dacs
-        self.adccfg = soc.adcs
+        self.daccfg = soc['dacs']
+        self.adccfg = soc['adcs']
 
     def set_mixer_freq(self, dacname, f, force=False, reset=False):
         """
@@ -172,36 +173,63 @@ class RFDC(xrfdc.RFdc):
             self.mixer_dict[dacname] = self.dac_tiles[tile].blocks[channel].MixerSettings['Freq']
             return self.mixer_dict[dacname]
 
-    def set_nyquist(self, dacname, nqz, force=False):
+    def set_nyquist(self, blockname, nqz, blocktype='dac', force=False):
         """
-        Sets DAC channel to operate in Nyquist zone nqz.
-        This setting doesn't change the output frequencies:
+        Sets channel to operate in Nyquist zone nqz.
+        This setting doesn't change the DAC output frequencies:
         you will always have some power at both the demanded frequency and its image(s).
         Setting the NQZ to 2 increases output power in the 2nd/3rd Nyquist zones.
         See "RF-DAC Nyquist Zone Operation" in PG269.
 
-        :param dacname: DAC channel (2-digit string)
-        :type dacname: int
+        :param blockname: channel ID (2-digit string)
+        :type blockname: int
         :param nqz: Nyquist zone (1 or 2)
         :type nqz: int
+        :param blocktype: 'dac' or 'adc'
+        :type blocktype: str
         :param force: force update, even if the setting is the same
         :type force: bool
         """
         if nqz not in [1,2]:
             raise RuntimeError("Nyquist zone must be 1 or 2")
-        tile, channel = [int(a) for a in dacname]
-        if not force and self.get_nyquist(dacname) == nqz:
+        if blocktype not in ['dac','adc']:
+            raise RuntimeError("Block type must be adc or dac")
+        tile, channel = [int(a) for a in blockname]
+        if not force and self.get_nyquist(blockname, blocktype) == nqz:
             return
-        self.dac_tiles[tile].blocks[channel].NyquistZone = nqz
-        self.nqz_dict[dacname] = nqz
+        if blocktype=='dac':
+            self.dac_tiles[tile].blocks[channel].NyquistZone = nqz
+        else:
+            self.adc_tiles[tile].blocks[channel].NyquistZone = nqz
+        self.nqz_dict[blocktype][blockname] = nqz
 
-    def get_nyquist(self, dacname):
+    def get_nyquist(self, blockname, blocktype='dac'):
+        """
+        Get the current Nyquist zone setting for a channel.
+
+        Parameters
+        ----------
+        blockname : str
+            Channel ID (2-digit string)
+        blocktype : str
+            'dac' or 'adc'
+
+        Returns
+        -------
+        int
+            NQZ setting (1 or 2)
+        """
+        if blocktype not in ['dac','adc']:
+            raise RuntimeError("Block type must be adc or dac")
         try:
-            return self.nqz_dict[dacname]
+            return self.nqz_dict[blocktype][blockname]
         except KeyError:
-            tile, channel = [int(a) for a in dacname]
-            self.nqz_dict[dacname] = self.dac_tiles[tile].blocks[channel].NyquistZone
-            return self.nqz_dict[dacname]
+            tile, channel = [int(a) for a in blockname]
+            if blocktype=='dac':
+                self.nqz_dict[blocktype][blockname] = self.dac_tiles[tile].blocks[channel].NyquistZone
+            else:
+                self.nqz_dict[blocktype][blockname] = self.adc_tiles[tile].blocks[channel].NyquistZone
+            return self.nqz_dict[blocktype][blockname]
 
 
 class QickSoc(Overlay, QickConfig):
@@ -359,9 +387,10 @@ class QickSoc(Overlay, QickConfig):
                 self.readouts.append(buf.readout)
 
         # Sort the lists.
-        # We order gens by the tProc port number and buffers by the switch port number.
+        # We order gens by the tProc port number and tProc mux port number (if present).
+        # We order buffers by the switch port number.
         # Those orderings are important, since those indices get used in programs.
-        self.gens.sort(key=lambda x: x['tproc_ch'])
+        self.gens.sort(key=lambda x:(x['tproc_ch'], x._cfg.get('tmux_ch')))
         self.avg_bufs.sort(key=lambda x: x.switch_ch)
         # The IQ and readout orderings aren't critical for anything.
         self.iqs.sort(key=lambda x: x.dac)
@@ -392,8 +421,6 @@ class QickSoc(Overlay, QickConfig):
             pass
 
         # Fill the config dictionary with driver parameters.
-        self['dacs'] = list(self.dacs.keys())
-        self['adcs'] = list(self.adcs.keys())
         self['gens'] = [gen.cfg for gen in self.gens]
         self['iqs'] = [iq.cfg for iq in self.iqs]
 
@@ -456,8 +483,8 @@ class QickSoc(Overlay, QickConfig):
         dac_fabric_freqs = []
         adc_fabric_freqs = []
         refclk_freqs = []
-        self.dacs = {}
-        self.adcs = {}
+        self['dacs'] = OrderedDict()
+        self['adcs'] = OrderedDict()
 
         for iTile in range(4):
             if rf_config['C_DAC%d_Enable' % (iTile)] != '1':
@@ -476,12 +503,14 @@ class QickSoc(Overlay, QickConfig):
             for iBlock in range(4):
                 if rf_config['C_DAC_Slice%d%d_Enable' % (iTile, iBlock)] != 'true':
                     continue
+                # define a 2-digit "name" that we'll use to refer to this channel
+                chname = "%d%d" % (iTile, iBlock)
                 interpolation = int(rf_config['C_DAC_Interpolation_Mode%d%d' % (iTile, iBlock)])
-                self.dacs["%d%d" % (iTile, iBlock)] = {'fs': fs,
-                                                       'fs_div': fs_div,
-                                                       'fs_mult': fs_mult,
-                                                       'f_fabric': f_fabric,
-                                                       'interpolation': interpolation}
+                self['dacs'][chname] = {'fs': fs,
+                                       'fs_div': fs_div,
+                                       'fs_mult': fs_mult,
+                                       'f_fabric': f_fabric,
+                                       'interpolation': interpolation}
 
         for iTile in range(4):
             if rf_config['C_ADC%d_Enable' % (iTile)] != '1':
@@ -504,12 +533,14 @@ class QickSoc(Overlay, QickConfig):
                 else:
                     if rf_config['C_ADC_Slice%d%d_Enable' % (iTile, iBlock)] != 'true':
                         continue
+                # define a 2-digit "name" that we'll use to refer to this channel
+                chname = "%d%d" % (iTile, iBlock)
                 decimation = int(rf_config['C_ADC_Decimation_Mode%d%d' % (iTile, iBlock)])
-                self.adcs["%d%d" % (iTile, iBlock)] = {'fs': fs,
-                                                       'fs_div': fs_div,
-                                                       'fs_mult': fs_mult,
-                                                       'f_fabric': f_fabric,
-                                                       'decimation': decimation}
+                self['adcs'][chname] = {'fs': fs,
+                                       'fs_div': fs_div,
+                                       'fs_mult': fs_mult,
+                                       'f_fabric': f_fabric,
+                                       'decimation': decimation}
 
         def get_common_freq(freqs):
             """
