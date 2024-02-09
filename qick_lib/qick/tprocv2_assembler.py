@@ -146,47 +146,65 @@ Alias_List = {
     'W_CONF'      : {'RegEx' : r'w_conf'                , 'R': 'w5'        },
     'ZERO'        : {'RegEx' : r'zero'                  , 'R': 's0'        },
     'RAND'        : {'RegEx' : r'rand'                  , 'R': 's1'        },
-    'CONF'        : {'RegEx' : r's_conf|s_ctrl'         , 'R': 's2'        },
-    'STATUS'      : {'RegEx' : r's_status'              , 'R': 's3'        },
+    'CONF'        : {'RegEx' : r's_cfg|s_conf|s_ctrl'   , 'R': 's2'        },
+    'ARITHL'      : {'RegEx' : r'arith_l'               , 'R': 's3'        },
     'DIVQ'        : {'RegEx' : r'div_q'                 , 'R': 's4'        },
     'DIVR'        : {'RegEx' : r'div_r'                 , 'R': 's5'        },
-    'ARITHL'      : {'RegEx' : r'arith_l'               , 'R': 's6'        },
-    'CORE_R1'     : {'RegEx' : r'core_r1'               , 'R': 's7'        },
-    'CORE_R2'     : {'RegEx' : r'core_r2'               , 'R': 's8'        },
-    'PORTL'       : {'RegEx' : r'port_l'                , 'R': 's9'        },
-    'PORTH'       : {'RegEx' : r'port_h'                , 'R': 's10'       },
+    'CORE_R1'     : {'RegEx' : r'core_r1'               , 'R': 's6'        },
+    'CORE_R2'     : {'RegEx' : r'core_r2'               , 'R': 's7'        },
+    'PORTL'       : {'RegEx' : r'port_l'                , 'R': 's8'        },
+    'PORTH'       : {'RegEx' : r'port_h'                , 'R': 's9'        },
+    'STATUS'      : {'RegEx' : r's_status'              , 'R': 's10'       },
     'TUSER'       : {'RegEx' : r'curr_usr_time|tuser'   , 'R': 's11'       },
     'CORE_W1'     : {'RegEx' : r'core_w1'               , 'R': 's12'       },
     'CORE_W2'     : {'RegEx' : r'core_w2'               , 'R': 's13'       },
     'TIME'        : {'RegEx' : r'out_usr_time|r_time|s_time' , 'R': 's14'  },
     'ADDR'        : {'RegEx' : r's_addr|r_addr'         , 'R': 's15'       },
-## Values
-    'SRC_0'       : {'RegEx' : r'src_tproc|flg_int', 'R': '#0'       },
-    'SRC_1'       : {'RegEx' : r'src_arith'        , 'R': '#1'       },
-    'SRC_2'       : {'RegEx' : r'src_qnet'         , 'R': '#2'       },
-    'SRC_3'       : {'RegEx' : r'src_qcom'         , 'R': '#3'       },
-    'SRC_4'       : {'RegEx' : r'src_qp1'          , 'R': '#4'       },
-    'SRC_5'       : {'RegEx' : r'src_qp2'          , 'R': '#5'       },
-    'SRC_6'       : {'RegEx' : r'src_core'         , 'R': '#6'       },
-    'SRC_7'       : {'RegEx' : r'src_port'         , 'R': '#7'       },
-    'FLAG_1'      : {'RegEx' : r'flg_axi'          , 'R': '#16'      },
-    'FLAG_2'      : {'RegEx' : r'flg_ext'          , 'R': '#32'      },
-    'FLAG_3'      : {'RegEx' : r'flg_div|flg_arith', 'R': '#48'      },
-    'FLAG_4'      : {'RegEx' : r'flg_port'         , 'R': '#64'      },
-    'FLAG_5'      : {'RegEx' : r'flg_qnet'         , 'R': '#80'      },
-    'FLAG_6'      : {'RegEx' : r'flg_qcom'         , 'R': '#96'      },
-    'FLAG_7'      : {'RegEx' : r'flg_qp1'          , 'R': '#112'     },
-    'SRC_FLAG_0'  : {'RegEx' : r'sf_arith'         , 'R': '#49'      },
-    'SRC_FLAG_1'  : {'RegEx' : r'sf_qnet'          , 'R': '#82'      },
-    'SRC_FLAG_2'  : {'RegEx' : r'sf_qcom'          , 'R': '#99'      },
-    'SRC_FLAG_3'  : {'RegEx' : r'sf_qp1'           , 'R': '#116'     },
-    'RST_SRC_FLG0' : {'RegEx' : r'sfr_div'         , 'R': '#131120'  },
-    'RST_SRC_FLG1' : {'RegEx' : r'sfr_arith'       , 'R': '#65585'   },
-    'RST_SRC_FLG2' : {'RegEx' : r'sfr_qnet'        , 'R': '#262226'  },
-    'RST_SRC_FLG3' : {'RegEx' : r'sfr_qp1'         , 'R': '#524404'     },
-    
-
-
+## Status
+    'RDY_A'   : {'RegEx' : r'arith_rdy'        , 'R': '#1'      },
+    'RDY_D'   : {'RegEx' : r'div_rdy'          , 'R': '#4'      },
+    'RDY_QN'  : {'RegEx' : r'qnet_rdy'         , 'R': '#16'     },
+    'RDY_QC'  : {'RegEx' : r'qcom_rdy'         , 'R': '#64'     },
+    'RDY_QA'  : {'RegEx' : r'qpa_rdy'          , 'R': '#256'    },
+    'RDY_QB'  : {'RegEx' : r'qpb_rdy'          , 'R': '#1024'   },
+    'NEW_A'   : {'RegEx' : r'arith_new'        , 'R': '#2'      },
+    'NEW_D'   : {'RegEx' : r'div_new'          , 'R': '#8'      },
+    'NEW_QN'  : {'RegEx' : r'qnet_new'         , 'R': '#32'     },
+    'NEW_QC'  : {'RegEx' : r'qcom_new'         , 'R': '#128'    },
+    'NEW_QA'  : {'RegEx' : r'qpa_new'           , 'R': '#512'    },
+    'NEW_QB'  : {'RegEx' : r'qpb_new'           , 'R': '#2048'   },
+## Config
+    'SRC_DT0'      : {'RegEx' : r'src_tproc|flg_int', 'R': '#0'       },
+    'SRC_DT1'      : {'RegEx' : r'arith_src'        , 'R': '#1'       },
+    'SRC_DT2'      : {'RegEx' : r'qnet_src'         , 'R': '#2'       },
+    'SRC_DT3'      : {'RegEx' : r'qcom_src'         , 'R': '#3'       },
+    'SRC_DT4'      : {'RegEx' : r'qpa_src'          , 'R': '#4'       },
+    'SRC_DT5'      : {'RegEx' : r'qpb_src'          , 'R': '#5'       },
+    'SRC_DT6'      : {'RegEx' : r'core_src'         , 'R': '#6'       },
+    'SRC_DT7'      : {'RegEx' : r'port_src'         , 'R': '#7'       },
+    'FLAG_1'       : {'RegEx' : r'axi_flg'          , 'R': '#16'      },
+    'FLAG_2'       : {'RegEx' : r'ext_flg'          , 'R': '#32'      },
+    'FLAG_3'       : {'RegEx' : r'div_flg|arith_flg', 'R': '#48'      },
+    'FLAG_4'       : {'RegEx' : r'port_flg'         , 'R': '#64'      },
+    'FLAG_5'       : {'RegEx' : r'qnet_flg'         , 'R': '#80'      },
+    'FLAG_6'       : {'RegEx' : r'qcom_flg'         , 'R': '#96'      },
+    'FLAG_7'       : {'RegEx' : r'qpa_flg'          , 'R': '#112'     },
+    'SRC&FLAG_0'   : {'RegEx' : r'arith_sf'         , 'R': '#49'      },
+    'SRC&FLAG_1'   : {'RegEx' : r'qnet_sf'          , 'R': '#82'      },
+    'SRC&FLAG_2'   : {'RegEx' : r'qcom_sf'          , 'R': '#99'      },
+    'SRC&FLAG_3'   : {'RegEx' : r'qpa_sf'           , 'R': '#116'     },
+## Control
+    'RST_A'   : {'RegEx' : r'arith_clr'        , 'R': '#65536'      },
+    'RST_D'   : {'RegEx' : r'div_clr'          , 'R': '#131072'     },
+    'RST_QN'  : {'RegEx' : r'qnet_clr'         , 'R': '#262144'     },
+    'RST_QC'  : {'RegEx' : r'qcom_clr'         , 'R': '#524288'     },
+    'RST_QA'  : {'RegEx' : r'qpa_clr'          , 'R': '#1048576'    },
+    'RST_QB'  : {'RegEx' : r'qpb_clr'          , 'R': '#2097152'    },
+    'RST_PORT': {'RegEx' : r'port_clr'         , 'R': '#4194304'    },
+    'RST&SRC&FLAG_0'   : {'RegEx' : r'arith_csf'         , 'R': '#65585'   },
+    'RST&SRC&FLAG_1'   : {'RegEx' : r'qnet_csf'          , 'R': '#262226'  },
+    'RST&SRC&FLAG_2'   : {'RegEx' : r'qcom_csf'          , 'R': '#99'      },
+    'RST&SRC&FLAG_3'   : {'RegEx' : r'qpa_csf'           , 'R': '#524404'  },
 ## CMDS
     'CLR_ARITH'     : {'RegEx' : r'clr_arith'       , 'R': '#65536'       },
     'CLR_DIV'       : {'RegEx' : r'clr_div'         , 'R': '#131072'       },
@@ -1395,7 +1413,6 @@ class Instruction():
             elif (current ['SRC'] == 'imm'):
                 #### Get Data Source
                 if ('LIT' in current ):
-                    print(current)
                     error, DATA, alu_op, DF = Instruction.__PROCESS_SOURCE(current)
                     CFG = '11__' + current ['UF'] + '_00_' + alu_op
                     ADDR  = '___00000000000__000000' # 17 Bits 11 + 6
@@ -1771,7 +1788,8 @@ class Instruction():
                 error = Logger.error('Instruction.CTRL', 'Posible Operations for TIME command are (rst, set_ref, inc_ref)' )
             if ('LIT' in current ):
                 DF='11'
-                RD1 = '___'+integer2bin(current['LIT'], 24)
+                RD0 = '_'
+                RD1 = '___'+integer2bin(current['LIT'], 32)
                 ImmFill=''
             elif ('R1' in current):
                 error, RD1 = get_reg_addr (current['R1'], 'Source')
