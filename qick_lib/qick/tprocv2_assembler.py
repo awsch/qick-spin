@@ -382,9 +382,12 @@ class Assembler():
         assembler_code = ''
         key_list = list(label_dict.keys())
         val_list = list(label_dict.values())
-        for address, command in enumerate(program_list, start=1):
+        wait_cnt = 0
+        for ind, command in enumerate(program_list, start=1):
             # CHECK FOR LABEL IN THAT MEMORY PLACE
-            address = program_list['P_ADDR'] if ('P_ADDR' in program_list) else address # set correct instruction address in memory.
+            address = command['P_ADDR'] if ('P_ADDR' in command) else (ind+wait_cnt) # set correct instruction address in memory.
+            if ( command['CMD'] == 'WAIT'):
+                wait_cnt = wait_cnt + 1
             # LABEL in the Correct Line
             PADDR = '&' + str(address)
             if (PADDR in val_list):
