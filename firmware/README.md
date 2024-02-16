@@ -159,6 +159,18 @@ RFDC DAC settings:
 * Mixer Type: Fine
 * Mixer Mode: I/Q->Real
 
+### tProc v2 (`qick_processor`):
+* s0_axis: feedback inputs
+* dma: to DMA AXIS ports
+* t_clk: timing clock (typically one of the DAC clocks)
+* c_clk: core clock (can be anything, but max ~200 MHz, doubling the PL clock makes sense)
+* ps_clk: AXI clock, from PS
+
+need a DMA:
+* buffer length width 26, address width 32
+* read enabled, 1 channel, width 256, burst 2
+* write enabled, 1 channel, width 256, burst 16
+
 ## Expanding the program memory
 
 In theory you just need to change it in the address editor and it will propagate to the block design, but there is some bug in Vivado which leads to an error message that complains about asymmetry between the two memory ports:
