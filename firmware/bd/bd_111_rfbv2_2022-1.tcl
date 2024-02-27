@@ -639,11 +639,17 @@ proc create_root_design { parentCell } {
   # Create instance: qick_processor_0, and set properties
   set qick_processor_0 [ create_bd_cell -type ip -vlnv Fermi:user:qick_processor:2.0 qick_processor_0 ]
   set_property -dict [ list \
+   CONFIG.ARITH {1} \
+   CONFIG.DEBUG {0} \
+   CONFIG.DMEM_AW {10} \
    CONFIG.EXT_FLAG {0} \
    CONFIG.IO_CTRL {1} \
+   CONFIG.LFSR {0} \
    CONFIG.OUT_DPORT_DW {8} \
    CONFIG.OUT_DPORT_QTY {2} \
    CONFIG.OUT_WPORT_QTY {8} \
+   CONFIG.PMEM_AW {10} \
+   CONFIG.WMEM_AW {10} \
  ] $qick_processor_0
 
   # Create instance: qick_vec2bit_0, and set properties
@@ -2621,8 +2627,8 @@ Port;FD4A0000;FD4AFFFF;1|FPD;DPDMA;FD4C0000;FD4CFFFF;1|FPD;DDR_XMPU5_CFG;FD05000
    "Addressing View_ScaleFactor":"0.580068",
    "Addressing View_TopLeft":"-141,-165",
    "Default View_Layers":"/axi_dma_mr_s2mm_introut:true|/usp_rf_data_converter_0_clk_dac0:true|/axi_intc_0_irq:true|/rst_dac0_peripheral_aresetn:true|/usp_rf_data_converter_0_clk_dac1:true|/rst_ddr4_0_333M_peripheral_aresetn:true|/rst_adc0_x2_peripheral_aresetn:true|/zynq_ultra_ps_e_0_pl_clk0:true|/ddr4_0_c0_ddr4_ui_clk:true|/zynq_ultra_ps_e_0_pl_resetn0:true|/axi_dma_tproc_s2mm_introut:true|/rst_100_bus_struct_reset:true|/clk_adc0_x2_clk_out1:true|/rst_dac1_peripheral_aresetn:true|/axi_dma_buf_s2mm_introut:true|/rst_adc0_peripheral_reset:true|/axi_dma_gen_mm2s_introut:true|/axi_dma_avg_s2mm_introut:true|/ddr4_0_c0_ddr4_ui_clk_sync_rst:true|/rst_ps8_0_99M_peripheral_aresetn:true|/usp_rf_data_converter_0_clk_adc0:true|/zynq_ultra_ps_e_0_pl_clk1:true|/axi_dma_tproc_mm2s_introut:true|",
-   "Default View_ScaleFactor":"0.362957",
-   "Default View_TopLeft":"-182,-838",
+   "Default View_ScaleFactor":"0.387354",
+   "Default View_TopLeft":"-181,-697",
    "Display-PortTypeClock":"true",
    "Display-PortTypeInterrupt":"true",
    "Display-PortTypeOthers":"true",
@@ -2733,7 +2739,6 @@ preplace inst lo_sync_constant_0 -pg 1 -lvl 15 -x 7380 -y 50 -defaultsOSRD
 preplace inst mr_buffer_et_0 -pg 1 -lvl 11 -x 5700 -y 970 -defaultsOSRD
 preplace inst ps8_0_axi_periph -pg 1 -lvl 4 -x 2660 -y 380 -defaultsOSRD
 preplace inst psf_spi -pg 1 -lvl 14 -x 6920 -y 440 -defaultsOSRD
-preplace inst qick_processor_0 -pg 1 -lvl 1 -x 740 -y 2290 -defaultsOSRD
 preplace inst qick_vec2bit_0 -pg 1 -lvl 15 -x 7380 -y 2570 -defaultsOSRD
 preplace inst qick_vec2bit_1 -pg 1 -lvl 10 -x 5230 -y 2360 -defaultsOSRD
 preplace inst rst_100 -pg 1 -lvl 3 -x 2010 -y -170 -defaultsOSRD
@@ -2755,6 +2760,7 @@ preplace inst xlconcat_0 -pg 1 -lvl 1 -x 740 -y -140 -defaultsOSRD
 preplace inst zynq_ultra_ps_e_0 -pg 1 -lvl 3 -x 2010 -y -380 -defaultsOSRD
 preplace inst clk_core -pg 1 -lvl 3 -x 2010 -y 1090 -defaultsOSRD
 preplace inst rst_core -pg 1 -lvl 3 -x 2010 -y 1240 -defaultsOSRD
+preplace inst qick_processor_0 -pg 1 -lvl 1 -x 740 -y 2290 -defaultsOSRD
 preplace netloc BIAS_SDO_1 1 14 2 N -70 NJ
 preplace netloc LO_MISO0_1 1 14 2 7100 330 NJ
 preplace netloc LO_MISO1_1 1 14 2 7110 350 NJ
@@ -2775,6 +2781,8 @@ preplace netloc axi_intc_0_irq 1 2 1 1430 -340n
 preplace netloc bias_constant_1_dout 1 15 1 N -150
 preplace netloc clk_adc0_x2_clk_out1 1 2 10 1540 510 2350 -440 N -440 3560 340 4010 340 4270 610 4600 370 5050 230 5420 1380 5910
 preplace netloc clk_adc0_x2_locked 1 2 2 1540 1010 2320
+preplace netloc clk_core_clk_out1 1 0 11 20 1340 N 1340 1440 1340 2430 -370 N -370 N -370 N -370 N -370 N -370 N -370 5550
+preplace netloc clk_core_locked 1 2 2 1540 1350 2320
 preplace netloc dac_bias_spi_io0_o 1 14 2 NJ -90 N
 preplace netloc dac_bias_spi_sck_o 1 14 2 N -50 NJ
 preplace netloc dac_bias_spi_ss_o 1 14 2 N -30 NJ
@@ -2806,8 +2814,10 @@ preplace netloc qick_vec2bit_1_dout1 1 9 2 5080 250 5380
 preplace netloc qick_vec2bit_1_dout2 1 10 3 5560 1190 NJ 1190 6310J
 preplace netloc qick_vec2bit_1_dout3 1 10 1 5550 930n
 preplace netloc rst_100_bus_struct_reset 1 3 12 2370J -400 NJ -400 NJ -400 NJ -400 N -400 NJ -400 NJ -400 NJ -400 NJ -400 N -400 N -400 7090
+preplace netloc rst_100_peripheral_reset 1 2 2 1510 500 2340
 preplace netloc rst_adc0_peripheral_reset 1 2 2 1530 490 2320
 preplace netloc rst_adc0_x2_peripheral_aresetn 1 3 9 2410 -360 N -360 3550 480 3990 540 4330 620 4580J 360 4970 240 5400 1390 5850
+preplace netloc rst_core_peripheral_aresetn 1 0 11 30 1400 NJ 1400 NJ 1400 2420 -420 N -420 N -420 N -420 N -420 N -420 N -420 5560
 preplace netloc rst_dac0_peripheral_aresetn 1 0 6 80 2470 940J 2180 1530 1820 2440 1820 3110 1270 3520J
 preplace netloc rst_dac1_peripheral_aresetn 1 1 5 1060 2350 1400 2430 2400 2360 2960 2360 3580J
 preplace netloc rst_ddr4_0_333M_peripheral_aresetn 1 3 12 2390 -410 N -410 N -410 N -410 N -410 N -410 N -410 N -410 5860 1410 6360 1410 6700 1280 N
@@ -2819,10 +2829,6 @@ preplace netloc xlconcat_0_dout 1 1 1 1000 -140n
 preplace netloc zynq_ultra_ps_e_0_pl_clk0 1 0 14 40 1450 1010 -290 1470 1020 2380 -430 2980 900 3600 900 N 900 4300 900 N 900 5030 220 5540 540 5910 330 6370 330 6710
 preplace netloc zynq_ultra_ps_e_0_pl_clk1 1 3 13 2340 -450 NJ -450 NJ -450 NJ -450 NJ -450 NJ -450 NJ -450 NJ -450 NJ -450 NJ -450 NJ -450 NJ -450 NJ
 preplace netloc zynq_ultra_ps_e_0_pl_resetn0 1 2 2 1490 470 2330
-preplace netloc clk_core_locked 1 2 2 1540 1350 2320
-preplace netloc clk_core_clk_out1 1 0 11 20 1340 N 1340 1440 1340 2430 -370 N -370 N -370 N -370 N -370 N -370 N -370 5550
-preplace netloc rst_core_peripheral_aresetn 1 0 11 30 1400 NJ 1400 NJ 1400 2420 -420 N -420 N -420 N -420 N -420 N -420 N -420 5560
-preplace netloc rst_100_peripheral_reset 1 2 2 1510 500 2340
 preplace netloc adc0_clk_1 1 5 11 3640 2060 N 2060 N 2060 N 2060 N 2060 N 2060 N 2060 N 2060 N 2060 N 2060 N
 preplace netloc axi_dma_0_M_AXI_MM2S 1 1 1 950 -490n
 preplace netloc axi_dma_0_M_AXI_S2MM 1 1 1 970J -470n
@@ -2946,11 +2952,11 @@ preplace netloc usp_rf_data_converter_0_vout03 1 6 10 N 1690 N 1690 N 1690 N 169
 preplace netloc usp_rf_data_converter_0_vout10 1 6 10 N 1710 N 1710 N 1710 N 1710 N 1710 N 1710 N 1710 N 1710 N 1710 N
 preplace netloc usp_rf_data_converter_0_vout11 1 6 10 N 1730 N 1730 N 1730 N 1730 N 1730 N 1730 N 1730 N 1730 N 1730 N
 preplace netloc usp_rf_data_converter_0_vout12 1 6 10 N 1750 N 1750 N 1750 N 1750 N 1750 N 1750 N 1750 N 1750 N 1750 N
+preplace netloc usp_rf_data_converter_0_vout13 1 6 10 N 1770 N 1770 N 1770 N 1770 N 1770 N 1770 N 1770 N 1770 N 1770 N
 preplace netloc vin0_1 1 5 11 3660 2000 3990 1990 N 1990 N 1990 N 1990 N 1990 N 1990 N 1990 N 1990 N 1990 N
 preplace netloc vin1_1 1 5 11 3670 2010 N 2010 N 2010 N 2010 N 2010 N 2010 N 2010 N 2010 N 2010 N 2010 N
 preplace netloc zynq_ultra_ps_e_0_M_AXI_HPM0_FPD 1 3 1 2360J -430n
 preplace netloc zynq_ultra_ps_e_0_M_AXI_HPM1_FPD 1 3 11 2330J -390 NJ -390 NJ -390 NJ -390 N -390 NJ -390 NJ -390 NJ -390 NJ -390 N -390 6690
-preplace netloc usp_rf_data_converter_0_vout13 1 6 10 N 1770 N 1770 N 1770 N 1770 N 1770 N 1770 N 1770 N 1770 N 1770 N
 levelinfo -pg 1 -40 740 1240 2010 2660 3350 3820 4130 4460 4770 5230 5700 6100 6550 6920 7380 7690
 pagesize -pg 1 -db -bbox -sgen -190 -1910 7860 4060
 "
