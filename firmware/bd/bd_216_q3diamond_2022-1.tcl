@@ -764,17 +764,17 @@ proc create_root_design { parentCell } {
    CONFIG.DAC0_Sampling_Rate {6.4} \
    CONFIG.DAC1_Clock_Source {6} \
    CONFIG.DAC1_Enable {1} \
-   CONFIG.DAC1_Fabric_Freq {599.040} \
-   CONFIG.DAC1_Outclk_Freq {599.040} \
+   CONFIG.DAC1_Fabric_Freq {430.080} \
+   CONFIG.DAC1_Outclk_Freq {430.080} \
    CONFIG.DAC1_PLL_Enable {true} \
    CONFIG.DAC1_Refclk_Freq {245.760} \
-   CONFIG.DAC1_Sampling_Rate {9.58464} \
+   CONFIG.DAC1_Sampling_Rate {6.88128} \
    CONFIG.DAC2_Clock_Dist {1} \
-   CONFIG.DAC2_Fabric_Freq {430.080} \
-   CONFIG.DAC2_Outclk_Freq {430.080} \
+   CONFIG.DAC2_Fabric_Freq {491.520} \
+   CONFIG.DAC2_Outclk_Freq {491.520} \
    CONFIG.DAC2_PLL_Enable {true} \
    CONFIG.DAC2_Refclk_Freq {245.760} \
-   CONFIG.DAC2_Sampling_Rate {6.88128} \
+   CONFIG.DAC2_Sampling_Rate {7.86432} \
    CONFIG.DAC3_Clock_Source {6} \
    CONFIG.DAC3_Fabric_Freq {430.080} \
    CONFIG.DAC3_Outclk_Freq {430.080} \
@@ -2912,6 +2912,8 @@ preplace netloc axis_avg_buffer_5_m1_axis 1 2 2 1260 3280 N
 preplace netloc axis_avg_buffer_5_m2_axis 1 2 1 1230 3050n
 preplace netloc axis_broadcaster_0_M00_AXIS 1 1 1 800 2180n
 preplace netloc axis_broadcaster_0_M01_AXIS 1 1 2 660 2660 1270
+preplace netloc axis_broadcaster_1_M00_AXIS 1 1 1 820 2440n
+preplace netloc axis_broadcaster_1_M01_AXIS 1 1 2 830 2710 1250
 preplace netloc axis_broadcaster_2_M00_AXIS 1 1 1 840 2770n
 preplace netloc axis_broadcaster_2_M01_AXIS 1 1 2 660 3790 1240
 preplace netloc axis_broadcaster_3_M00_AXIS 1 1 1 860 3050n
@@ -2946,6 +2948,7 @@ preplace netloc axis_pfb_readout_v3_0_m2_axis 1 0 2 170 2440 560
 preplace netloc axis_pfb_readout_v3_0_m3_axis 1 0 2 130 2070 580
 preplace netloc axis_readout_v2_0_m0_axis 1 1 3 650J 3830 1280J 3560 2500
 preplace netloc axis_readout_v2_0_m1_axis 1 0 2 180 2060 560
+preplace netloc axis_readout_v3_0_m_axis 1 0 2 190 2910 550
 preplace netloc axis_resampler_2x1_v1_0_m_axis 1 0 2 190 2080 550
 preplace netloc axis_sg_int4_v1_0_m_axis 1 5 1 3560 1820n
 preplace netloc axis_sg_int4_v1_1_m_axis 1 5 1 3570 1840n
@@ -3046,9 +3049,6 @@ preplace netloc vin21_0_1 1 5 3 3770 2330 N 2330 N
 preplace netloc vin22_0_1 1 5 3 3780 2350 N 2350 N
 preplace netloc zynq_ultra_ps_e_0_M_AXI_HPM0_FPD 1 3 1 2310 -20n
 preplace netloc zynq_ultra_ps_e_0_M_AXI_HPM1_FPD 1 3 3 2510 3900 3070 3910 3780
-preplace netloc axis_readout_v3_0_m_axis 1 0 2 190 2910 550
-preplace netloc axis_broadcaster_1_M00_AXIS 1 1 1 820 2440n
-preplace netloc axis_broadcaster_1_M01_AXIS 1 1 2 830 2710 1250
 levelinfo -pg 1 0 370 1090 1870 2710 3430 3930 4330 4810
 pagesize -pg 1 -db -bbox -sgen -150 -220 5050 4270
 "
