@@ -18,6 +18,7 @@ from .asm_v1 import QickProgram
 from .drivers.generator import *
 from .drivers.readout import *
 from .drivers.tproc import *
+from .drivers.peripherals import *
 
 
 class AxisSwitch(SocIp):
@@ -314,6 +315,13 @@ class QickSoc(Overlay, QickConfig):
             #self.qcom = self.qick_com_0
             try:
                self.qcom = self.qick_com_0
+            except:
+               pass
+            
+            #self.qtt = self.qick_time_tagger_0
+            try:
+                self.qtt = self.qick_time_tagger_0
+                self.qtt.configure(self.axi_dma_qtt)
             except:
                pass
 
