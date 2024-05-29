@@ -7,7 +7,7 @@ set clk_core [get_clocks -of_objects [get_nets -of_objects [get_pins d_1_i/clk_c
 set clk_adc2  [get_clocks -of_objects [get_nets -of_objects [get_pins d_1_i/usp_rf_data_converter_0/clk_adc2]]]
 set clk_adc2_x2 [get_clocks -of_objects [get_nets -of_objects [get_pins d_1_i/clk_adc2_x2/clk_out1]]]
 
-set clk_dac1 [get_clocks -of_objects [get_nets -of_objects [get_pins d_1_i/usp_rf_data_converter_0/clk_dac1]]]
+#set clk_dac1 [get_clocks -of_objects [get_nets -of_objects [get_pins d_1_i/usp_rf_data_converter_0/clk_dac1]]]
 # this is also tProc timing clock
 set clk_dac2 [get_clocks -of_objects [get_nets -of_objects [get_pins d_1_i/usp_rf_data_converter_0/clk_dac2]]]
 set clk_dac3 [get_clocks -of_objects [get_nets -of_objects [get_pins d_1_i/usp_rf_data_converter_0/clk_dac3]]]
@@ -23,9 +23,9 @@ set_clock_group -name clk_axi_to_adc2_x2 -asynchronous \
     -group [get_clocks $clk_axi] \
     -group [get_clocks $clk_adc2_x2]
 
-set_clock_group -name clk_axi_to_dac1 -asynchronous \
-    -group [get_clocks $clk_axi] \
-    -group [get_clocks $clk_dac1]
+#set_clock_group -name clk_axi_to_dac1 -asynchronous \
+#    -group [get_clocks $clk_axi] \
+#    -group [get_clocks $clk_dac1]
 
 set_clock_group -name clk_axi_to_dac2 -asynchronous \
     -group [get_clocks $clk_axi] \
@@ -36,17 +36,21 @@ set_clock_group -name clk_axi_to_dac3 -asynchronous \
     -group [get_clocks $clk_dac3]
 
 # tProc timing clock to generator clocks
-set_clock_group -name clk_tproc_to_dac1 -asynchronous \
-    -group [get_clocks $clk_dac2] \
-    -group [get_clocks $clk_dac1]
+#set_clock_group -name clk_tproc_to_dac1 -asynchronous \
+#    -group [get_clocks $clk_dac2] \
+#    -group [get_clocks $clk_dac1]
 
 set_clock_group -name clk_tproc_to_dac3 -asynchronous \
     -group [get_clocks $clk_dac2] \
     -group [get_clocks $clk_dac3]
 
-#set_clock_group -name clk_tproc_to_adc2 -asynchronous \
-#    -group [get_clocks $clk_dac2] \
-#    -group [get_clocks $clk_adc2]
+set_clock_group -name clk_tproc_to_adc2 -asynchronous \
+    -group [get_clocks $clk_dac2] \
+    -group [get_clocks $clk_adc2]
+
+set_clock_group -name clk_tproc_to_adc2_x2 -asynchronous \
+    -group [get_clocks $clk_dac2] \
+    -group [get_clocks $clk_adc2_x2]
 
 set_clock_group -name clk_axi_to_core -asynchronous \
     -group [get_clocks $clk_axi] \
@@ -82,3 +86,6 @@ set_clock_group -name clk_ddr4_to_adc2 -asynchronous \
 
 # readout triggers
 set_false_path -through [get_cells d_1_i/qick_vec2bit_1]
+
+# reset
+set_false_path  -through [get_pins d_1_i/rst_dac2/peripheral_aresetn[0]]
