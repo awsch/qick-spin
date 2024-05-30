@@ -1,3 +1,4 @@
+from __future__ import annotations
 import logging
 import numpy as np
 import textwrap
@@ -34,7 +35,7 @@ class QickSpan(NamedTuple):
         return QickSweep(0, {self.loop:self.span})
     def to_int(self, scale, quantize, parname, trunc=False):
         # this will get called if you use a single QickSpan as a parameter
-        return to_int(self._to_sweep(), scale, quantize=quantize, parname=parname, trunc=trune)
+        return to_int(self._to_sweep(), scale, quantize=quantize, parname=parname, trunc=trunc)
     def __add__(self, a):
         return self._to_sweep() + a
     def __radd__(self, a):
@@ -956,6 +957,12 @@ class QickProgramV2(AbsQickProgram):
     def __init__(self, soccfg):
         super().__init__(soccfg)
 
+        ASM_REVISION = 20
+        if self.tproccfg['type']!='qick_processor':
+            raise RuntimeError("tProc v2 programs can only be run on a tProc v2 firmware")
+        if self.tproccfg['revision']!=ASM_REVISION:
+            raise RuntimeError("this version of the QICK library only supports tProc v2 revision %d, you have %d"%(ASM_REVISION, self.tproccfg['revision']))
+
         # all current v1 programs are processed in one pass:
         # * init the program
         # * fill the ASM list (using make_program or by calling ASM wrappers directly)
@@ -1022,14 +1029,13 @@ class QickProgramV2(AbsQickProgram):
 
         # low-level ASM management
 
-        self.prog_list = []
+        # the initial values here are copied from command_recognition() and label_recognition() in tprocv2_assembler.py
+        self.prog_list = [{'P_ADDR':1, 'LINE':2, 'CMD':'NOP'}]
         self.labels = {'s15': 's15'} # register 15 predefinition
-
         # address in program memory
         self.p_addr = 1
         # line number
-        self.line = 1
-        # first instruction is always NOP, so both counters start at 1
+        self.line = 2
 
     def load_prog(self, progdict):
         # note that we only dump+load the raw waveforms and ASM (the low-level stuff that gets converted to binary)
@@ -1110,6 +1116,7 @@ class QickProgramV2(AbsQickProgram):
         self.prog_list.append(inst)
 
     def _add_label(self, label):
+        self.line += 1
         self.labels[label] = '&%d' % (self.p_addr)
 
     def asm(self):

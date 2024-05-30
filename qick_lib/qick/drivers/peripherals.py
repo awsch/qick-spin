@@ -12,23 +12,6 @@ class QICK_Time_Tagger(SocIp):
     """
     bindto = ['Fermi:user:qick_time_tagger:1.0']
 
-    REGISTERS = {
-        'qtt_ctrl'     :0 ,
-        'qtt_cfg'      :1 ,
-        'dma_cfg'      :2 ,
-        'axi_dt1'      :3 ,
-        'proc_dt'      :5 ,
-        'proc_qty'     :6,
-        'tag0_qty'     :7,
-        'tag1_qty'     :8,
-        'tag2_qty'     :9,
-        'tag3_qty'     :10,
-        'smp_qty'      :11,
-        'arm_qty'      :12,
-        'thr_inh'      :13,
-        'qtt_status'   :14,
-        'qtt_debug'    :15,
-    }
     dma_st_list = ['ST_IDLE','ST_TX','ST_LAST','ST_END']
 
     def __init__(self, description):
@@ -36,6 +19,24 @@ class QICK_Time_Tagger(SocIp):
         Constructor method
         """
         super().__init__(description)
+
+        self.REGISTERS = {
+            'qtt_ctrl'     :0 ,
+            'qtt_cfg'      :1 ,
+            'dma_cfg'      :2 ,
+            'axi_dt1'      :3 ,
+            'proc_dt'      :5 ,
+            'proc_qty'     :6,
+            'tag0_qty'     :7,
+            'tag1_qty'     :8,
+            'tag2_qty'     :9,
+            'tag3_qty'     :10,
+            'smp_qty'      :11,
+            'arm_qty'      :12,
+            'thr_inh'      :13,
+            'qtt_status'   :14,
+            'qtt_debug'    :15,
+        }
 
         # Parameters
         self.cfg['tag_mem_size'] = pow( 2, int(description['parameters']['TAG_FIFO_AW']) )
@@ -218,24 +219,26 @@ class QICK_Com(SocIp):
     QCOM_DEBUG       Read Only    32-Bits
     """
     bindto = ['Fermi:user:qick_com:1.0']
-    REGISTERS = {
-        'qcom_ctrl'     :0 ,
-        'qcom_cfg'      :1 ,
-        'axi_dt1'       :2 ,
-        'flag'     :7 ,
-        'dt1'      :8 ,
-        'dt2'      :9,
-        'status'   :12,
-        'tx_dt'    :13,
-        'rx_dt'    :14,
-        'debug'    :15
-    }    
 
     def __init__(self, description):
         """
         Constructor method
         """
         super().__init__(description)
+
+        self.REGISTERS = {
+            'qcom_ctrl'     :0 ,
+            'qcom_cfg'      :1 ,
+            'axi_dt1'       :2 ,
+            'flag'     :7 ,
+            'dt1'      :8 ,
+            'dt2'      :9,
+            'status'   :12,
+            'tx_dt'    :13,
+            'rx_dt'    :14,
+            'debug'    :15
+        }
+
         # Initial Values 
         self.qcom_ctrl = 0
         self.qcom_cfg  = 10
@@ -340,25 +343,6 @@ class QICK_Net(SocIp):
     """
     bindto = ['Fermi:user:qick_network:1.0']
 
-    REGISTERS = {
-        'tnet_ctrl'     :0 ,
-        'tnet_cfg'      :1 ,
-        'tnet_addr'     :2 ,
-        'tnet_len'      :3 ,
-        'raxi_dt1'      :4 ,
-        'raxi_dt2'      :5 ,
-        'raxi_dt3'      :6 ,
-        'nn_id'         :7 ,
-        'rtd'           :8,
-        'tnet_w_dt1'    :9,
-        'tnet_w_dt2'    :10,
-        'rx_status'     :11,
-        'tx_status'     :12,
-        'status'        :13,
-        'debug'         :14,
-        'hist'          :15
-    }
-
     main_list = ['M_NOT_READY','M_IDLE','M_LOC_CMD','M_NET_CMD','M_WRESP','M_WACK','M_NET_RESP','M_NET_ANSW','M_CMD_EXEC','M_ERROR']
     task_list = ['T_NOT_READY','T_IDLE','T_LOC_CMD','T_LOC_WSYNC','T_LOC_SEND','T_LOC_WnREQ','T_NET_CMD', 'T_NET_SEND']
     cmd_list = [ 'NOT_READY','IDLE','L_GNET','L_SNET','L_SYNC1','L_UPDT_OFF','L_SET_DT','L_GET_DT','L_RST_TIME','L_START',\
@@ -374,6 +358,24 @@ class QICK_Net(SocIp):
         """
         super().__init__(description)
 
+        self.REGISTERS = {
+            'tnet_ctrl'     :0 ,
+            'tnet_cfg'      :1 ,
+            'tnet_addr'     :2 ,
+            'tnet_len'      :3 ,
+            'raxi_dt1'      :4 ,
+            'raxi_dt2'      :5 ,
+            'raxi_dt3'      :6 ,
+            'nn_id'         :7 ,
+            'rtd'           :8,
+            'tnet_w_dt1'    :9,
+            'tnet_w_dt2'    :10,
+            'rx_status'     :11,
+            'tx_status'     :12,
+            'status'        :13,
+            'debug'         :14,
+            'hist'          :15
+        }
        
         # Initial Values 
         self.tnet_ctrl = 0

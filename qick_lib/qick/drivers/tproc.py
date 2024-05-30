@@ -48,12 +48,6 @@ class AxisTProc64x32_x8(SocIp):
     :type axi_dma: int
     """
     bindto = ['user.org:user:axis_tproc64x32_x8:1.0']
-    REGISTERS = {'start_src_reg': 0,
-                 'start_reg': 1,
-                 'mem_mode_reg': 2,
-                 'mem_start_reg': 3,
-                 'mem_addr_reg': 4,
-                 'mem_len_reg': 5}
 
     # Number of 32-bit words in the lower address map (reserved for register access)
     NREG = 64
@@ -62,7 +56,20 @@ class AxisTProc64x32_x8(SocIp):
         """
         Constructor method
         """
+        # Generics.
+        # data memory address size (log2 of the number of 32-bit words)
+        self.DMEM_N = int(description['parameters']['DMEM_N'])
+        # program memory address size (log2 of the number of 64-bit words, though the actual memory is usually smaller)
+        self.PMEM_N = int(description['parameters']['PMEM_N'])
+
         super().__init__(description)
+
+        self.REGISTERS = {'start_src_reg': 0,
+                          'start_reg': 1,
+                          'mem_mode_reg': 2,
+                          'mem_start_reg': 3,
+                          'mem_addr_reg': 4,
+                          'mem_len_reg': 5}
 
         # Default registers.
         # start_src_reg = 0   : internal start.
@@ -78,12 +85,6 @@ class AxisTProc64x32_x8(SocIp):
         self.mem_addr_reg = 0
         self.mem_len_reg = 100
 
-        # Generics.
-        # data memory address size (log2 of the number of 32-bit words)
-        self.DMEM_N = int(description['parameters']['DMEM_N'])
-        # program memory address size (log2 of the number of 64-bit words, though the actual memory is usually smaller)
-        self.PMEM_N = int(description['parameters']['PMEM_N'])
-
         self.cfg['dmem_size'] = 2**self.DMEM_N
 
     # Configure this driver with links to its memory and DMA.
@@ -97,6 +98,8 @@ class AxisTProc64x32_x8(SocIp):
         self.cfg['pmem_size'] = self.mem.mmio.length//8
 
     def configure_connections(self, soc):
+        super().configure_connections(soc)
+
         self.cfg['output_pins'] = []
         self.cfg['start_pin'] = None
         self.cfg['f_time'] = soc.metadata.get_fclk(self.fullpath, "aclk")
@@ -333,29 +336,29 @@ class Axis_QICK_Proc(SocIp):
     """
     bindto = ['Fermi:user:qick_processor:2.0']
     
-    REGISTERS = {
-        'tproc_ctrl'    :0 ,
-        'tproc_cfg'     :1 ,
-        'mem_addr'      :2 ,
-        'mem_len'       :3 ,
-        'mem_dt_i'      :4 ,
-        'axi_w_dt1'   :5,
-        'axi_w_dt2'   :6,
-        'core_cfg'      :7,
-        'read_sel'      :8,
-        'mem_dt_o'      :10,
-        'axi_r_dt1'   :11 ,
-        'axi_r_dt2'   :12 ,
-        'time_usr'      :13,
-        'tproc_status'  :14,
-        'tproc_debug'   :15
-    }
-
     def __init__(self, description):
         """
         Constructor method
         """
         super().__init__(description)
+
+        self.REGISTERS = {
+            'tproc_ctrl'    :0 ,
+            'tproc_cfg'     :1 ,
+            'mem_addr'      :2 ,
+            'mem_len'       :3 ,
+            'mem_dt_i'      :4 ,
+            'axi_w_dt1'   :5,
+            'axi_w_dt2'   :6,
+            'core_cfg'      :7,
+            'read_sel'      :8,
+            'mem_dt_o'      :10,
+            'axi_r_dt1'   :11 ,
+            'axi_r_dt2'   :12 ,
+            'time_usr'      :13,
+            'tproc_status'  :14,
+            'tproc_debug'   :15
+        }
 
         # Parameters
         #self.cfg['dual_core'] = = int(description['parameters']['DUAL_CORE'])
@@ -400,6 +403,8 @@ class Axis_QICK_Proc(SocIp):
 
     
     def configure_connections(self, soc):
+        super().configure_connections(soc)
+
         self.cfg['output_pins'] = []
         self.cfg['start_pin'] = None
         self.cfg['f_core'] = soc.metadata.get_fclk(self.fullpath, "c_clk_i")
