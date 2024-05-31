@@ -7,12 +7,13 @@
 ## Customizable Parameters
 
 # Project Name 
-set _xil_proj_name_  "QICK_111_Time_Tagger"
+set _xil_proj_name_  "top_111_Time_Tagger"
 set timing_const     "timing_111_qtt.xdc"
 set ios_const        "ios_111_qtt.xdc"
-set bd_file          "bd_111_qtt_23-1.tcl"
+set bd_file          "bd_1adc_2dac_8t_qtt_23-1.tcl"
 set board            "111"
 
+# Posible board values : 111, 216, 4x2
 
 ###############################################################################
 ## Automated Script
