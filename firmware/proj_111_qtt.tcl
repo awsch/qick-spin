@@ -10,7 +10,7 @@
 set _xil_proj_name_  "top_111_Time_Tagger"
 set timing_const     "timing_111_qtt.xdc"
 set ios_const        "ios_111_qtt.xdc"
-set bd_file          "bd_1adc_2dac_8t_qtt_23-1.tcl"
+set bd_file          "bd_qtt_1adc_1dac_4t_qtt_23-1.tcl"
 set board            "111"
 
 # Posible board values : 111, 216, 4x2
@@ -134,26 +134,28 @@ add_files -fileset $obj $files
 
 # Modify Current Synthesis
 set_property strategy Flow_RuntimeOptimized [get_runs synth_1]
-set_property name Flow_Fast [get_runs synth_1]
+set_property name Fast_synthesis [get_runs synth_1]
+set_property strategy Flow_Quick [get_runs impl_1]
+set_property name Fast_Implementation [get_runs impl_1]
 
 # Create Synthesis
 create_run Performance -flow {Vivado Synthesis 2022} -strategy Flow_PerfOptimized_high
 
 # Create Implementation NET DELAY
-create_run Net_Delay -parent_run Performance -flow {Vivado Implementation 2022} -strategy Performance_NetDelay_high
+create_run Net_Delay -parent_run Performance -flow {Vivado Implementation 2023} -strategy Performance_NetDelay_high
 set INC_DIR_Net_Delay [get_property directory [current_project]]/${_xil_proj_name_}.srcs/utils_1/imports/Net_Delay
 set_property AUTO_INCREMENTAL_CHECKPOINT 1 [get_runs Net_Delay]
 set_property AUTO_INCREMENTAL_CHECKPOINT.DIRECTORY $INC_DIR_Net_Delay [get_runs Net_Delay]
 
 # Create Implementation Extra Timing Opt
-create_run Timing -parent_run Performance -flow {Vivado Implementation 2022} -strategy Performance_ExtraTimingOpt
+create_run Timing -parent_run Performance -flow {Vivado Implementation 2023} -strategy Performance_ExtraTimingOpt
 set INC_DIR_Timing [get_property directory [current_project]]/${_xil_proj_name_}.srcs/utils_1/imports/Timing
 set_property AUTO_INCREMENTAL_CHECKPOINT.DIRECTORY $INC_DIR_Timing [get_runs Net_Delay]
 set_property AUTO_INCREMENTAL_CHECKPOINT 1 [get_runs Timing]
 set_property incremental_checkpoint.directive TimingClosure [get_runs Timing]
 
 # Create Implementation Refine Placement
-create_run Refine_Place -parent_run Performance -flow {Vivado Implementation 2022} -strategy Performance_RefinePlacement
+create_run Refine_Place -parent_run Performance -flow {Vivado Implementation 2023} -strategy Performance_RefinePlacement
 set INC_DIR_Refine [get_property directory [current_project]]/${_xil_proj_name_}.srcs/utils_1/imports/Refine
 set_property AUTO_INCREMENTAL_CHECKPOINT.DIRECTORY $INC_DIR_Refine [get_runs Refine_Place]
 set_property AUTO_INCREMENTAL_CHECKPOINT 1 [get_runs Refine_Place]
