@@ -1447,6 +1447,7 @@ Port;FD4A0000;FD4AFFFF;1|FPD;DPDMA;FD4C0000;FD4CFFFF;1|FPD;DDR_XMPU5_CFG;FD05000
   set_property -dict [list \
     CONFIG.CUSTOM_PERIPH {1} \
     CONFIG.DEBUG {0} \
+    CONFIG.DMEM_AW {10} \
     CONFIG.EXT_FLAG {0} \
     CONFIG.IN_PORT_QTY {1} \
     CONFIG.IO_CTRL {0} \
@@ -1454,6 +1455,7 @@ Port;FD4A0000;FD4AFFFF;1|FPD;DPDMA;FD4C0000;FD4CFFFF;1|FPD;DDR_XMPU5_CFG;FD05000
     CONFIG.OUT_DPORT_QTY {1} \
     CONFIG.OUT_TRIG_QTY {21} \
     CONFIG.OUT_WPORT_QTY {1} \
+    CONFIG.PMEM_AW {10} \
     CONFIG.REG_AW {4} \
     CONFIG.TIME_READ {1} \
     CONFIG.TNET {0} \
@@ -1474,7 +1476,8 @@ Port;FD4A0000;FD4AFFFF;1|FPD;DPDMA;FD4C0000;FD4CFFFF;1|FPD;DDR_XMPU5_CFG;FD05000
     CONFIG.CMP_SLOPE {0} \
     CONFIG.DEBUG {0} \
     CONFIG.EXT_ARM {1} \
-    CONFIG.SMP_FIFO_AW {10} \
+    CONFIG.SMP_FIFO_AW {15} \
+    CONFIG.SMP_STORE {1} \
     CONFIG.TAG_FIFO_AW {19} \
   ] $qick_time_tagger_0
 
@@ -1616,8 +1619,8 @@ Port;FD4A0000;FD4AFFFF;1|FPD;DPDMA;FD4C0000;FD4CFFFF;1|FPD;DDR_XMPU5_CFG;FD05000
    "Color Coded_ScaleFactor":"0.226667",
    "Color Coded_TopLeft":"-326,0",
    "Default View_Layers":"/clk_tproc_clk_out2:true|/rst_tproc_peripheral_aresetn:true|/usp_rf_data_converter_0_clk_adc0:true|/usp_rf_data_converter_0_clk_dac0:true|/clk_adc0_x2_clk_out1:true|/clk_tproc_clk_out1:true|/rst_adc0_x2_peripheral_aresetn:true|/rst_ps8_0_99M_peripheral_aresetn:true|/zynq_ultra_ps_e_0_pl_clk0:true|/rst_adc0_peripheral_aresetn:true|/zynq_ultra_ps_e_0_pl_resetn0:true|/rst_dac0_peripheral_aresetn:true|/usp_rf_data_converter_0_clk_dac2:true|/rst_dac1_peripheral_aresetn:true|",
-   "Default View_ScaleFactor":"0.148256",
-   "Default View_TopLeft":"-1207,-432",
+   "Default View_ScaleFactor":"0.182081",
+   "Default View_TopLeft":"-461,-428",
    "Display-PortTypeClock":"true",
    "Display-PortTypeOthers":"true",
    "Display-PortTypeReset":"true",
@@ -1650,26 +1653,26 @@ preplace port vin0_01 -pg 1 -lvl 11 -x 5260 -y 1480 -defaultsOSRD -right
 preplace port vout00 -pg 1 -lvl 11 -x 5260 -y 1830 -defaultsOSRD
 preplace port adc2_clk -pg 1 -lvl 11 -x 5260 -y 1540 -defaultsOSRD -right
 preplace port vin2_01 -pg 1 -lvl 11 -x 5260 -y 1440 -defaultsOSRD -right
-preplace port port-id_PMOD0_0 -pg 1 -lvl 11 -x 5260 -y 2530 -defaultsOSRD
-preplace port port-id_PMOD0_1 -pg 1 -lvl 11 -x 5260 -y 2550 -defaultsOSRD
-preplace port port-id_PMOD0_2 -pg 1 -lvl 11 -x 5260 -y 2570 -defaultsOSRD
-preplace port port-id_PMOD0_3 -pg 1 -lvl 11 -x 5260 -y 2590 -defaultsOSRD
-preplace port port-id_PMOD0_4 -pg 1 -lvl 11 -x 5260 -y 2610 -defaultsOSRD
-preplace port port-id_PMOD0_5 -pg 1 -lvl 11 -x 5260 -y 2630 -defaultsOSRD
-preplace port port-id_PMOD0_6 -pg 1 -lvl 11 -x 5260 -y 2650 -defaultsOSRD
-preplace port port-id_PMOD0_7 -pg 1 -lvl 11 -x 5260 -y 2670 -defaultsOSRD
-preplace port port-id_PMOD1_0 -pg 1 -lvl 11 -x 5260 -y 2730 -defaultsOSRD
-preplace port port-id_PMOD1_1 -pg 1 -lvl 11 -x 5260 -y 2750 -defaultsOSRD
-preplace port port-id_PMOD1_2 -pg 1 -lvl 11 -x 5260 -y 2770 -defaultsOSRD
-preplace port port-id_PMOD1_3 -pg 1 -lvl 11 -x 5260 -y 2790 -defaultsOSRD
-preplace port port-id_PMOD1_4 -pg 1 -lvl 11 -x 5260 -y 2810 -defaultsOSRD
-preplace port port-id_PMOD1_5 -pg 1 -lvl 11 -x 5260 -y 2830 -defaultsOSRD
-preplace port port-id_PMOD1_6 -pg 1 -lvl 11 -x 5260 -y 2850 -defaultsOSRD
-preplace port port-id_PMOD1_7 -pg 1 -lvl 11 -x 5260 -y 2870 -defaultsOSRD
-preplace port port-id_PMOD01_0 -pg 1 -lvl 11 -x 5260 -y 2690 -defaultsOSRD
-preplace port port-id_PMOD01_1 -pg 1 -lvl 11 -x 5260 -y 2710 -defaultsOSRD
-preplace port port-id_PMOD01_2 -pg 1 -lvl 11 -x 5260 -y 2890 -defaultsOSRD
-preplace port port-id_PMOD01_3 -pg 1 -lvl 11 -x 5260 -y 2910 -defaultsOSRD
+preplace port port-id_PMOD0_0 -pg 1 -lvl 11 -x 5260 -y 2540 -defaultsOSRD
+preplace port port-id_PMOD0_1 -pg 1 -lvl 11 -x 5260 -y 2560 -defaultsOSRD
+preplace port port-id_PMOD0_2 -pg 1 -lvl 11 -x 5260 -y 2580 -defaultsOSRD
+preplace port port-id_PMOD0_3 -pg 1 -lvl 11 -x 5260 -y 2600 -defaultsOSRD
+preplace port port-id_PMOD0_4 -pg 1 -lvl 11 -x 5260 -y 2620 -defaultsOSRD
+preplace port port-id_PMOD0_5 -pg 1 -lvl 11 -x 5260 -y 2640 -defaultsOSRD
+preplace port port-id_PMOD0_6 -pg 1 -lvl 11 -x 5260 -y 2660 -defaultsOSRD
+preplace port port-id_PMOD0_7 -pg 1 -lvl 11 -x 5260 -y 2680 -defaultsOSRD
+preplace port port-id_PMOD1_0 -pg 1 -lvl 11 -x 5260 -y 2740 -defaultsOSRD
+preplace port port-id_PMOD1_1 -pg 1 -lvl 11 -x 5260 -y 2760 -defaultsOSRD
+preplace port port-id_PMOD1_2 -pg 1 -lvl 11 -x 5260 -y 2780 -defaultsOSRD
+preplace port port-id_PMOD1_3 -pg 1 -lvl 11 -x 5260 -y 2800 -defaultsOSRD
+preplace port port-id_PMOD1_4 -pg 1 -lvl 11 -x 5260 -y 2820 -defaultsOSRD
+preplace port port-id_PMOD1_5 -pg 1 -lvl 11 -x 5260 -y 2840 -defaultsOSRD
+preplace port port-id_PMOD1_6 -pg 1 -lvl 11 -x 5260 -y 2860 -defaultsOSRD
+preplace port port-id_PMOD1_7 -pg 1 -lvl 11 -x 5260 -y 2880 -defaultsOSRD
+preplace port port-id_PMOD01_0 -pg 1 -lvl 11 -x 5260 -y 2700 -defaultsOSRD
+preplace port port-id_PMOD01_1 -pg 1 -lvl 11 -x 5260 -y 2720 -defaultsOSRD
+preplace port port-id_PMOD01_2 -pg 1 -lvl 11 -x 5260 -y 2900 -defaultsOSRD
+preplace port port-id_PMOD01_3 -pg 1 -lvl 11 -x 5260 -y 2920 -defaultsOSRD
 preplace inst axis_register_slice_0 -pg 1 -lvl 9 -x 4420 -y 1970 -defaultsOSRD
 preplace inst axis_signal_gen_v6_0 -pg 1 -lvl 8 -x 3700 -y 1950 -defaultsOSRD
 preplace inst rst_100 -pg 1 -lvl 8 -x 3700 -y -60 -defaultsOSRD
@@ -1698,7 +1701,7 @@ preplace inst usp_rf_data_converter_0 -pg 1 -lvl 10 -x 5050 -y 2100 -defaultsOSR
 preplace inst zynq_ultra_ps_e_0 -pg 1 -lvl 8 -x 3700 -y -240 -defaultsOSRD
 preplace inst rst_tproc -pg 1 -lvl 8 -x 3700 -y 130 -defaultsOSRD -resize 320 156
 preplace inst axis_register_slice_4 -pg 1 -lvl 4 -x 1410 -y 1710 -defaultsOSRD -resize 180 116
-preplace inst qick_processor_0 -pg 1 -lvl 5 -x 1900 -y 2700 -defaultsOSRD
+preplace inst qick_processor_0 -pg 1 -lvl 5 -x 1900 -y 2720 -defaultsOSRD
 preplace inst ps8_0_axi_periph -pg 1 -lvl 9 -x 4420 -y 670 -defaultsOSRD
 preplace inst qick_time_tagger_0 -pg 1 -lvl 5 -x 1900 -y 1760 -defaultsOSRD
 preplace netloc Net1 1 3 6 1240 2160 1640 2110 N 2110 N 2110 N 2110 4010
@@ -1706,38 +1709,38 @@ preplace netloc clk_adc0_x2_clk_out1 1 0 10 260 1960 570 2020 860 2150 1220 1910
 preplace netloc clk_adc0_x2_locked 1 7 1 3330 290n
 preplace netloc clk_adc2_x2_clk_out1 1 3 7 1270 1790 1660 1940 2430 1740 2860 1740 3360 1740 N 1740 4650
 preplace netloc clk_adc2_x2_locked 1 7 1 N 530
-preplace netloc qick_processor_0_port_0_dt_o 1 1 5 590 3000 N 3000 N 3000 N 3000 2080
-preplace netloc qick_processor_0_trig_0_o 1 5 6 N 2520 N 2520 N 2520 N 2520 N 2520 5210
-preplace netloc qick_processor_0_trig_10_o 1 5 6 N 2720 N 2720 N 2720 N 2720 N 2720 5210
-preplace netloc qick_processor_0_trig_11_o 1 5 6 N 2740 N 2740 N 2740 N 2740 N 2740 5200
-preplace netloc qick_processor_0_trig_12_o 1 5 6 N 2760 N 2760 N 2760 N 2760 N 2760 5210
-preplace netloc qick_processor_0_trig_13_o 1 5 6 N 2780 N 2780 N 2780 N 2780 N 2780 5200
-preplace netloc qick_processor_0_trig_14_o 1 5 6 N 2800 N 2800 N 2800 N 2800 N 2800 5210
-preplace netloc qick_processor_0_trig_15_o 1 5 6 N 2820 N 2820 N 2820 N 2820 N 2820 5200
-preplace netloc qick_processor_0_trig_16_o 1 5 6 N 2840 N 2840 N 2840 N 2840 N 2840 5210
-preplace netloc qick_processor_0_trig_17_o 1 5 6 N 2860 N 2860 N 2860 N 2860 N 2860 5200
-preplace netloc qick_processor_0_trig_18_o 1 5 6 N 2880 N 2880 N 2880 N 2880 N 2880 5210
-preplace netloc qick_processor_0_trig_19_o 1 5 6 N 2900 N 2900 N 2900 N 2900 N 2900 5200
-preplace netloc qick_processor_0_trig_1_o 1 5 6 N 2540 N 2540 N 2540 N 2540 N 2540 5200
-preplace netloc qick_processor_0_trig_2_o 1 5 6 N 2560 N 2560 N 2560 N 2560 N 2560 5210
-preplace netloc qick_processor_0_trig_3_o 1 5 6 N 2580 N 2580 N 2580 N 2580 N 2580 5200
-preplace netloc qick_processor_0_trig_4_o 1 5 6 N 2600 N 2600 N 2600 N 2600 N 2600 5210
-preplace netloc qick_processor_0_trig_5_o 1 5 6 N 2620 N 2620 N 2620 N 2620 N 2620 5200
-preplace netloc qick_processor_0_trig_6_o 1 5 6 N 2640 N 2640 N 2640 N 2640 N 2640 5210
-preplace netloc qick_processor_0_trig_7_o 1 5 6 N 2660 N 2660 N 2660 N 2660 N 2660 5200
-preplace netloc qick_processor_0_trig_8_o 1 5 6 N 2680 N 2680 N 2680 N 2680 N 2680 5210
-preplace netloc qick_processor_0_trig_9_o 1 5 6 N 2700 N 2700 N 2700 N 2700 N 2700 5200
+preplace netloc qick_processor_0_port_0_dt_o 1 1 5 590 3020 N 3020 N 3020 N 3020 2080
+preplace netloc qick_processor_0_trig_0_o 1 5 6 N 2540 N 2540 N 2540 N 2540 N 2540 N
+preplace netloc qick_processor_0_trig_10_o 1 5 6 N 2740 N 2740 N 2740 N 2740 N 2740 N
+preplace netloc qick_processor_0_trig_11_o 1 5 6 N 2760 N 2760 N 2760 N 2760 N 2760 N
+preplace netloc qick_processor_0_trig_12_o 1 5 6 N 2780 N 2780 N 2780 N 2780 N 2780 N
+preplace netloc qick_processor_0_trig_13_o 1 5 6 N 2800 N 2800 N 2800 N 2800 N 2800 N
+preplace netloc qick_processor_0_trig_14_o 1 5 6 N 2820 N 2820 N 2820 N 2820 N 2820 N
+preplace netloc qick_processor_0_trig_15_o 1 5 6 N 2840 N 2840 N 2840 N 2840 N 2840 N
+preplace netloc qick_processor_0_trig_16_o 1 5 6 N 2860 N 2860 N 2860 N 2860 N 2860 N
+preplace netloc qick_processor_0_trig_17_o 1 5 6 N 2880 N 2880 N 2880 N 2880 N 2880 N
+preplace netloc qick_processor_0_trig_18_o 1 5 6 N 2900 N 2900 N 2900 N 2900 N 2900 N
+preplace netloc qick_processor_0_trig_19_o 1 5 6 N 2920 N 2920 N 2920 N 2920 N 2920 N
+preplace netloc qick_processor_0_trig_1_o 1 5 6 N 2560 N 2560 N 2560 N 2560 N 2560 N
+preplace netloc qick_processor_0_trig_20_o 1 4 2 1720 1960 2090
+preplace netloc qick_processor_0_trig_2_o 1 5 6 N 2580 N 2580 N 2580 N 2580 N 2580 N
+preplace netloc qick_processor_0_trig_3_o 1 5 6 N 2600 N 2600 N 2600 N 2600 N 2600 N
+preplace netloc qick_processor_0_trig_4_o 1 5 6 N 2620 N 2620 N 2620 N 2620 N 2620 N
+preplace netloc qick_processor_0_trig_5_o 1 5 6 N 2640 N 2640 N 2640 N 2640 N 2640 N
+preplace netloc qick_processor_0_trig_6_o 1 5 6 N 2660 N 2660 N 2660 N 2660 N 2660 N
+preplace netloc qick_processor_0_trig_7_o 1 5 6 N 2680 N 2680 N 2680 N 2680 N 2680 N
+preplace netloc qick_processor_0_trig_8_o 1 5 6 N 2700 N 2700 N 2700 N 2700 N 2700 N
+preplace netloc qick_processor_0_trig_9_o 1 5 6 N 2720 N 2720 N 2720 N 2720 N 2720 N
 preplace netloc qick_vec2bit_0_dout0 1 2 1 870 2000n
 preplace netloc rst_adc0_x2_peripheral_aresetn 1 0 10 270 1940 580 2040 850 2170 N 2170 1650 2160 N 2160 N 2160 N 2160 4040 2150 N
 preplace netloc rst_adc2_x2_peripheral_aresetn 1 3 7 1260 1800 1670 1950 2460 1750 2850 1750 N 1750 4030J 1750 4600
 preplace netloc rst_dac0_peripheral_aresetn 1 6 4 2870 2030 3310 2100 4020 2140 4570
 preplace netloc rst_ps8_0_99M_peripheral_aresetn 1 1 9 600 2030 880 2160 1210 140 1600 280 2480 980 N 980 3350 980 4250 1550 4840
 preplace netloc usp_rf_data_converter_0_clk_adc0 1 3 8 1270 1960 1630 270 N 270 2850 200 3390 770 4050 290 N 290 5230
-preplace netloc usp_rf_data_converter_0_clk_adc2 1 6 5 2880 1780 N 1780 N 1780 N 1780 5190
+preplace netloc usp_rf_data_converter_0_clk_adc2 1 6 5 2880 1780 N 1780 N 1780 N 1780 5210
 preplace netloc usp_rf_data_converter_0_clk_dac0 1 6 5 2880 1990 3330 2090 4270 2050 4820 1890 5200
 preplace netloc zynq_ultra_ps_e_0_pl_clk0 1 1 9 590 1800 890 1800 1200 130 1610 1110 2470 80 N 80 3370 -340 4260 1560 4830
 preplace netloc zynq_ultra_ps_e_0_pl_resetn0 1 6 3 2880 210 3380 -350 4010
-preplace netloc qick_processor_0_trig_20_o 1 4 2 1720 1960 2090
 preplace netloc adc0_clk1_1 1 9 2 4900 1540 N
 preplace netloc adc0_clk_1 1 9 2 4910 1560 N
 preplace netloc axi_dma_0_M_AXI_MM2S 1 5 1 2120 -270n
@@ -1783,7 +1786,7 @@ preplace netloc qick_processor_0_m_dma_axis_o 1 4 2 1660 290 2100
 preplace netloc qick_time_tagger_0_m_axis_dma 1 4 2 1700 1120 2080
 preplace netloc sg_translator_0_m_gen_v6_axis 1 6 1 N 1850
 preplace netloc sysref_in_1 1 9 2 4860 1420 N
-preplace netloc usp_rf_data_converter_0_m00_axis 1 0 11 250 2140 N 2140 N 2140 1230 1920 N 1920 2440 1760 N 1760 N 1760 N 1760 N 1760 5210
+preplace netloc usp_rf_data_converter_0_m00_axis 1 0 11 250 2140 N 2140 N 2140 1230 1920 N 1920 2440 1760 N 1760 N 1760 N 1760 N 1760 5190
 preplace netloc usp_rf_data_converter_0_m20_axis 1 3 8 1250 1930 N 1930 2480 1770 N 1770 N 1770 N 1770 N 1770 5220
 preplace netloc usp_rf_data_converter_0_vout00 1 10 1 5240 1830n
 preplace netloc vin0_01_1 1 9 2 4880 1480 N
