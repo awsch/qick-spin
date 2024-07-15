@@ -492,7 +492,7 @@ class MultiplexedGenManager(AbsGenManager):
             mask = params['mask']
             for maskch in mask:
                 if maskch not in range(self.gencfg['n_tones']):
-                    raise RuntimeError("invalid mask specification")
+                    raise RuntimeError("invalid mask specification: tone %d was requested, but is out of range for this mux generator")
                 val_mask |= (1 << maskch)
             self.set_reg('phase', val_mask, f'mask = {mask}', defaults=defaults)
         if not defaults:
@@ -559,6 +559,9 @@ class QickProgram(AbsQickProgram):
                 'axis_sg_mux4_v2': MultiplexedGenManager,
                 'axis_sg_mux4_v3': MultiplexedGenManager,
                 'axis_sg_mux8_v1': MultiplexedGenManager}
+
+    # Gaussian and DRAG definitions use incorrect original definition, which gives a pulse that is too narrow by sqrt(2)
+    GAUSS_BUG = True
 
     def __init__(self, soccfg):
         """
@@ -876,7 +879,7 @@ class QickProgram(AbsQickProgram):
         ch : int or list of int
             generator channel (index in 'gens' list)
         t : int, optional
-            The number of tProc cycles at which the pulse starts (None to use the time register as is, 'auto' to start whenever the last pulse ends)
+            The number of tProc cycles at which the pulse starts (None to use the time register as is, 'auto' to start whenever the last pulse on this generator ends)
         """
         # try to convert pulse_ch to int; if that fails, assume it's list of ints
         ch_list = ch2list(ch)
@@ -890,14 +893,16 @@ class QickProgram(AbsQickProgram):
             if t is not None:
                 ts = self.get_timestamp(gen_ch=ch)
                 if t == 'auto':
-                    t = int(ts)
+                    t_ch = int(ts)
                 elif t < ts:
-                    print("warning: pulse time %d appears to conflict with previous pulse ending at %f?"%(t, ts))
+                    logger.warning("pulse time %d appears to conflict with previous pulse ending at %f?"%(t, ts))
+                else:
+                    t_ch = int(t)
                 # convert from generator clock to tProc clock
                 pulse_length = next_pulse['length']
                 pulse_length *= self.tproccfg['f_time']/self.soccfg['gens'][ch]['f_fabric']
-                self.set_timestamp(t + pulse_length, gen_ch=ch)
-                self.safe_regwi(rp, r_t, t, f't = {t}')
+                self.set_timestamp(t_ch + pulse_length, gen_ch=ch)
+                self.safe_regwi(rp, r_t, t_ch, f't = {t_ch}')
 
             # Play each pulse segment.
             # We specify the same time for all segments and rely on the signal generator to concatenate them without gaps.
@@ -931,11 +936,12 @@ class QickProgram(AbsQickProgram):
 
 
     def sync_all(self, t=0, gen_t0=None):
-        """Aligns and syncs all channels with additional time t.
-        Accounts for both generator pulses and readout windows.
+        """Sets the tProc reference time to the point where all generator pulses and readout windows are complete, plus additional time t.
         This does not pause the tProc. gen_t0 is an optional list of
         additional delays for each individual generator channel, e.g. when 
         the channels are on different tiles so they don't natively sync.
+
+        This does nothing if the firmware has no generators or readouts.
 
         Parameters
         ----------
@@ -946,6 +952,8 @@ class QickProgram(AbsQickProgram):
         """
         # subtract gen_t0 from the timestamps
         max_t = self.get_max_timestamp(gen_t0=gen_t0)
+        if max_t is None:
+            return
         if max_t + t > 0:
             self.synci(int(max_t + t))
             # reset all timestamps to 0 or gen_t0 (if defined)
@@ -956,15 +964,19 @@ class QickProgram(AbsQickProgram):
 
 
     def wait_all(self, t=0):
-        """Pause the tProc until all ADC readout windows are complete, plus additional time t.
-        This does not sync the tProc clock.
+        """Pause the tProc until all readout windows are complete, plus additional time t.
+        This does not increment the tProc reference time.
+
+        This does nothing if the firmware has no readouts.
 
         Parameters
         ----------
         t : int, optional
             The time offset in tProc cycles
         """
-        self.waiti(0, int(self.get_max_timestamp(gens=False, ros=True) + t))
+        max_t = self.get_max_timestamp(gens=False, ros=True)
+        if max_t is not None:
+            self.waiti(0, int(self.get_max_timestamp(gens=False, ros=True) + t))
 
     # should change behavior to only change bits that are specified
     def trigger(self, adcs=None, pins=None, ddr4=False, mr=False, adc_trig_offset=270, t=0, width=10, rp=0, r_out=16):
@@ -1023,7 +1035,7 @@ class QickProgram(AbsQickProgram):
             for ro in adcs:
                 ts = self.get_timestamp(ro_ch=ro)
                 if t_start < ts:
-                    print("Readout time %d appears to conflict with previous readout ending at %f?"%(t, ts))
+                    logger.warning("Readout time %d appears to conflict with previous readout ending at %f?"%(t, ts))
                 # convert from readout clock to tProc clock
                 ro_length = self.ro_chs[ro]['length']
                 ro_length *= self.tproccfg['f_time']/self.soccfg['readouts'][ro]['f_output']
@@ -1095,7 +1107,7 @@ class QickProgram(AbsQickProgram):
                 if ch_type == "generator":
                     ts = self.get_timestamp(gen_ch=ch)
                     if t < ts:
-                        print(f"warning: generator {ch} phase reset at t={t} appears to conflict "
+                        logger.warning(f"generator {ch} phase reset at t={t} appears to conflict "
                               f"with previous pulse ending at {ts}")
                     ch_mgr = self._gen_mgrs[ch]
                     phrst_params = dict(style="const", phase=0, freq=0, gain=0, length=3, phrst=1)
@@ -1106,7 +1118,7 @@ class QickProgram(AbsQickProgram):
                     if ch_mgr is None: continue
                     ts = self.get_timestamp(ro_ch=ch)
                     if t < ts:
-                        print(f"warning: readout {ch} phase reset at t={t} appears to conflict "
+                        logger.warning(f"readout {ch} phase reset at t={t} appears to conflict "
                               f"with previous readout ending at {ts}")
                     phrst_params = dict(freq=0, length=3, phrst=1)
                     tproc_ch = self.soccfg["readouts"][ch]['tproc_ctrl']
