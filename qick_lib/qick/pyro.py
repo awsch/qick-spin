@@ -64,10 +64,13 @@ def start_server(ns_host, ns_port=8888, proxy_name='myqick', soc_class=QickSoc, 
     if host=="127.0.0.1":
         # get the IPv4 address of the eth0 interface
         # unless you have an unusual network config (e.g. VPN), this is the interface clients will want to connect to
-        (myaddr,) = [addr for addr in psutil.net_if_addrs()['eth0'] if addr.family==socket.AddressFamily.AF_INET]
-        host = myaddr.address
+        host = None
+        for interface_name, interfaces in psutil.net_if_addrs().items():
+            if 'eth0' in interface_name:
+                for interface in interfaces:
+                    if interface.family==socket.AddressFamily.AF_INET:
+                        host = interface.address
     daemon = Pyro4.Daemon(host=host)
-
     # if you want to use a different firmware image or set some initialization options, you would do that here
     soc = soc_class(**kwargs)
     print("initialized QICK")
