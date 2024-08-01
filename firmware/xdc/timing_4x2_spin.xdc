@@ -16,8 +16,9 @@
 ## Generated Clocks
 set clk_axi  [get_clocks -of_objects [get_nets -of_objects [get_pins d_1_i/zynq_ultra_ps_e_0/pl_clk0]]]
 set clk_adc0 [get_clocks -of_objects [get_nets -of_objects [get_pins d_1_i/usp_rf_data_converter_0/clk_adc0]]]
-set clk_adc2 [get_clocks -of_objects [get_nets -of_objects [get_pins d_1_i/usp_rf_data_converter_0/clk_adc0]]]
+set clk_adc2 [get_clocks -of_objects [get_nets -of_objects [get_pins d_1_i/usp_rf_data_converter_0/clk_adc2]]]
 set clk_dac0 [get_clocks -of_objects [get_nets -of_objects [get_pins d_1_i/usp_rf_data_converter_0/clk_dac0]]]
+set clk_dac2 [get_clocks -of_objects [get_nets -of_objects [get_pins d_1_i/usp_rf_data_converter_0/clk_dac2]]]
 
 ## Clock Wizards
 set clk_adc0_x2 [get_clocks -of_objects [get_nets -of_objects [get_pins d_1_i/clk_adc0_x2/clk_out1]]]
@@ -32,6 +33,7 @@ set_clock_groups -name async_clks -asynchronous \
 -group [get_clocks [get_clocks $clk_adc0 ]] \
 -group [get_clocks [get_clocks $clk_adc2 ]] \
 -group [get_clocks [get_clocks $clk_dac0 ]] \
+-group [get_clocks [get_clocks $clk_dac2 ]] \
 -group [get_clocks [get_clocks $clk_adc0_x2 ]] \
 -group [get_clocks [get_clocks $clk_adc2_x2 ]] 
 
