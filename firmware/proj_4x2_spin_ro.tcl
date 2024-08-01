@@ -7,10 +7,10 @@
 ## Customizable Parameters
 
 # Project Name 
-set _xil_proj_name_  "top_4x2_Spin"
+set _xil_proj_name_  "top_4x2_Spin_ro"
 set timing_const     "timing_4x2_spin.xdc"
 set ios_const        "ios_4x2_spin.xdc"
-set bd_file          "bd_4x2_spin_2adc_2dac_20t_qtt_23-1.tcl"
+set bd_file          "bd_4x2_spin_1adc_2dac_20t_ro_23-1.tcl"
 set board            "4x2"
 
 # Posible board values : 111, 216, 4x2
