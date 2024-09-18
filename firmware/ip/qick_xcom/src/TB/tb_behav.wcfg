@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wave_config>
+   <wave_state>
+   </wave_state>
+   <db_ref_list>
+      <db_ref path="tb_xcom_link_behav.wdb" id="1">
+         <top_modules>
+            <top_module name="glbl" />
+            <top_module name="tb_xcom_link" />
+         </top_modules>
+      </db_ref>
+   </db_ref_list>
+   <zoom_setting>
+      <ZoomStartTime time="0.000000 us"></ZoomStartTime>
+      <ZoomEndTime time="21.000000 us"></ZoomEndTime>
+      <Cursor1Time time="9.655000 us"></Cursor1Time>
+   </zoom_setting>
+   <column_width_setting>
+      <NameColumnWidth column_width="309"></NameColumnWidth>
+      <ValueColumnWidth column_width="161"></ValueColumnWidth>
+   </column_width_setting>
+   <WVObjectSize size="19" />
+   <wvobject fp_name="/tb_xcom_link/RX/x_clk_i" type="logic">
+      <obj_property name="ElementShortName">x_clk_i</obj_property>
+      <obj_property name="ObjectShortName">x_clk_i</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_xcom_link/RX/xcom_id_i" type="array">
+      <obj_property name="ElementShortName">xcom_id_i[3:0]</obj_property>
+      <obj_property name="ObjectShortName">xcom_id_i[3:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_xcom_link/xcom_id_i" type="array">
+      <obj_property name="ElementShortName">xcom_id_i[3:0]</obj_property>
+      <obj_property name="ObjectShortName">xcom_id_i[3:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_xcom_link/TX/tick_cfg_i" type="array">
+      <obj_property name="ElementShortName">tick_cfg_i[3:0]</obj_property>
+      <obj_property name="ObjectShortName">tick_cfg_i[3:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_xcom_link/TX/tx_rdy_o" type="logic">
+      <obj_property name="ElementShortName">tx_rdy_o</obj_property>
+      <obj_property name="ObjectShortName">tx_rdy_o</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_xcom_link/RX/rx_vld_o" type="logic">
+      <obj_property name="ElementShortName">rx_vld_o</obj_property>
+      <obj_property name="ObjectShortName">rx_vld_o</obj_property>
+      <obj_property name="CustomSignalColor">#0000FF</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_xcom_link/TX/tx_vld_i" type="logic">
+      <obj_property name="ElementShortName">tx_vld_i</obj_property>
+      <obj_property name="ObjectShortName">tx_vld_i</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_xcom_link/TX/tx_header_i" type="array">
+      <obj_property name="ElementShortName">tx_header_i[7:0]</obj_property>
+      <obj_property name="ObjectShortName">tx_header_i[7:0]</obj_property>
+      <obj_property name="Radix">BINARYRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_xcom_link/TX/tx_data_i" type="array">
+      <obj_property name="ElementShortName">tx_data_i[31:0]</obj_property>
+      <obj_property name="ObjectShortName">tx_data_i[31:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_xcom_link/TX/tx_dt_o" type="logic">
+      <obj_property name="ElementShortName">tx_dt_o</obj_property>
+      <obj_property name="ObjectShortName">tx_dt_o</obj_property>
+      <obj_property name="CustomSignalColor">#0000FF</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_xcom_link/TX/tx_st" type="array">
+      <obj_property name="ElementShortName">tx_st[31:0]</obj_property>
+      <obj_property name="ObjectShortName">tx_st[31:0]</obj_property>
+      <obj_property name="CustomSignalColor">#FF00FF</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_xcom_link/TX/tx_ck_o" type="logic">
+      <obj_property name="ElementShortName">tx_ck_o</obj_property>
+      <obj_property name="ObjectShortName">tx_ck_o</obj_property>
+      <obj_property name="CustomSignalColor">#0000FF</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_xcom_link/RX/rx_dt_i" type="logic">
+      <obj_property name="ElementShortName">rx_dt_i</obj_property>
+      <obj_property name="ObjectShortName">rx_dt_i</obj_property>
+      <obj_property name="CustomSignalColor">#00FFFF</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_xcom_link/RX/rx_ck_i" type="logic">
+      <obj_property name="ElementShortName">rx_ck_i</obj_property>
+      <obj_property name="ObjectShortName">rx_ck_i</obj_property>
+      <obj_property name="CustomSignalColor">#00FFFF</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_xcom_link/RX/rx_st" type="array">
+      <obj_property name="ElementShortName">rx_st[31:0]</obj_property>
+      <obj_property name="ObjectShortName">rx_st[31:0]</obj_property>
+      <obj_property name="CustomSignalColor">#FF00FF</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_xcom_link/RX/rx_cmd_o" type="array">
+      <obj_property name="ElementShortName">rx_cmd_o[3:0]</obj_property>
+      <obj_property name="ObjectShortName">rx_cmd_o[3:0]</obj_property>
+      <obj_property name="CustomSignalColor">#0000FF</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
+      <obj_property name="Radix">BINARYRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_xcom_link/RX/rx_dst_all" type="logic">
+      <obj_property name="ElementShortName">rx_dst_all</obj_property>
+      <obj_property name="ObjectShortName">rx_dst_all</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_xcom_link/RX/rx_dst_own" type="logic">
+      <obj_property name="ElementShortName">rx_dst_own</obj_property>
+      <obj_property name="ObjectShortName">rx_dst_own</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_xcom_link/RX/rx_data_o" type="array">
+      <obj_property name="ElementShortName">rx_data_o[31:0]</obj_property>
+      <obj_property name="ObjectShortName">rx_data_o[31:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+      <obj_property name="CustomSignalColor">#0000FF</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
+   </wvobject>
+</wave_config>
