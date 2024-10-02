@@ -2,7 +2,7 @@ library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 
-entity axi_slv_qcom is	Generic 
+entity axi_slv_xcom is	Generic 
 	(
 		DATA_WIDTH	: integer	:= 32;
 		ADDR_WIDTH	: integer	:= 6
@@ -34,19 +34,23 @@ entity axi_slv_qcom is	Generic
 		rvalid		: out std_logic;
 		rready		: in std_logic;
 		-- Registers.
-     QCOM_CTRL       : out std_logic_vector ( 7 downto 0) ;
-     QCOM_CFG        : out std_logic_vector ( 3 downto 0) ;
-     RAXI_DT1        : out std_logic_vector (31 downto 0) ;
-     QCOM_FLAG       : in  std_logic ;
-     QCOM_DT_1       : in  std_logic_vector (31 downto 0) ;
-     QCOM_DT_2       : in  std_logic_vector (31 downto 0) ;
-     QCOM_STATUS     : in  std_logic_vector ( 7 downto 0) ;
-     QCOM_TX_DT      : in  std_logic_vector (31 downto 0) ;
-     QCOM_RX_DT      : in  std_logic_vector (31 downto 0) ;
-     QCOM_DEBUG      : in  std_logic_vector (23 downto 0) );
-end axi_slv_qcom;
+     XCOM_CTRL       : out std_logic_vector ( 5 downto 0) ;
+     XCOM_CFG        : out std_logic_vector ( 3 downto 0) ;
+     AXI_DT1         : out std_logic_vector (31 downto 0) ;
+     AXI_DT2         : out std_logic_vector (31 downto 0) ;
+     AXI_ADDR        : out std_logic_vector ( 3 downto 0) ;
+     BOARD_ID        : in  std_logic_vector ( 3 downto 0) ;
+     XCOM_FLAG       : in  std_logic ;
+     XCOM_DT_1       : in  std_logic_vector (31 downto 0) ;
+     XCOM_DT_2       : in  std_logic_vector (31 downto 0) ;
+     XCOM_MEM        : in  std_logic_vector (31 downto 0) ;
+     XCOM_RX_DT      : in  std_logic_vector (31 downto 0) ;
+     XCOM_TX_DT      : in  std_logic_vector (31 downto 0) ;
+     XCOM_STATUS     : in  std_logic_vector ( 7 downto 0) ;
+     XCOM_DEBUG      : in  std_logic_vector (23 downto 0) );
+end axi_slv_xcom;
 
-architecture rtl of axi_slv_qcom is
+architecture rtl of axi_slv_xcom is
 
 	-- AXI4LITE signals
 	signal axi_awaddr	  : std_logic_vector(ADDR_WIDTH-1 downto 0);
@@ -93,7 +97,6 @@ architecture rtl of axi_slv_qcom is
 	signal byte_index	: integer;
 	signal aw_en	: std_logic;
 
-   signal slv_reg0_rst : std_logic;
 begin
 	-- I/O Connections assignments
 
@@ -191,7 +194,7 @@ begin
 	  if rising_edge(aclk) then 
 	    if aresetn = '0' then
 	      slv_reg0 <= (others => '0');
-	      slv_reg1 <= "00000000000000000000000000000011";
+	      slv_reg1 <= "00000000000000000000000000000000";
 	      slv_reg2 <= (others => '0');
 	      slv_reg3 <= (others => '0');
 	      slv_reg4 <= (others => '0');
@@ -209,8 +212,7 @@ begin
 	    else
 	      loc_addr := axi_awaddr(ADDR_LSB + OPT_MEM_ADDR_BITS downto ADDR_LSB);
          -- Reset 
-         if (unsigned(slv_reg0) /= 0) then slv_reg0_rst <= ('1'); else slv_reg0_rst <= ('0'); end if;
-         if (slv_reg0_rst = '1') then slv_reg0 <= (others => '0'); end if;
+         if (unsigned(slv_reg0) /= 0) then slv_reg0 <= (others => '0'); end if; 
          if (slv_reg_wren = '1') then
 	        case loc_addr is
 	          when b"0000" =>
@@ -447,7 +449,7 @@ begin
 	-- 4 : TAVG_LOW_REG	(r).
 	-- 5 : TAVG_HIGH_REG(r).
 
-	process (slv_reg0, slv_reg1, slv_reg2, QCOM_FLAG, QCOM_DT_1, QCOM_DT_2, QCOM_STATUS, QCOM_TX_DT, QCOM_RX_DT, QCOM_DEBUG, axi_araddr, aresetn, slv_reg_rden)
+	process (slv_reg0, slv_reg1, slv_reg2, XCOM_FLAG, XCOM_DT_1, XCOM_DT_2, XCOM_STATUS, XCOM_TX_DT, XCOM_RX_DT, XCOM_DEBUG, axi_araddr, aresetn, slv_reg_rden)
 	variable loc_addr :std_logic_vector(OPT_MEM_ADDR_BITS downto 0);
 	begin
 	    -- Address decoding for reading registers
@@ -460,31 +462,31 @@ begin
 	      when b"0010" =>
 	        reg_data_out <= slv_reg2;
 	      when b"0011" =>
-	        reg_data_out <= "00000000000000000000000000000000";
+	        reg_data_out <= slv_reg3;
 	      when b"0100" =>
-	        reg_data_out <= "00000000000000000000000000000000";
+	        reg_data_out <= slv_reg4;
 	      when b"0101" =>
 	        reg_data_out <= "00000000000000000000000000000000";
 	      when b"0110" =>
-	        reg_data_out <= "00000000000000000000000000000000";
+	        reg_data_out <= "0000000000000000000000000000" & BOARD_ID ;
 	      when b"0111" =>
-	        reg_data_out <= "0000000000000000000000000000000" & QCOM_FLAG;
+	        reg_data_out <= "0000000000000000000000000000000" & XCOM_FLAG;
 	      when b"1000" =>
-	        reg_data_out <= QCOM_DT_1;
+	        reg_data_out <= XCOM_DT_1;
 	      when b"1001" =>
-	        reg_data_out <= QCOM_DT_2;
+	        reg_data_out <= XCOM_DT_2;
 	      when b"1010" =>
-	        reg_data_out <= "000000000000000000000000" & QCOM_STATUS;
+	        reg_data_out <= XCOM_MEM;
 	      when b"1011" =>
 	        reg_data_out <= "00000000000000000000000000000000";
 	      when b"1100" =>
-	        reg_data_out <= "00000000000000000000000000000000";
+	        reg_data_out <= XCOM_RX_DT;
 	      when b"1101" =>
-	        reg_data_out <= QCOM_TX_DT;
+	        reg_data_out <= XCOM_TX_DT;
 	      when b"1110" =>
-	        reg_data_out <= QCOM_RX_DT;
+	        reg_data_out <= "000000000000000000000000" & XCOM_STATUS;
 	      when b"1111" =>
-	        reg_data_out <= "00000000" & QCOM_DEBUG;
+	        reg_data_out <= "00000000" & XCOM_DEBUG;
 	      when others =>
 	        reg_data_out  <= (others => '0');
 	    end case;
@@ -510,9 +512,11 @@ begin
 
 -- Output Registers.
 
-QCOM_CTRL    <= slv_reg0( 7 downto 0);
-QCOM_CFG     <= slv_reg1( 3 downto 0);
-RAXI_DT1     <= slv_reg2(31 downto 0);
+XCOM_CTRL    <= slv_reg0( 5 downto 0);
+XCOM_CFG     <= slv_reg1( 3 downto 0);
+AXI_DT1      <= slv_reg2(31 downto 0);
+AXI_DT2      <= slv_reg3(31 downto 0);
+AXI_ADDR     <= slv_reg4(3 downto 0);
 
 end rtl;
 

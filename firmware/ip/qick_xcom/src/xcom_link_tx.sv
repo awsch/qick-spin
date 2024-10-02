@@ -19,10 +19,12 @@ module xcom_link_tx (
    input  wire [31:0]   tx_data_i    ,
 // Xwire COM
    output reg           tx_dt_o      ,
-   output reg           tx_ck_o      ,
-///// DEBUG   
-   output wire [7:0]    tx_do        
+   output reg           tx_ck_o      
    );
+
+wire tx_last_dt;
+reg  [ 5:0] tx_bit_cnt, tx_pack_size_r; //Number of bits transmited  (Total Defined in tx_pack_size)
+
 
 // TICK GENERATOR
 ///////////////////////////////////////////////////////////////////////////////
@@ -80,36 +82,6 @@ always_comb begin
    endcase
 end
 
-// TX Registers
-///////////////////////////////////////////////////////////////////////////////
-reg  [39:0] tx_dt_r ; //Out Shift Register For Par 2 Ser. (Data encoded on tx_dt)
-reg  [ 5:0] tx_bit_cnt, tx_pack_size_r; //Number of bits transmited  (Total Defined in tx_pack_size)
-
-reg tx_ck_r; // Data and Clock
-
-always_ff @ (posedge x_clk_i, negedge x_rst_ni) begin
-   if (!x_rst_ni) begin
-      tx_ck_r        <= 0;
-      tx_dt_r        <= '{default:'0} ; 
-      tx_bit_cnt     <= 6'd0;
-      tx_pack_size_r <= 6'd0;
-   end else begin 
-      if (tx_vld_i & tx_idle_s) begin
-         tx_dt_r        <= tx_buff;
-         tx_bit_cnt     <= 6'd1;
-         tx_pack_size_r <= tx_pack_size;
-      end else if ( tx_idle_s ) begin
-         tx_ck_r <= 1'b0;
-      end 
-      if ( tick_clk )
-         tx_ck_r <= ~tx_ck_r;
-      else if (tick_dt) begin 
-         tx_dt_r     <= tx_dt_r << 1;
-         tx_bit_cnt  <= tx_bit_cnt + 1'b1 ;
-      end
-   end
-end
-
 assign tx_last_dt  = (tx_bit_cnt == tx_pack_size_r) ;
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -150,7 +122,36 @@ always_comb begin
       TX_END    :  begin
          tx_st_nxt = TX_IDLE;
       end
+      default: tx_st_nxt = tx_st;
    endcase
+end
+
+// TX Registers
+///////////////////////////////////////////////////////////////////////////////
+reg  [39:0] tx_dt_r ; //Out Shift Register For Par 2 Ser. (Data encoded on tx_dt)
+reg tx_ck_r; // Data and Clock
+
+always_ff @ (posedge x_clk_i, negedge x_rst_ni) begin
+   if (!x_rst_ni) begin
+      tx_ck_r        <= 0;
+      tx_dt_r        <= '{default:'0} ; 
+      tx_bit_cnt     <= 6'd0;
+      tx_pack_size_r <= 6'd0;
+   end else begin 
+      if (tx_vld_i & tx_idle_s) begin
+         tx_dt_r        <= tx_buff;
+         tx_bit_cnt     <= 6'd1;
+         tx_pack_size_r <= tx_pack_size;
+      end else if ( tx_idle_s ) begin
+         tx_ck_r <= 1'b0;
+      end 
+      if ( tick_clk )
+         tx_ck_r <= ~tx_ck_r;
+      else if (tick_dt) begin 
+         tx_dt_r     <= tx_dt_r << 1;
+         tx_bit_cnt  <= tx_bit_cnt + 1'b1 ;
+      end
+   end
 end
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -160,6 +161,5 @@ end
 assign tx_rdy_o     = tx_idle_s;
 assign tx_dt_o      = tx_dt_r[39] ;
 assign tx_ck_o      = tx_ck_r;
-assign xcom_link_do = 0;
    
 endmodule

@@ -4,14 +4,14 @@ proc init_gui { IPINST } {
   #Adding Page
   set Page_0 [ipgui::add_page $IPINST -name "Page 0"]
   ipgui::add_static_text $IPINST -name "XCOM" -parent ${Page_0} -text {Xcom Configuration}
-  ipgui::add_param $IPINST -name "SYNC" -parent ${Page_0}
   #Adding Group
   set Communication_Options [ipgui::add_group $IPINST -name "Communication Options" -parent ${Page_0}]
   ipgui::add_param $IPINST -name "CH" -parent ${Communication_Options}
+  ipgui::add_param $IPINST -name "SYNC" -parent ${Communication_Options} -widget checkBox
 
   #Adding Group
   set Debug [ipgui::add_group $IPINST -name "Debug" -parent ${Page_0}]
-  ipgui::add_param $IPINST -name "DEBUG" -parent ${Debug}
+  ipgui::add_param $IPINST -name "DEBUG" -parent ${Debug} -widget comboBox
 
 
 
