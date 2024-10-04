@@ -22,7 +22,6 @@ module axi_qick_xcom # (
    input  wire             t_aresetn     ,
    input  wire             x_clk         ,
    input  wire             x_aresetn     ,
-   input  wire             pulse_sync_i  ,
 // QICK PERIPHERAL INTERFACE (c_clk)
    input  wire             qp_en_i      , 
    input  wire  [4:0]      qp_op_i      , 
@@ -34,6 +33,8 @@ module axi_qick_xcom # (
    output reg              qp_vld_o     , 
    output reg              qp_flag_o    , 
 // Qick Reset CONTROL (t_clk)
+   input  wire             pulse_sync_i  ,
+   input  wire [31:0]      time_dt_i     ,
    output reg              qproc_start_o ,
 // XCOM 
    output wire  [ 3:0]     xcom_id_o     ,
@@ -100,8 +101,8 @@ qick_xcom_cmd QICK_CMD(
    .c_rst_ni      ( c_aresetn   ),
    .x_clk_i       ( x_clk       ),
    .x_rst_ni      ( x_aresetn   ),
-   .c_en_i        ( qp_en_i   ),
-   .c_op_i        ( qp_op_i   ),
+   .c_en_i        ( qp_en_i     ),
+   .c_op_i        ( qp_op_i     ),
    .c_dt_i        ( c_dt        ),
    .p_ctrl_i      ( p_ctrl      ),
    .p_dt_i        ( p_dt        ),
@@ -114,7 +115,10 @@ qick_xcom_cmd QICK_CMD(
    .cmd_cnt_do    ( cmd_cnt     ));
 
   
-qick_xcom # (.CH(CH)) XCOM (
+qick_xcom # (
+   .CH    ( CH   ),
+   .SYNC  ( SYNC )
+) XCOM (
    .c_clk_i        ( c_clk          ),
    .c_rst_ni       ( c_aresetn      ),
    .t_clk_i        ( t_clk          ),

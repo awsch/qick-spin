@@ -7,7 +7,8 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 module qick_xcom # (
-   parameter CH = 2
+   parameter CH   = 2 ,
+   parameter SYNC = 1 
 )(
 // CLK & RST & PulseSync
    input  wire             c_clk_i       ,
@@ -93,21 +94,23 @@ rx_cmd # (.CH(CH)) RX_CMD (
 
 // RX Decoding
 ///////////////////////////////////////////////////////////////////////////////
-wire rx_no_dt, rx_wflg, rx_wreg, rx_sync, rx_wmem ;
+wire rx_no_dt, rx_wflg, rx_wreg, rx_wmem ;
 wire rx_wflg_en, rx_wreg_en, rx_wmem_en;
+wire rx_qrst_sync, rx_qrst_now, rx_auto_id,rx_sync_time; 
 
 assign rx_no_dt   = ~|rx_cmd_op[2:1];
 assign rx_wflg    =  !rx_cmd_op[3] & rx_no_dt ; //000X
 assign rx_wreg    =  !rx_cmd_op[3] & !rx_no_dt; //001X-010X-011X
 assign rx_wmem    =   rx_cmd_op[3] & !rx_no_dt & ~rx_cmd_op[0]; //000X
+
 assign rx_wflg_en = rx_cmd_vld & rx_wflg; 
 assign rx_wreg_en = rx_cmd_vld & rx_wreg;
 assign rx_wmem_en = rx_cmd_vld & rx_wmem;
 
-
-assign rx_sync     =   rx_cmd_vld & rx_cmd_op == 4'b1000 ; //1000
-assign rx_auto_id  =   rx_cmd_vld & rx_cmd_op == 4'b1001 ; 
-
+assign rx_qrst_sync =   rx_cmd_vld & rx_cmd_op == 4'b1000 ;
+assign rx_qrst_now  =   rx_cmd_vld & rx_cmd_op == 4'b1001 ;
+assign rx_auto_id   =   rx_cmd_vld & rx_cmd_op == 4'b1011 ;
+assign rx_sync_time =   rx_cmd_vld & rx_cmd_op == 4'b1111 ;
 
 // LOC COMMAND
 ///////////////////////////////////////////////////////////////////////////////
@@ -202,18 +205,28 @@ always_ff @ (posedge c_clk_i) begin
   end
 end
 
-// Sync Tproc
 ///////////////////////////////////////////////////////////////////////////////
-cmd_sync cmd_sync (
-   .c_clk_i        ( c_clk_i     ),
-   .c_rst_ni       ( c_rst_ni    ),
-   .t_clk_i        ( t_clk_i     ),
-   .t_rst_ni       ( t_rst_ni    ),
-   .pulse_i        ( pulse_sync_i),
-   .sync_req_i     ( rx_sync     ),
-   .sync_ack_o     (             ),
-   .qproc_start_o  ( qproc_start ));
+// SYNC OPTION
+///////////////////////////////////////////////////////////////////////////////
+wire qproc_start;
+generate
+   if (SYNC == 0) begin : SYNC_NO
+      assign qproc_start  = 0 ;
+   end else if   (SYNC == 1) begin : SYNC_YES
+      cmd_sync cmd_sync (
+         .t_clk_i        ( t_clk_i     ),
+         .t_rst_ni       ( t_rst_ni    ),
+         .pulse_sync_i   ( pulse_sync_i),
+         .qrst_now_req_i ( rx_qrst_now ),
+         .qrst_sync_req_i( rx_qrst_sync),
+         .qrst_ack_o     (             ),
+         .qproc_start_o  ( qproc_start ));
+   end
+endgenerate
+
+
    
+
 ///////////////////////////////////////////////////////////////////////////////
 // OUTPUTS
 ///////////////////////////////////////////////////////////////////////////////
