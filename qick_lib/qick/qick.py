@@ -13,6 +13,7 @@ from . import bitfile_path, obtain, get_version
 from .ip import SocIp, QickMetadata
 from .parser import parse_to_bin
 from .streamer import DataStreamer
+from .time_tagger import TimeTagStreamWorker
 from .qick_asm import QickConfig
 from .asm_v1 import QickProgram
 from .drivers.generator import *
@@ -317,31 +318,30 @@ class QickSoc(Overlay, QickConfig):
             else:
                 raise RuntimeError('No tProcessor found')
 
-            #self.qnet = self.qick_network_0
             try:
                self.qnet = self.qick_network_0
             except:
                pass
 
-            #self.qcom = self.qick_com_0
             try:
                self.qcom = self.qick_com_0
             except:
                pass
             
-            #self.qtt = self.qick_time_tagger_0
             try:
-                self.qtt = self.qick_time_tagger_0
-                self.qtt.configure(self.axi_dma_qtt)
+                self._qtt = self.qick_time_tagger_0
             except:
-               pass
+                pass
+            else:
+                self._qtt.configure(self.axi_dma_qtt)
+                self._tt_streamer = TimeTagStreamWorker(self)
 
             self.map_signal_paths()
 
             self._streamer = DataStreamer(self)
 
             # list of objects that need to be registered for autoproxying over Pyro
-            self.autoproxy = [self.streamer, self.tproc]
+            self.autoproxy = [self.tproc, self.streamer, self.qtt, self.tt_streamer]
 
     @property
     def tproc(self):
@@ -350,6 +350,14 @@ class QickSoc(Overlay, QickConfig):
     @property
     def streamer(self):
         return self._streamer
+
+    @property
+    def qtt(self):
+        return self._qtt
+
+    @property
+    def tt_streamer(self):
+        return self._tt_streamer
 
     def map_signal_paths(self):
         """

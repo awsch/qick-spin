@@ -42,7 +42,9 @@ class QICK_Time_Tagger(SocIp):
         self.cfg['tag_mem_size'] = pow( 2, int(description['parameters']['TAG_FIFO_AW']) )
         self.cfg['arm_mem_size'] = pow( 2, int(description['parameters']['ARM_FIFO_AW']) )
         self.cfg['smp_mem_size'] = pow( 2, int(description['parameters']['SMP_FIFO_AW']) )
-        
+
+        self.buff_rd_len = max(self['tag_mem_size'], self['arm_mem_size'], self['smp_mem_size'])
+
         for param in ['adc_qty','cmp_inter','arm_store','smp_store','cmp_slope']:
             self.cfg[param] = int(description['parameters'][param.upper()])
         self.cfg['debug']  = int(description['parameters']['DEBUG'])
@@ -60,8 +62,7 @@ class QICK_Time_Tagger(SocIp):
     def configure(self, axi_dma):
         # dma
         self.dma = axi_dma
-        maxlen = max(self['tag_mem_size'], self['arm_mem_size'], self['smp_mem_size'])
-        self.buff_rd = allocate(shape=(maxlen, 1), dtype=np.int32)
+        self.buff_rd = allocate(shape=(self.buff_rd_len, 1), dtype=np.int32)
 
     def configure_connections(self, soc):
         super().configure_connections(soc)
@@ -92,7 +93,7 @@ class QICK_Time_Tagger(SocIp):
         lines.append("----------\n")
         return "\n".join(lines)
     
-    def read_mem(self,mem_sel:str, length=-1):
+    def read_mem(self, mem_sel:str, length=-1):
         """
         Read tProc Selected memory using DMA
         Parameters
@@ -122,10 +123,9 @@ class QICK_Time_Tagger(SocIp):
             data_len = length if (length != -1) else self.smp_qty
             self.dma_cfg     = 5+16* data_len
         else:
-            raise RuntimeError('Source Memory error. Optionas are TAG0, TAG1, TAG2, TAG3, ARM, SMP current Value : %s' % (mem_sel))
+            raise RuntimeError('Source Memory error. Options are TAG0, TAG1, TAG2, TAG3, ARM, SMP current Value : %s' % (mem_sel))
        
         if   (data_len==0):
-            print('No Data to read in ', mem_sel)
             return np.array([])
         else:
             #Strat DMA Transfer
@@ -135,7 +135,9 @@ class QICK_Time_Tagger(SocIp):
             self.dma.recvchannel.wait()
             # truncate, copy, convert PynqBuffer to ndarray
             #print(len(self.buff_rd), data_len)
-            return np.array(self.buff_rd[:data_len], copy=True)
+            ret = np.array(self.buff_rd[:data_len], copy=True)
+            ret = ret.reshape((-1,))
+            return ret
     
     def set_config(self,cfg_filter, cfg_slope, cfg_inter, smp_wr_qty, cfg_invert):
         """
@@ -164,16 +166,24 @@ class QICK_Time_Tagger(SocIp):
                 print('Sample Store is not Implemented')
         self.qtt_cfg     = cfg_filter + cfg_slope*2 + cfg_inter*4 + smp_wr_qty*32 +cfg_invert*1024
 
-    def get_config(self):
-        print('--- AXI Time Tagger CONFIG')
+    def get_config(self, print_cfg = False):
         qtt_cfg_num = self.qtt_cfg
         qtt_cfg_bin = '{:032b}'.format(qtt_cfg_num)
-        print( ' FILTER           : ' + str(qtt_cfg_bin[31])  )
-        print( ' SLOPE            : ' + str(qtt_cfg_bin[30])  )
-        print( ' INTERPOLATION    : ' + str(int(qtt_cfg_bin[27:30], 2) )  )
-        print( ' WRITE SAMPLE QTY : ' + str(int(qtt_cfg_bin[22:27], 2) )  )
-        print( ' INVERT INPUT     : ' + str(qtt_cfg_bin[21])  )
-        
+        filt = qtt_cfg_bin[31]
+        slope = qtt_cfg_bin[30]
+        interp = int(qtt_cfg_bin[27:30], 2)
+        wr_smp = int(qtt_cfg_bin[22:27], 2)
+        invert = qtt_cfg_bin[21]
+
+        if print_cfg:
+            print('--- AXI Time Tagger CONFIG')
+            print( ' FILTER           : ' + str(filt))
+            print( ' SLOPE            : ' + str(slope))
+            print( ' INTERPOLATION    : ' + str(interp))
+            print( ' WRITE SAMPLE QTY : ' + str(wr_smp))
+            print( ' INVERT INPUT     : ' + str(invert))
+
+        return filt, slope, interp, wr_smp, invert
 
     def disarm(self):
         self.qtt_ctrl    = 1+2* 0 
@@ -181,10 +191,12 @@ class QICK_Time_Tagger(SocIp):
         self.qtt_ctrl    = 1+2* 1
     def pop_dt(self):
         self.qtt_ctrl    = 1+2* 2
-    def set_threshold(self,value):
+    def set_threshold(self, value):
         self.axi_dt1     = value
         self.qtt_ctrl    = 1+2* 4
-    def set_dead_time(self,value):
+    def set_dead_time(self, value):
+        if value < 5 or value > 255:
+            raise ValueError(f'Dead time must be in the range [5, 255] clocks.')
         self.axi_dt1     = value
         self.qtt_ctrl    = 1+2* 5
     def reset(self):
